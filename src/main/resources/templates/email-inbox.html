@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Quixlab - Bootstrap Admin Dashboard Template by Themefisher.com</title>
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <!-- Custom Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/favicon.png}">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 
 </head>
 
@@ -274,8 +272,8 @@
                         </a>
                         <ul aria-expanded="false">
                             <li><a th:href="@{/inbox}">Inbox</a></li>
-                            <li><a href="./email-read.html">Read</a></li>
-                            <li><a href="./email-compose.html">Compose</a></li>
+                            <li><a th:href="@{/read}">Read</a></li>
+                            <li><a th:href="@{/compose}">Compose</a></li>
                         </ul>
                     </li>
                     <li>
