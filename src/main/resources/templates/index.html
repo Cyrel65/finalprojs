@@ -222,7 +222,7 @@
                             <div class="dropdown-content-body">
                                 <ul>
                                     <li>
-                                        <a href="app-profile.html"><i class="icon-user"></i> <span>Profile</span></a>
+                                        <a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a>
                                     </li>
                                     <li>
                                         <a href="javascript:void()">
@@ -234,7 +234,7 @@
                                     <li>
                                         <a href="page-lock.html"><i class="icon-lock"></i> <span>Lock Screen</span></a>
                                     </li>
-                                    <li><a href="page-login.html"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                    <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -265,7 +265,7 @@
                 </li>
                 <li class="mega-menu mega-menu-sm">
                     <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                        <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Layouts</span>
+                        <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
                     </a>
                     <ul aria-expanded="false">
                         <li><a href="./layout-blank.html">Blank</a></li>
@@ -284,70 +284,33 @@
                 </li>
 
                 <li>
-                    <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                        <i class="icon-envelope menu-icon"></i> <span class="nav-text">Messages</span>
+                    <a th:href="@{/inbox}" aria-expanded="false">
+                        <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
                     </a>
-                    <ul aria-expanded="false">
-                        <li><a href="./email-inbox.html">Inbox</a></li>
-                        <li><a href="./email-read.html">Read</a></li>
-                        <li><a href="./email-compose.html">Compose</a></li>
-                    </ul>
+
                 </li>
                 <li>
-                    <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <a th:href="@{/profile}">
                         <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span>
                     </a>
-                    <ul aria-expanded="false">
-                        <li><a href="./app-profile.html">Profile</a></li>
-                        <li><a href="./app-calender.html">Calender</a></li>
-                    </ul>
+
                 </li>
                 <li>
-                    <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <a th:href="@{/table}">
                         <i class="icon-graph menu-icon"></i> <span class="nav-text">Student Rankings</span>
                     </a>
-                    <ul aria-expanded="false">
-                        <li><a href="./chart-flot.html">Flot</a></li>
-                        <li><a href="./chart-morris.html">Morris</a></li>
-                        <li><a href="./chart-chartjs.html">Chartjs</a></li>
-                        <li><a href="./chart-chartist.html">Chartist</a></li>
-                        <li><a href="./chart-sparkline.html">Sparkline</a></li>
-                        <li><a href="./chart-peity.html">Peity</a></li>
-                    </ul>
+
                 </li>
 
                 <li>
                     <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                        <i class="icon-grid menu-icon"></i><span class="nav-text">Classes</span>
+                        <i class="icon-grid menu-icon"></i><span class="nav-text">View Classes</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="./ui-accordion.html">Accordion</a></li>
-                        <li><a href="./ui-alert.html">Alert</a></li>
-                        <li><a href="./ui-badge.html">Badge</a></li>
-                        <li><a href="./ui-button.html">Button</a></li>
-                        <li><a href="./ui-button-group.html">Button Group</a></li>
-                        <li><a href="./ui-cards.html">Cards</a></li>
-                        <li><a href="./ui-carousel.html">Carousel</a></li>
-                        <li><a href="./ui-dropdown.html">Dropdown</a></li>
-                        <li><a href="./ui-list-group.html">List Group</a></li>
-                        <li><a href="./ui-media-object.html">Media Object</a></li>
-                        <li><a href="./ui-modal.html">Modal</a></li>
-                        <li><a href="./ui-pagination.html">Pagination</a></li>
-                        <li><a href="./ui-popover.html">Popover</a></li>
-                        <li><a href="./ui-progressbar.html">Progressbar</a></li>
-                        <li><a href="./ui-tab.html">Tab</a></li>
-                        <li><a href="./ui-typography.html">Typography</a></li>
-                        <!-- </ul>
-                    </li>
-                    <li>
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-layers menu-icon"></i><span class="nav-text">Components</span>
-                        </a>
-                        <ul aria-expanded="false"> -->
-                        <li><a href="./uc-nestedable.html">Nestedable</a></li>
-                        <li><a href="./uc-noui-slider.html">Noui Slider</a></li>
-                        <li><a href="./uc-sweetalert.html">Sweet Alert</a></li>
-                        <li><a href="./uc-toastr.html">Toastr</a></li>
+                        <li><a href="./ui-accordion.html">Create Class</a></li>
+                        <li><a href="./ui-alert.html">Edit Existing Class</a></li>
+                        <li><a href="./ui-badge.html">Delete Class</a></li>
+
                     </ul>
                 </li>
                 <li>

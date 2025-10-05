@@ -25,4 +25,21 @@ public class controller {
     public String viewRegister() {
         return "page-register";
     }
+
+    @GetMapping("/inbox")
+    public String viewInbox() {return "email-inbox";
+    }
+
+    @GetMapping("/read")
+    public String viewRead() {
+        return "email-read";
+    }
+
+    @GetMapping("/compose")
+    public String viewCompose() {
+        return "email-compose"; }
+
+    @GetMapping("/table")
+    public String viewTable() {
+        return "table-basic"; }
 }
