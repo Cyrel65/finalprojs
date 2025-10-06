@@ -46,4 +46,8 @@ public class controller {
     @GetMapping("/viewclass")
     public String viewClass() {
         return "viewclasses"; }
+
+    @GetMapping("/redeem")
+    public String viewWidgets() {
+        return "widgets"; }
 }
