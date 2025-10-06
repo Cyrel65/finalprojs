@@ -50,4 +50,8 @@ public class controller {
     @GetMapping("/redeem")
     public String viewWidgets() {
         return "widgets"; }
+
+    @GetMapping("/forgotpass")
+    public String viewPassword() {
+        return "forgot-password"; }
 }
