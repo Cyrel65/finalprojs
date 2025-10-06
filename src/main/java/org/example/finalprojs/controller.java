@@ -62,4 +62,10 @@ public class controller {
     @GetMapping("/newindex")
     public String newindex() {
         return "index"; }
+
+    @GetMapping("/about")
+    public String About() {
+        return "about"; }
+
+
 }

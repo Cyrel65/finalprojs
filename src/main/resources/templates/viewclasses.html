@@ -207,17 +207,13 @@
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="app-profile.html"><i class="icon-user"></i> <span>Profile</span></a>
+                                            <a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a>
                                         </li>
                                         <li>
-                                            <a href="email-inbox.html"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
+                                            <a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
                                         </li>
-                                        
-                                        <hr class="my-2">
-                                        <li>
-                                            <a href="page-lock.html"><i class="icon-lock"></i> <span>Lock Screen</span></a>
-                                        </li>
-                                        <li><a href="page-login.html"><i class="icon-key"></i> <span>Logout</span></a></li>
+
+                                        <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -335,16 +331,18 @@
             <div class="container-fluid mt-3">
                 <div class="row">
                     <div class="col-lg-3 col-sm-6">
-                        <div class="card gradient-1">
-                            <div class="card-body">
-                                <h3 class="card-title text-white">Products Sold</h3>
-                                <div class="d-inline-block">
-                                    <h2 class="text-white">4565</h2>
-                                    <p class="text-white mb-0">Jan - March 2019</p>
+                        <a th:href="@{/section}" class="text-decoration-none">
+                            <div class="card gradient-1">
+                                <div class="card-body">
+                                    <h3 class="card-title text-white">Products Sold</h3>
+                                    <div class="d-inline-block">
+                                        <h2 class="text-white">4565</h2>
+                                        <p class="text-white mb-0">Jan - March 2019</p>
+                                    </div>
+                                    <span class="float-right display-5 opacity-5"><i class="fa fa-shopping-cart"></i></span>
                                 </div>
-                                <span class="float-right display-5 opacity-5"><i class="fa fa-shopping-cart"></i></span>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-lg-3 col-sm-6">
                         <div class="card gradient-2">
