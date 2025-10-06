@@ -54,4 +54,8 @@ public class controller {
     @GetMapping("/forgotpass")
     public String viewPassword() {
         return "forgot-password"; }
+
+    @GetMapping("/helpFeed")
+    public String viewHelpFeed() {
+        return "help-feedback"; }
 }
