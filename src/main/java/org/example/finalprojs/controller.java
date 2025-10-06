@@ -42,4 +42,8 @@ public class controller {
     @GetMapping("/table")
     public String viewTable() {
         return "table-basic"; }
+
+    @GetMapping("/viewclass")
+    public String viewClass() {
+        return "viewclasses"; }
 }
