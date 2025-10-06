@@ -235,111 +235,67 @@
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <div class="nk-sidebar">           
+        <div class="nk-sidebar">
             <div class="nk-nav-scroll">
                 <ul class="metismenu" id="menu">
-                    <li class="nav-label">Dashboard</li>
+
                     <li>
-                        <a th:href="@{/}" aria-expanded="false">
-                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                        <a th:href="@{/}">
+                            <span class="nav-text">Dashboard</span>
                         </a>
                     </li>
                     <li class="mega-menu mega-menu-sm">
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Layouts</span>
+                            <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="./layout-blank.html">Blank</a></li>
-                            <li><a href="./layout-one-column.html">One Column</a></li>
-                            <li><a href="./layout-two-column.html">Two column</a></li>
-                            <li><a href="./layout-compact-nav.html">Compact Nav</a></li>
-                            <li><a href="./layout-vertical.html">Vertical</a></li>
-                            <li><a href="./layout-horizontal.html">Horizontal</a></li>
-                            <li><a href="./layout-boxed.html">Boxed</a></li>
-                            <li><a href="./layout-wide.html">Wide</a></li>
-                            
-                            
-                            <li><a href="./layout-fixed-header.html">Fixed Header</a></li>
-                            <li><a href="layout-fixed-sidebar.html">Fixed Sidebar</a></li>
+                            <li><a href="./layout-blank.html">Signout</a></li>
+                            <li><a href="./layout-one-column.html">Change Email</a></li>
+                            <li><a href="./layout-one-column.html">Forgot Password</a></li>
+                            <li><a href="./layout-one-column.html">Help and Feedback</a></li>
+
                         </ul>
                     </li>
-                    <li class="nav-label">Apps</li>
+
                     <li>
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-envelope menu-icon"></i> <span class="nav-text">Email</span>
+                        <a th:href="@{/inbox}" aria-expanded="false">
+                            <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
                         </a>
-                        <ul aria-expanded="false">
-                            <li><a th:href="@{/inbox}">Inbox</a></li>
-                            <li><a th:href="@{/read}">Read</a></li>
-                            <li><a th:href="@{/compose}">Compose</a></li>
-                        </ul>
+
                     </li>
                     <li>
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Apps</span>
+                        <a th:href="@{/profile}">
+                            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span>
                         </a>
-                        <ul aria-expanded="false">
-                            <li><a th:href="@{/profile}">Profile</a></li>
-                            <li><a href="./app-calender.html">Calender</a></li>
-                        </ul>
+
                     </li>
                     <li>
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-graph menu-icon"></i> <span class="nav-text">Charts</span>
+                        <a th:href="@{/table}">
+                            <i class="icon-graph menu-icon"></i> <span class="nav-text">Student Rankings</span>
                         </a>
-                        <ul aria-expanded="false">
-                            <li><a href="./chart-flot.html">Flot</a></li>
-                            <li><a href="./chart-morris.html">Morris</a></li>
-                            <li><a href="./chart-chartjs.html">Chartjs</a></li>
-                            <li><a href="./chart-chartist.html">Chartist</a></li>
-                            <li><a href="./chart-sparkline.html">Sparkline</a></li>
-                            <li><a href="./chart-peity.html">Peity</a></li>
-                        </ul>
+
                     </li>
-                    <li class="nav-label">UI Components</li>
+
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-grid menu-icon"></i><span class="nav-text">UI Components</span>
+                            <i class="icon-grid menu-icon"></i><span class="nav-text">View Classes</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="./ui-accordion.html">Accordion</a></li>
-                            <li><a href="./ui-alert.html">Alert</a></li>
-                            <li><a href="./ui-badge.html">Badge</a></li>
-                            <li><a href="./ui-button.html">Button</a></li>
-                            <li><a href="./ui-button-group.html">Button Group</a></li>
-                            <li><a href="./ui-cards.html">Cards</a></li>
-                            <li><a href="./ui-carousel.html">Carousel</a></li>
-                            <li><a href="./ui-dropdown.html">Dropdown</a></li>
-                            <li><a href="./ui-list-group.html">List Group</a></li>
-                            <li><a href="./ui-media-object.html">Media Object</a></li>
-                            <li><a href="./ui-modal.html">Modal</a></li>
-                            <li><a href="./ui-pagination.html">Pagination</a></li>
-                            <li><a href="./ui-popover.html">Popover</a></li>
-                            <li><a href="./ui-progressbar.html">Progressbar</a></li>
-                            <li><a href="./ui-tab.html">Tab</a></li>
-                            <li><a href="./ui-typography.html">Typography</a></li>
-                        <!-- </ul>
-                    </li>
-                    <li>
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-layers menu-icon"></i><span class="nav-text">Components</span>
-                        </a>
-                        <ul aria-expanded="false"> -->
-                            <li><a href="./uc-nestedable.html">Nestedable</a></li>
-                            <li><a href="./uc-noui-slider.html">Noui Slider</a></li>
-                            <li><a href="./uc-sweetalert.html">Sweet Alert</a></li>
-                            <li><a href="./uc-toastr.html">Toastr</a></li>
+                            <li><a href="./ui-accordion.html">Create Class</a></li>
+                            <li><a href="./ui-alert.html">Edit Existing Class</a></li>
+                            <li><a href="./ui-badge.html">Delete Class</a></li>
+
                         </ul>
                     </li>
                     <li>
                         <a href="widgets.html" aria-expanded="false">
-                            <i class="icon-badge menu-icon"></i><span class="nav-text">Widget</span>
+                            <i class="icon-badge menu-icon"></i><span class="nav-text">Redeem</span>
                         </a>
                     </li>
-                    <li class="nav-label">Forms</li>
+
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-note menu-icon"></i><span class="nav-text">Forms</span>
+                            <i class="icon-note menu-icon"></i><span class="nav-text">About</span>
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="./form-basic.html">Basic Form</a></li>
@@ -349,20 +305,23 @@
                             <li><a href="./form-picker.html">Picker</a></li>
                         </ul>
                     </li>
-                    <li class="nav-label">Table</li>
+
+
+                    <!--
+                                     <li>
+                                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                                             <i class="icon-menu menu-icon"></i><span class="nav-text">Table</span>
+                                         </a>
+                                         <ul aria-expanded="false">
+                                             <li><a href="./table-basic.html" aria-expanded="false">Basic Table</a></li>
+                                             <li><a href="./table-datatable.html" aria-expanded="false">Data Table</a></li>
+                                         </ul>
+                                     </li>  -->
+
+
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-menu menu-icon"></i><span class="nav-text">Table</span>
-                        </a>
-                        <ul aria-expanded="false">
-                            <li><a href="./table-basic.html" aria-expanded="false">Basic Table</a></li>
-                            <li><a href="./table-datatable.html" aria-expanded="false">Data Table</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-label">Pages</li>
-                    <li>
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Pages</span>
+                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Add Points</span>
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="./page-login.html">Login</a></li>
