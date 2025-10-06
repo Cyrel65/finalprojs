@@ -248,10 +248,9 @@
                             <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="index.html">Signout</a></li>
-                            <li><a href="./layout-one-column.html">Change Email</a></li>
-                            <li><a href="./layout-one-column.html">Forgot Password</a></li>
-                            <li><a href="./layout-one-column.html">Help and Feedback</a></li>
+                            <li><a th:href="@{/login}">Signout</a></li>
+                            <li><a th:href="@{/forgotpass}">Forgot Password</a></li>
+                            <li><a th:href="@{/helpFeed}">Help and Feedback</a></li>
 
                         </ul>
                     </li>
@@ -288,16 +287,9 @@
                     </li>
 
                     <li>
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <a th:href="@{/about}" aria-expanded="false">
                             <i class="icon-note menu-icon"></i><span class="nav-text">About</span>
                         </a>
-                        <ul aria-expanded="false">
-                            <li><a href="./form-basic.html">Basic Form</a></li>
-                            <li><a href="./form-validation.html">Form Validation</a></li>
-                            <li><a href="./form-step.html">Step Form</a></li>
-                            <li><a href="./form-editor.html">Editor</a></li>
-                            <li><a href="./form-picker.html">Picker</a></li>
-                        </ul>
                     </li>
 
 
@@ -313,25 +305,7 @@
                                      </li>  -->
 
 
-                    <li>
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Add Points</span>
-                        </a>
-                        <ul aria-expanded="false">
-                            <li><a href="./page-login.html">Login</a></li>
-                            <li><a href="./page-register.html">Register</a></li>
-                            <li><a href="./page-lock.html">Lock Screen</a></li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Error</a>
-                                <ul aria-expanded="false">
-                                    <li><a href="./page-error-404.html">Error 404</a></li>
-                                    <li><a href="./page-error-403.html">Error 403</a></li>
-                                    <li><a href="./page-error-400.html">Error 400</a></li>
-                                    <li><a href="./page-error-500.html">Error 500</a></li>
-                                    <li><a href="./page-error-503.html">Error 503</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
+
                 </ul>
             </div>
         </div>
@@ -359,7 +333,7 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="email-left-box"><a href="email-compose.html" class="btn btn-primary btn-block">Compose</a>
+                                <div class="email-left-box"><a th:href="@{/compose}" class="btn btn-primary btn-block">Compose</a>
                                     <div class="mail-list mt-4"><a th:href="@{/inbox}" class="list-group-item border-0 text-primary p-r-0"><i class="fa fa-inbox font-18 align-middle mr-2"></i> <b>Inbox</b> <span class="badge badge-primary badge-sm float-right m-t-5">198</span> </a>
                                         <a href="#" class="list-group-item border-0 p-r-0"><i class="fa fa-paper-plane font-18 align-middle mr-2"></i>Sent</a>  <a href="#" class="list-group-item border-0 p-r-0"><i class="fa fa-star-o font-18 align-middle mr-2"></i>Important <span class="badge badge-danger badge-sm float-right m-t-5">47</span> </a>
                                         <a href="#" class="list-group-item border-0 p-r-0"><i class="mdi mdi-file-document-box font-18 align-middle mr-2"></i>Draft</a><a href="#" class="list-group-item border-0 p-r-0"><i class="fa fa-trash font-18 align-middle mr-2"></i>Trash</a>
