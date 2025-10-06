@@ -68,4 +68,7 @@ public class controller {
         return "about"; }
 
 
+    @GetMapping("/section")
+    public String section() {
+        return "table-datatable"; }
 }
