@@ -58,4 +58,8 @@ public class controller {
     @GetMapping("/helpFeed")
     public String viewHelpFeed() {
         return "help-feedback"; }
+
+    @GetMapping("/newindex")
+    public String newindex() {
+        return "index"; }
 }
