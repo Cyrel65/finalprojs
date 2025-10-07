@@ -123,6 +123,35 @@ body {
 
 [tabindex="-1"]:focus {
   outline: 0 !important; }
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    visibility: hidden; /* Key to hiding it */
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1000;
+}
+
+/* 2. Style the actual pop-up box (centered) */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    width: 300px;
+    margin: 10% auto;
+    border-radius: 8px;
+}
+
+/* 3. THE HACK: Show the modal when the checkbox is checked */
+/* The general sibling selector (~) allows us to target the modal
+   only when the checkbox is in the 'checked' state. */
+#modal-toggle:checked ~ .modal {
+    visibility: visible;
+    opacity: 1;
+}
 
 hr {
   box-sizing: content-box;
