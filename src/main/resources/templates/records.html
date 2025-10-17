@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quixlab - Bootstrap Admin Dashboard Template by Themefisher.com</title>
+  <!-- Favicon icon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+  <!-- Custom Stylesheet -->
+  <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!--*******************
+    Preloader start
+********************-->
+<div id="preloader">
+  <div class="loader">
+    <svg class="circular" viewBox="25 25 50 50">
+      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+    </svg>
+  </div>
+</div>
+<!--*******************
+    Preloader end
+********************-->
+
+
+<!--**********************************
+    Main wrapper start
+***********************************-->
+<div id="main-wrapper">
+
+  <!--**********************************
+      Nav header start
+  ***********************************-->
+  <div class="nav-header">
+    <div class="brand-logo">
+      <a href="index.html">
+        <b class="logo-abbr"><img src="images/logo.png" alt=""> </b>
+        <span class="logo-compact"><img src="./images/logo-compact.png" alt=""></span>
+        <span class="brand-title">
+                        <img src="images/logo-text.png" alt="">
+                    </span>
+      </a>
+    </div>
+  </div>
+  <!--**********************************
+      Nav header end
+  ***********************************-->
+
+  <!--**********************************
+      Header start
+  ***********************************-->
+  <div class="header">
+    <div class="header-content clearfix">
+
+      <div class="nav-control">
+        <div class="hamburger">
+          <span class="toggle-icon"><i class="icon-menu"></i></span>
+        </div>
+      </div>
+      <div class="header-left">
+        <div class="input-group icons">
+          <div class="input-group-prepend">
+            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+          </div>
+          <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
+          <div class="drop-down   d-md-none">
+            <form action="#">
+              <input type="text" class="form-control" placeholder="Search">
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="header-right">
+        <ul class="clearfix">
+          <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
+            <i class="mdi mdi-email-outline"></i>
+            <span class="badge gradient-1 badge-pill badge-primary">3</span>
+          </a>
+            <div class="drop-down animated fadeIn dropdown-menu">
+              <div class="dropdown-content-heading d-flex justify-content-between">
+                <span class="">3 New Messages</span>
+
+              </div>
+              <div class="dropdown-content-body">
+                <ul>
+                  <li class="notification-unread">
+                    <a href="javascript:void()">
+                      <img class="float-left mr-3 avatar-img" src="images/avatar/1.jpg" alt="">
+                      <div class="notification-content">
+                        <div class="notification-heading">Saiful Islam</div>
+                        <div class="notification-timestamp">08 Hours ago</div>
+                        <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="notification-unread">
+                    <a href="javascript:void()">
+                      <img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg" alt="">
+                      <div class="notification-content">
+                        <div class="notification-heading">Adam Smith</div>
+                        <div class="notification-timestamp">08 Hours ago</div>
+                        <div class="notification-text">Can you do me a favour?</div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="javascript:void()">
+                      <img class="float-left mr-3 avatar-img" src="images/avatar/3.jpg" alt="">
+                      <div class="notification-content">
+                        <div class="notification-heading">Barak Obama</div>
+                        <div class="notification-timestamp">08 Hours ago</div>
+                        <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="javascript:void()">
+                      <img class="float-left mr-3 avatar-img" src="images/avatar/4.jpg" alt="">
+                      <div class="notification-content">
+                        <div class="notification-heading">Hilari Clinton</div>
+                        <div class="notification-timestamp">08 Hours ago</div>
+                        <div class="notification-text">Hello</div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+          </li>
+          <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
+            <i class="mdi mdi-bell-outline"></i>
+            <span class="badge badge-pill gradient-2 badge-primary">3</span>
+          </a>
+            <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
+              <div class="dropdown-content-heading d-flex justify-content-between">
+                <span class="">2 New Notifications</span>
+
+              </div>
+              <div class="dropdown-content-body">
+                <ul>
+                  <li>
+                    <a href="javascript:void()">
+                      <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                      <div class="notification-content">
+                        <h6 class="notification-heading">Events near you</h6>
+                        <span class="notification-text">Within next 5 days</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="javascript:void()">
+                      <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                      <div class="notification-content">
+                        <h6 class="notification-heading">Event Started</h6>
+                        <span class="notification-text">One hour ago</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="javascript:void()">
+                      <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                      <div class="notification-content">
+                        <h6 class="notification-heading">Event Ended Successfully</h6>
+                        <span class="notification-text">One hour ago</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="javascript:void()">
+                      <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                      <div class="notification-content">
+                        <h6 class="notification-heading">Events to Join</h6>
+                        <span class="notification-text">After two days</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+          </li>
+          <li class="icons dropdown d-none d-md-flex">
+            <a href="javascript:void(0)" class="log-user"  data-toggle="dropdown">
+              <span>English</span>  <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i>
+            </a>
+            <div class="drop-down dropdown-language animated fadeIn  dropdown-menu">
+              <div class="dropdown-content-body">
+                <ul>
+                  <li><a href="javascript:void()">English</a></li>
+                  <li><a href="javascript:void()">Dutch</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="icons dropdown">
+            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+              <span class="activity active"></span>
+              <img src="images/user/1.png" height="40" width="40" alt="">
+            </div>
+            <div class="drop-down dropdown-profile   dropdown-menu">
+              <div class="dropdown-content-body">
+                <ul>
+                  <li>
+                    <a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a>
+                  </li>
+                  <li>
+                    <a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
+                  </li>
+
+                  <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!--**********************************
+      Header end ti-comment-alt
+  ***********************************-->
+
+  <!--**********************************
+      Sidebar start
+  ***********************************-->
+  <div class="nk-sidebar">
+    <div class="nk-nav-scroll">
+      <ul class="metismenu" id="menu">
+
+        <li>
+          <a th:href="@{/}">
+            <span class="nav-text">Dashboard</span>
+          </a>
+        </li>
+        <li class="mega-menu mega-menu-sm">
+          <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+            <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
+          </a>
+          <ul aria-expanded="false">
+            <li><a th:href="@{/login}">Signout</a></li>
+            <li><a th:href="@{/forgotpass}">Forgot Password</a></li>
+            <li><a th:href="@{/helpFeed}">Help and Feedback</a></li>
+
+          </ul>
+        </li>
+
+        <li>
+          <a th:href="@{/inbox}" aria-expanded="false">
+            <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
+          </a>
+
+        </li>
+        <li>
+          <a th:href="@{/profile}">
+            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span>
+          </a>
+
+        </li>
+        <li>
+          <a th:href="@{/table}">
+            <i class="icon-graph menu-icon"></i> <span class="nav-text">Student Rankings</span>
+          </a>
+
+        </li>
+
+        <li>
+          <a  th:href="@{/viewclass}">
+            <i class="icon-grid menu-icon"></i><span class="nav-text">View Classes</span>
+          </a>
+
+        </li>
+        <li>
+          <a th:href="@{/redeem}" aria-expanded="false">
+            <i class="icon-badge menu-icon"></i><span class="nav-text">Redeem</span>
+          </a>
+        </li>
+
+
+
+
+        <!--
+                         <li>
+                             <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                                 <i class="icon-menu menu-icon"></i><span class="nav-text">Table</span>
+                             </a>
+                             <ul aria-expanded="false">
+                                 <li><a href="./table-basic.html" aria-expanded="false">Basic Table</a></li>
+                                 <li><a href="./table-datatable.html" aria-expanded="false">Data Table</a></li>
+                             </ul>
+                         </li>  -->
+
+
+
+      </ul>
+    </div>
+  </div>
+  <!--**********************************
+      Sidebar end
+  ***********************************-->
+
+  <!--**********************************
+      Content body start
+  ***********************************-->
+  <div class="content-body">
+
+    <div class="row page-titles mx-0">
+      <div class="col p-md-0">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
+          <li class="breadcrumb-item active"><a href="javascript:void(0)">Home</a></li>
+        </ol>
+      </div>
+    </div>
+    <!-- row -->
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Students List</h4>
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered zero-configuration">
+                  <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                      <th>Q1</th>
+                      <th>Q2</th>
+                      <th>Q3</th>
+                      <th>Q4</th>
+                      <th>Q5</th>
+                    <th>Quiz Average</th>
+                      <th>UT1</th>
+                      <th>UT2</th>
+                    <th>Unit Test Average</th>
+                    <th>Term Test %</th>
+                    <th>Raw Grades %</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Student 1 </td>
+                    <td>92%</td>
+                    <td>85%</td>
+                    <td>75%</td>
+                    <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Student 2</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Student 3</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Student 4</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Student 5</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>Student 6</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>Student 7</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>Student 8</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>Student 10</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>11</td>
+                    <td>Student 11</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>12</td>
+                    <td>Student 12</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                      <td>45%</td>
+                      <td>92%</td>
+                      <td>85%</td>
+                      <td>75%</td>
+                  </tr>
+                  <tr>
+                    <td>13</td>
+                    <td>Student 13</td>
+                    <td>37%</td>
+                    <td>95%</td>
+                    <td>1%</td>
+                    <td>44%</td>
+                  </tr>
+                  <tr>
+                    <td>14</td>
+                    <td>Student 14</td>
+                    <td>58%</td>
+                    <td>69%</td>
+                    <td>12%</td>
+                    <td>46%</td>
+                  </tr>
+                  <tr>
+                    <td>15</td>
+                    <td>Student 15</td>
+                    <td>71%</td>
+                    <td>22%</td>
+                    <td>100%</td>
+                    <td>77%</td>
+                  </tr>
+                  <tr>
+                    <td>16</td>
+                    <td>Student 16</td>
+                    <td>6%</td>
+                    <td>36%</td>
+                    <td>66%</td>
+                    <td>41%</td>
+                  </tr>
+                  <tr>
+                    <td>17</td>
+                    <td>Student 17</td>
+                    <td>14%</td>
+                    <td>2%</td>
+                    <td>70%</td>
+                    <td>29%</td>
+                  </tr>
+                  <tr>
+                    <td>18</td>
+                    <td>Student 18</td>
+                    <td>70%</td>
+                    <td>58%</td>
+                    <td>13%</td>
+                    <td>47%</td>
+                  </tr>
+                  <tr>
+                    <td>19</td>
+                    <td>Student 19</td>
+                    <td>63%</td>
+                    <td>41%</td>
+                    <td>29%</td>
+                    <td>44%</td>
+                  </tr>
+                  <tr>
+                    <td>20</td>
+                    <td>Student 20</td>
+                    <td>25%</td>
+                    <td>73%</td>
+                    <td>85%</td>
+                    <td>61%</td>
+                  </tr>
+                  <tr>
+                    <td>21</td>
+                    <td>Student 21</td>
+                    <td>45%</td>
+                    <td>19%</td>
+                    <td>68%</td>
+                    <td>46%</td>
+                  </tr>
+                  <tr>
+                    <td>22</td>
+                    <td>Student 22</td>
+                    <td>43%</td>
+                    <td>25%</td>
+                    <td>46%</td>
+                    <td>37%</td>
+                  </tr>
+                  <tr>
+                    <td>23</td>
+                    <td>Student 23</td>
+                    <td>90%</td>
+                    <td>79%</td>
+                    <td>9%</td>
+                    <td>60%</td>
+                  </tr>
+                  <tr>
+                    <td>24</td>
+                    <td>Student 24</td>
+                    <td>54%</td>
+                    <td>78%</td>
+                    <td>88%</td>
+                    <td>73%</td>
+                  </tr>
+                  <tr>
+                    <td>25</td>
+                    <td>Student 25</td>
+                    <td>36%</td>
+                    <td>61%</td>
+                    <td>9%</td>
+                    <td>36%</td>
+                  </tr>
+                  <tr>
+                    <td>26</td>
+                    <td>Student 26</td>
+                    <td>62%</td>
+                    <td>26%</td>
+                    <td>59%</td>
+                    <td>49%</td>
+                  </tr>
+                  <tr>
+                    <td>27</td>
+                    <td>Student 27</td>
+                    <td>37%</td>
+                    <td>12%</td>
+                    <td>60%</td>
+                    <td>38%</td>
+                  </tr>
+                  <tr>
+                    <td>28</td>
+                    <td>Student 28</td>
+                    <td>25%</td>
+                    <td>87%</td>
+                    <td>1%</td>
+                    <td>38%</td>
+                  </tr>
+                  <tr>
+                    <td>29</td>
+                    <td>Student 29</td>
+                    <td>80%</td>
+                    <td>9%</td>
+                    <td>73%</td>
+                    <td>52%</td>
+                  </tr>
+                  <tr>
+                    <td>30</td>
+                    <td>Student 30</td>
+                    <td>16%</td>
+                    <td>25%</td>
+                    <td>74%</td>
+                    <td>38%</td>
+                  </tr>
+                  <tr>
+                    <td>31</td>
+                    <td>Student 31</td>
+                    <td>79%</td>
+                    <td>84%</td>
+                    <td>27%</td>
+                    <td>63%</td>
+                  </tr>
+                  <tr>
+                    <td>32</td>
+                    <td>Student 32</td>
+                    <td>39%</td>
+                    <td>35%</td>
+                    <td>2%</td>
+                    <td>24%</td>
+                  </tr>
+                  <tr>
+                    <td>33</td>
+                    <td>Student 33</td>
+                    <td>55%</td>
+                    <td>32%</td>
+                    <td>47%</td>
+                    <td>45%</td>
+                  </tr>
+                  <tr>
+                    <td>34</td>
+                    <td>Student 34</td>
+                    <td>42%</td>
+                    <td>90%</td>
+                    <td>50%</td>
+                    <td>61%</td>
+                  </tr>
+                  <tr>
+                    <td>35</td>
+                    <td>Student 35</td>
+                    <td>25%</td>
+                    <td>77%</td>
+                    <td>92%</td>
+                    <td>65%</td>
+                  </tr>
+                  <tr>
+                    <td>36</td>
+                    <td>Student 36</td>
+                    <td>93%</td>
+                    <td>28%</td>
+                    <td>53%</td>
+                    <td>58%</td>
+                  </tr>
+                  <tr>
+                    <td>37</td>
+                    <td>Student 37</td>
+                    <td>78%</td>
+                    <td>49%</td>
+                    <td>56%</td>
+                    <td>61%</td>
+                  </tr>
+                  <tr>
+                    <td>38</td>
+                    <td>Student 38</td>
+                    <td>47%</td>
+                    <td>14%</td>
+                    <td>3%</td>
+                    <td>22%</td>
+                  </tr>
+                  <tr>
+                    <td>39</td>
+                    <td>Student 39</td>
+                    <td>73%</td>
+                    <td>10%</td>
+                    <td>35%</td>
+                    <td>39%</td>
+                  </tr>
+                  <tr>
+                    <td>40</td>
+                    <td>Student 40</td>
+                    <td>65%</td>
+                    <td>34%</td>
+                    <td>65%</td>
+                    <td>55%</td>
+                  </tr>
+                  <tr>
+                    <td>41</td>
+                    <td>Student 41</td>
+                    <td>82%</td>
+                    <td>18%</td>
+                    <td>14%</td>
+                    <td>38%</td>
+                  </tr>
+                  <tr>
+                    <td>42</td>
+                    <td>Student 42</td>
+                    <td>59%</td>
+                    <td>57%</td>
+                    <td>85%</td>
+                    <td>67%</td>
+                  </tr>
+                  <tr>
+                    <td>43</td>
+                    <td>Student 43</td>
+                    <td>1%</td>
+                    <td>84%</td>
+                    <td>1%</td>
+                    <td>29%</td>
+                  </tr>
+                  <tr>
+                    <td>44</td>
+                    <td>Student 44</td>
+                    <td>76%</td>
+                    <td>39%</td>
+                    <td>73%</td>
+                    <td>63%</td>
+                  </tr>
+                  <tr>
+                    <td>45</td>
+                    <td>Student 45</td>
+                    <td>10%</td>
+                    <td>77%</td>
+                    <td>10%</td>
+                    <td>32%</td>
+                  </tr>
+                  <tr>
+                    <td>46</td>
+                    <td>Student 46</td>
+                    <td>28%</td>
+                    <td>10%</td>
+                    <td>80%</td>
+                    <td>39%</td>
+                  </tr>
+                  <tr>
+                    <td>47</td>
+                    <td>Student 47</td>
+                    <td>98%</td>
+                    <td>65%</td>
+                    <td>77%</td>
+                    <td>80%</td>
+                  </tr>
+                  <tr>
+                    <td>48</td>
+                    <td>Student 48</td>
+                    <td>7%</td>
+                    <td>67%</td>
+                    <td>87%</td>
+                    <td>54%</td>
+                  </tr>
+                  <tr>
+                    <td>49</td>
+                    <td>Student 49</td>
+                    <td>33%</td>
+                    <td>60%</td>
+                    <td>28%</td>
+                    <td>40%</td>
+                  </tr>
+                  <tr>
+                    <td>50</td>
+                    <td>Student 50</td>
+                    <td>15%</td>
+                    <td>98%</td>
+                    <td>45%</td>
+                    <td>53%</td>
+                  </tr>
+                  <tr>
+                    <td>51</td>
+                    <td>Student 51</td>
+                    <td>56%</td>
+                    <td>27%</td>
+                    <td>15%</td>
+                    <td>33%</td>
+                  </tr>
+                  <tr>
+                    <td>52</td>
+                    <td>Student 52</td>
+                    <td>69%</td>
+                    <td>28%</td>
+                    <td>49%</td>
+                    <td>49%</td>
+                  </tr>
+                  <tr>
+                    <td>53</td>
+                    <td>Student 53</td>
+                    <td>11%</td>
+                    <td>32%</td>
+                    <td>70%</td>
+                    <td>38%</td>
+                  </tr>
+                  <tr>
+                    <td>54</td>
+                    <td>Student 54</td>
+                    <td>60%</td>
+                    <td>50%</td>
+                    <td>35%</td>
+                    <td>48%</td>
+                  </tr>
+                  <tr>
+                    <td>55</td>
+                    <td>Student 55</td>
+                    <td>33%</td>
+                    <td>56%</td>
+                    <td>70%</td>
+                    <td>53%</td>
+                  </tr>
+                  <tr>
+                    <td>56</td>
+                    <td>Student 56</td>
+                    <td>13%</td>
+                    <td>21%</td>
+                    <td>58%</td>
+                    <td>31%</td>
+                  </tr>
+                  <tr>
+                    <td>57</td>
+                    <td>Student 57</td>
+                    <td>98%</td>
+                    <td>34%</td>
+                    <td>88%</td>
+                    <td>73%</td>
+                  </tr>
+                  <tr>
+                    <td>58</td>
+                    <td>Student 58</td>
+                    <td>8%</td>
+                    <td>98%</td>
+                    <td>100%</td>
+                    <td>69%</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #/ container -->
+  </div>
+  <!--**********************************
+      Content body end
+  ***********************************-->
+
+
+  <!--**********************************
+      Footer start
+  ***********************************-->
+  <div class="footer">
+    <div class="copyright">
+      <p>Copyright &copy; Designed & Developed by <a href="https://themeforest.net/user/quixlab">Quixlab</a> 2018</p>
+    </div>
+  </div>
+  <!--**********************************
+      Footer end
+  ***********************************-->
+</div>
+<!--**********************************
+    Main wrapper end
+***********************************-->
+
+<!--**********************************
+    Scripts
+***********************************-->
+<script src="plugins/common/common.min.js"></script>
+<script src="js/custom.min.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/gleek.js"></script>
+<script src="js/styleSwitcher.js"></script>
+
+<script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
+<script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+<script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+
+</body>
+
+</html>

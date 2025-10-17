@@ -71,4 +71,9 @@ public class controller {
     @GetMapping("/section")
     public String section() {
         return "table-datatable"; }
+
+    @GetMapping("/records")
+    public String Record() {
+        return "records"; }
 }
+
