@@ -224,10 +224,6 @@
             Header end ti-comment-alt
         ***********************************-->
 
-        <!--**********************************
-            Sidebar start
-        ***********************************-->
-        ***********************************-->
         <div class="nk-sidebar">
             <div class="nk-nav-scroll">
                 <ul class="metismenu" id="menu">
@@ -248,6 +244,7 @@
 
                         </ul>
                     </li>
+
                     <li>
                         <a th:href="@{/inbox}" aria-expanded="false">
                             <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
@@ -279,7 +276,11 @@
                         </a>
                     </li>
 
-
+                    <li>
+                        <a th:href="@{/about}" aria-expanded="false">
+                            <i class="icon-note menu-icon"></i><span class="nav-text">About</span>
+                        </a>
+                    </li>
 
 
                     <!--
@@ -298,9 +299,9 @@
                 </ul>
             </div>
         </div>
-        <!--**********************************
+        <!--
             Sidebar end
-           ***********************************-->
+           -->
 
         <!--**********************************
             Content body start
