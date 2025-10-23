@@ -29,7 +29,7 @@
         Preloader end
     ********************-->
 
-    
+
     <!--**********************************
         Main wrapper start
     ***********************************-->
@@ -56,9 +56,9 @@
         <!--**********************************
             Header start
         ***********************************-->
-        <div class="header">    
+        <div class="header">
             <div class="header-content clearfix">
-                
+
                 <div class="nav-control">
                     <div class="hamburger">
                         <span class="toggle-icon"><i class="icon-menu"></i></span>
@@ -85,8 +85,8 @@
                             </a>
                             <div class="drop-down animated fadeIn dropdown-menu">
                                 <div class="dropdown-content-heading d-flex justify-content-between">
-                                    <span class="">3 New Messages</span>  
-                                    
+                                    <span class="">3 New Messages</span>
+
                                 </div>
                                 <div class="dropdown-content-body">
                                     <ul>
@@ -131,7 +131,7 @@
                                             </a>
                                         </li>
                                     </ul>
-                                    
+
                                 </div>
                             </div>
                         </li>
@@ -141,8 +141,8 @@
                             </a>
                             <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
                                 <div class="dropdown-content-heading d-flex justify-content-between">
-                                    <span class="">2 New Notifications</span>  
-                                    
+                                    <span class="">2 New Notifications</span>
+
                                 </div>
                                 <div class="dropdown-content-body">
                                     <ul>
@@ -151,7 +151,7 @@
                                                 <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
                                                 <div class="notification-content">
                                                     <h6 class="notification-heading">Events near you</h6>
-                                                    <span class="notification-text">Within next 5 days</span> 
+                                                    <span class="notification-text">Within next 5 days</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -160,7 +160,7 @@
                                                 <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
                                                 <div class="notification-content">
                                                     <h6 class="notification-heading">Event Started</h6>
-                                                    <span class="notification-text">One hour ago</span> 
+                                                    <span class="notification-text">One hour ago</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -178,7 +178,7 @@
                                                 <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
                                                 <div class="notification-content">
                                                     <h6 class="notification-heading">Events to Join</h6>
-                                                    <span class="notification-text">After two days</span> 
+                                                    <span class="notification-text">After two days</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -333,147 +333,48 @@
 
                 <div id="inlineForm" style="display: none;" class="p-3 mb-4 border rounded bg-light">
                     <h4>Define New Box Details</h4>
-                    <form id="cardFormInline">
+                    <form th:action="@{/createBox}" method="post">
                         <div class="form-group">
                             <label for="pointsInputInline">Points</label>
-                            <input type="number" class="form-control" id="pointsInputInline" placeholder="Enter points" required>
+                            <input type="number" class="form-control" name="points" id="pointsInputInline" placeholder="Enter points" required>
                         </div>
                         <div class="form-group">
                             <label for="messageInputInline">Type of Test</label>
-                            <input type="text" class="form-control" id="messageInputInline" placeholder="Enter the type of Test you want" required>
+                            <input type="text" class="form-control" name="typeOfTest" id="messageInputInline" placeholder="Enter the type of Test you want" required>
                         </div>
-                        <button type="button" id="createCardBtn" class="btn btn-success mt-2">Create Box</button>
+                        <button type="submit" id="createCardBtn" class="btn btn-success mt-2">Create Box</button>
                     </form>
                 </div>
 
                 <div class="row" id="cardContainer">
-                </div>
-            </div>
-
-            <script>
-                const CARD_STORAGE_KEY = 'savedUserCards';
-                const cardContainer = document.getElementById("cardContainer");
-
-                // Function to generate new card HTML
-                function createCard(points, message) {
-                    return `
-                <div class="col-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="text-center">
-                                <span class="display-5"><i class="icon-diamond gradient-4-text"></i></span>
-                                <h2 class="mt-3">${points} Points</h2>
-                                <p>${message}</p>
-                                <a href="javascript:void()" class="btn gradient-4 btn-lg border-0 btn-rounded px-5">Redeem now</a>
+                    <div th:each="box : ${boxes}" class="col-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <span class="display-5"><i class="icon-diamond gradient-4-text"></i></span>
+                                    <h2 class="mt-3" th:text="${box.points} + ' Points'">Points</h2>
+                                    <p th:text="${box.typeOfTest}">Type of Test</p>
+                                    <a href="javascript:void()" class="btn gradient-4 btn-lg border-0 btn-rounded px-5">Redeem now</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>`;
-                }
 
-                // Function to save the current cards array to LocalStorage
-                function saveCardsToLocalStorage(cardsArray) {
-                    localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(cardsArray));
-                    // Show the Clear All button if cards exist
-                    document.getElementById("clearAllBtn").style.display = cardsArray.length > 0 ? 'inline-block' : 'none';
-                }
+                    <div th:if="${boxes.empty}" class="col-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <span class="display-5"><i class="icon-diamond gradient-4-text"></i></span>
+                                    <h2 class="mt-3">10 Points</h2>
+                                    <p>Unit Test 1</p>
+                                    <a href="javascript:void()" class="btn gradient-4 btn-lg border-0 btn-rounded px-5">Redeem now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                // Function to load cards from LocalStorage and render them
-                function loadAndRenderCards() {
-                    // *** FIX: Ensure the container is cleared before rendering ***
-                    cardContainer.innerHTML = '';
-
-                    const storedCards = localStorage.getItem(CARD_STORAGE_KEY);
-                    let cards = [];
-
-                    if (storedCards) {
-                        try {
-                            cards = JSON.parse(storedCards);
-                        } catch (e) {
-                            console.error("Error parsing stored cards:", e);
-                        }
-                    }
-
-                    // Render each card from the saved data
-                    cards.forEach(card => {
-                        cardContainer.insertAdjacentHTML("beforeend", createCard(card.points, card.message));
-                    });
-
-                    // Add one default card if the saved array is empty
-                    if (cards.length === 0) {
-                         cardContainer.insertAdjacentHTML("beforeend", createCard(10, "Unit Test 1"));
-                    }
-
-                    // Update the visibility of the "Clear All" button
-                    document.getElementById("clearAllBtn").style.display = cards.length > 0 ? 'inline-block' : 'none';
-                }
-
-                // --- Main Logic (Element References) ---
-                const toggleButton = document.getElementById("toggleFormBtn");
-                const formContainer = document.getElementById("inlineForm");
-                const createButton = document.getElementById("createCardBtn");
-                const cardFormElement = document.getElementById("cardFormInline");
-                const clearAllButton = document.getElementById("clearAllBtn");
-
-                // 1. Event Listener for the main "Add New Box" button (Form Toggle)
-                if (toggleButton && formContainer) {
-                    toggleButton.addEventListener("click", function () {
-                        // Toggle the display style of the form
-                        const isHidden = formContainer.style.display === "none" || formContainer.style.display === "";
-                        formContainer.style.display = isHidden ? "block" : "none";
-                        this.innerHTML = isHidden ? '<i class="fa fa-times"></i> Close Form' : '<i class="fa fa-plus"></i> Add New Box';
-                        this.classList.toggle('btn-primary', !isHidden);
-                        this.classList.toggle('btn-secondary', isHidden);
-                    });
-                }
-
-                // 2. Event Listener for the inner "Create Box" button (Card Creation & Saving)
-                if (createButton && cardFormElement) {
-                    createButton.addEventListener("click", function () {
-                        const points = document.getElementById("pointsInputInline").value.trim();
-                        const message = document.getElementById("messageInputInline").value.trim();
-
-                        if (!points || !message) {
-                            alert("Please enter both Points and Type of Test.");
-                            return;
-                        }
-
-                        // Get saved cards, add new card data, and save back
-                        const storedCards = localStorage.getItem(CARD_STORAGE_KEY);
-                        let cards = storedCards ? JSON.parse(storedCards) : [];
-                        cards.push({ points: points, message: message });
-
-                        saveCardsToLocalStorage(cards);
-
-                        // *** FIX: Call loadAndRenderCards() to redraw the UI instantly ***
-                        loadAndRenderCards();
-
-                        // Reset and hide the form
-                        cardFormElement.reset();
-                        formContainer.style.display = "none";
-
-                        // Reset the toggle button back to its initial state
-                        toggleButton.innerHTML = '<i class="fa fa-plus"></i> Add New Box';
-                        toggleButton.classList.remove('btn-secondary');
-                        toggleButton.classList.add('btn-primary');
-                    });
-                }
-
-                // 3. Clear All Button Logic
-                if (clearAllButton) {
-                    clearAllButton.addEventListener("click", function () {
-                        if (confirm("Are you sure you want to delete ALL saved boxes?")) {
-                            localStorage.removeItem(CARD_STORAGE_KEY);
-                            loadAndRenderCards(); // Re-render to show only the default card
-                        }
-                    });
-                }
-
-                // --- INITIALIZATION ---
-                // Load and render cards when the page first loads
-                document.addEventListener('DOMContentLoaded', loadAndRenderCards);
-            </script>
-        <!--**********************************
+                    <!--**********************************
             Content body end
         ***********************************-->
     </div>
@@ -489,67 +390,28 @@
     <script src="js/settings.js"></script>
     <script src="js/gleek.js"></script>
     <script src="js/styleSwitcher.js"></script>
-    <script src="./js/dashboard/dashboard-2.js"></script>    
 
 
-    <script>
-        window.localStorage.clear();
-        $(document).ready(function () {
+            <script>
+                $(document).ready(function () {
 
-$('#list-items').html(localStorage.getItem('listItems'));
+                    // =======================================================
+                    // ESSENTIAL FUNCTION: TOGGLE THE ADD NEW BOX FORM
+                    // This is the only client-side function needed for the button.
+                    // It makes the button with id="toggleFormBtn" show/hide
+                    // the form with id="inlineForm".
+                    // =======================================================
+                    $('#toggleFormBtn').on('click', function() {
+                        $('#inlineForm').slideToggle();
+                    });
+                    // =======================================================
 
-$('.add-items').submit(function(event) 
-{
-event.preventDefault();
+                    // ALL UNNECESSARY LOCAL STORAGE/TODO LIST CODE HAS BEEN REMOVED.
+                    // Your form submission (th:action="@{/createBox}") will now
+                    // correctly trigger the Spring Boot controller to save the data to MySQL.
 
-var item = $('#todo-list-item').val();
-if(item) 
-{
-$('#list-items').append("<li><div class='round d-inline-block'><input type='checkbox' id='checkbox' /><label for='checkbox'></label></div><label for='checkbox'>" + item + "</label><a class='remove'><i class='fa fa-trash'></i></a></li>");
-
-
-
-
-// <div class='round'><input type='checkbox' id='checkbox' /><label for='checkbox'></label></div><label for='checkbox'>
-
-// dfdfdf</label>
-
-
-
-
-
-localStorage.setItem('listItems', $('#list-items').html());
-
-$('#todo-list-item').val("");
-}
-
-});
-
-$(document).on('change', '.checkbox', function() 
-{
-if($(this).attr('checked')) 
-{
-$(this).removeAttr('checked');
-} 
-else 
-{
-$(this).attr('checked', 'checked');
-}
-
-$(this).parent().toggleClass('completed');
-
-localStorage.setItem('listItems', $('#list-items').html());
-});
-
-$(document).on('click', '.remove', function() 
-{
-$(this).parent().remove();
-
-localStorage.setItem('listItems', $('#list-items').html());
-});
-
-});
-    </script>
+                });
+            </script>
 </body>
 
 </html>

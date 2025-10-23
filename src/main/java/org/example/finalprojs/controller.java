@@ -1,6 +1,8 @@
 package org.example.finalprojs;
 
+import org.example.finalprojs.model.Box;
 import org.example.finalprojs.model.User;
+import org.example.finalprojs.repository.BoxRepository;
 import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -79,10 +82,6 @@ public class controller {
     }
 
 
-    @GetMapping("/")
-    public String viewIndex() {
-        return "index";
-    }
 
     @GetMapping("/profile")
     public String viewProfile() {
@@ -110,9 +109,23 @@ public class controller {
     public String viewClass() {
         return "viewclasses"; }
 
+
+    @Autowired
+    private BoxRepository boxRepository;
+
     @GetMapping("/redeem")
-    public String viewWidgets() {
-        return "widgets"; }
+    public String viewWidgets(Model model) {
+
+        // 1. Fetch ALL boxes from the database (just like the dashboard)
+        List<Box> allBoxes = boxRepository.findAll();
+
+        // 2. Add the list of ALL boxes to the model, using the variable name 'boxes'
+        //    that widgets.html expects.
+        model.addAttribute("boxes", allBoxes);
+
+        // 3. Return the template name
+        return "widgets";
+    }
 
     @GetMapping("/forgotpass")
     public String viewPassword() {
