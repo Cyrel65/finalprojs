@@ -322,100 +322,157 @@
 
             <div class="container-fluid">
 
-                <!-- Add New Box Button -->
                 <div class="mb-3">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal">
+                    <button type="button" class="btn btn-primary" id="toggleFormBtn">
                         <i class="fa fa-plus"></i> Add New Box
+                    </button>
+                    <button type="button" class="btn btn-danger" id="clearAllBtn" style="display: none;">
+                        <i class="fa fa-trash"></i> Clear All Saved Boxes
                     </button>
                 </div>
 
+                <div id="inlineForm" style="display: none;" class="p-3 mb-4 border rounded bg-light">
+                    <h4>Define New Box Details</h4>
+                    <form id="cardFormInline">
+                        <div class="form-group">
+                            <label for="pointsInputInline">Points</label>
+                            <input type="number" class="form-control" id="pointsInputInline" placeholder="Enter points" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="messageInputInline">Type of Test</label>
+                            <input type="text" class="form-control" id="messageInputInline" placeholder="Enter the type of Test you want" required>
+                        </div>
+                        <button type="button" id="createCardBtn" class="btn btn-success mt-2">Create Box</button>
+                    </form>
+                </div>
+
                 <div class="row" id="cardContainer">
-                    <!-- Example card -->
-                    <div class="col-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <span class="display-5"><i class="icon-diamond gradient-4-text"></i></span>
-                                    <h2 class="mt-3">10 Points</h2>
-                                    <p>Unit Test 1</p>
-                                    <a href="javascript:void()" class="btn gradient-4 btn-lg border-0 btn-rounded px-5">Redeem now</a>
-                                </div>
+                </div>
+            </div>
+
+            <script>
+                const CARD_STORAGE_KEY = 'savedUserCards';
+                const cardContainer = document.getElementById("cardContainer");
+
+                // Function to generate new card HTML
+                function createCard(points, message) {
+                    return `
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <span class="display-5"><i class="icon-diamond gradient-4-text"></i></span>
+                                <h2 class="mt-3">${points} Points</h2>
+                                <p>${message}</p>
+                                <a href="javascript:void()" class="btn gradient-4 btn-lg border-0 btn-rounded px-5">Redeem now</a>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-
-            <!-- Basic Modal -->
-            <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="basicModalLabel">Create New Box</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="cardForm">
-                                <div class="form-group">
-                                    <label for="pointsInput">Points</label>
-                                    <input type="number" class="form-control" id="pointsInput" placeholder="Enter points">
-                                </div>
-                                <div class="form-group">
-                                    <label for="messageInput">Type of Test</label>
-                                    <input type="text" class="form-control" id="messageInput" placeholder="Enter the type of Test you want">
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" id="saveCardBtn" class="btn btn-primary">Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <script>
-                // Function to generate new card
-                function createCard(points, message) {
-                    return `
-            <div class="col-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <span class="display-5"><i class="icon-diamond gradient-4-text"></i></span>
-                            <h2 class="mt-3">${points} Points</h2>
-                            <p>${message}</p>
-                            <a href="javascript:void()" class="btn gradient-4 btn-lg border-0 btn-rounded px-5">Redeem now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
+                </div>`;
                 }
 
-                // Add new card when "Save" is clicked
-                document.getElementById("saveCardBtn").addEventListener("click", function () {
-                    const points = document.getElementById("pointsInput").value || "0";
-                    const message = document.getElementById("messageInput").value || "No message";
+                // Function to save the current cards array to LocalStorage
+                function saveCardsToLocalStorage(cardsArray) {
+                    localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(cardsArray));
+                    // Show the Clear All button if cards exist
+                    document.getElementById("clearAllBtn").style.display = cardsArray.length > 0 ? 'inline-block' : 'none';
+                }
 
-                    document.getElementById("cardContainer")
-                        .insertAdjacentHTML("beforeend", createCard(points, message));
+                // Function to load cards from LocalStorage and render them
+                function loadAndRenderCards() {
+                    // *** FIX: Ensure the container is cleared before rendering ***
+                    cardContainer.innerHTML = '';
 
-                    // Reset form fields
-                    document.getElementById("pointsInput").value = "";
-                    document.getElementById("messageInput").value = "";
+                    const storedCards = localStorage.getItem(CARD_STORAGE_KEY);
+                    let cards = [];
 
-                    // Close modal (Bootstrap 4 way)
-                    $('#basicModal').modal('hide')
-                });
+                    if (storedCards) {
+                        try {
+                            cards = JSON.parse(storedCards);
+                        } catch (e) {
+                            console.error("Error parsing stored cards:", e);
+                        }
+                    }
+
+                    // Render each card from the saved data
+                    cards.forEach(card => {
+                        cardContainer.insertAdjacentHTML("beforeend", createCard(card.points, card.message));
+                    });
+
+                    // Add one default card if the saved array is empty
+                    if (cards.length === 0) {
+                         cardContainer.insertAdjacentHTML("beforeend", createCard(10, "Unit Test 1"));
+                    }
+
+                    // Update the visibility of the "Clear All" button
+                    document.getElementById("clearAllBtn").style.display = cards.length > 0 ? 'inline-block' : 'none';
+                }
+
+                // --- Main Logic (Element References) ---
+                const toggleButton = document.getElementById("toggleFormBtn");
+                const formContainer = document.getElementById("inlineForm");
+                const createButton = document.getElementById("createCardBtn");
+                const cardFormElement = document.getElementById("cardFormInline");
+                const clearAllButton = document.getElementById("clearAllBtn");
+
+                // 1. Event Listener for the main "Add New Box" button (Form Toggle)
+                if (toggleButton && formContainer) {
+                    toggleButton.addEventListener("click", function () {
+                        // Toggle the display style of the form
+                        const isHidden = formContainer.style.display === "none" || formContainer.style.display === "";
+                        formContainer.style.display = isHidden ? "block" : "none";
+                        this.innerHTML = isHidden ? '<i class="fa fa-times"></i> Close Form' : '<i class="fa fa-plus"></i> Add New Box';
+                        this.classList.toggle('btn-primary', !isHidden);
+                        this.classList.toggle('btn-secondary', isHidden);
+                    });
+                }
+
+                // 2. Event Listener for the inner "Create Box" button (Card Creation & Saving)
+                if (createButton && cardFormElement) {
+                    createButton.addEventListener("click", function () {
+                        const points = document.getElementById("pointsInputInline").value.trim();
+                        const message = document.getElementById("messageInputInline").value.trim();
+
+                        if (!points || !message) {
+                            alert("Please enter both Points and Type of Test.");
+                            return;
+                        }
+
+                        // Get saved cards, add new card data, and save back
+                        const storedCards = localStorage.getItem(CARD_STORAGE_KEY);
+                        let cards = storedCards ? JSON.parse(storedCards) : [];
+                        cards.push({ points: points, message: message });
+
+                        saveCardsToLocalStorage(cards);
+
+                        // *** FIX: Call loadAndRenderCards() to redraw the UI instantly ***
+                        loadAndRenderCards();
+
+                        // Reset and hide the form
+                        cardFormElement.reset();
+                        formContainer.style.display = "none";
+
+                        // Reset the toggle button back to its initial state
+                        toggleButton.innerHTML = '<i class="fa fa-plus"></i> Add New Box';
+                        toggleButton.classList.remove('btn-secondary');
+                        toggleButton.classList.add('btn-primary');
+                    });
+                }
+
+                // 3. Clear All Button Logic
+                if (clearAllButton) {
+                    clearAllButton.addEventListener("click", function () {
+                        if (confirm("Are you sure you want to delete ALL saved boxes?")) {
+                            localStorage.removeItem(CARD_STORAGE_KEY);
+                            loadAndRenderCards(); // Re-render to show only the default card
+                        }
+                    });
+                }
+
+                // --- INITIALIZATION ---
+                // Load and render cards when the page first loads
+                document.addEventListener('DOMContentLoaded', loadAndRenderCards);
             </script>
-
-
-            <!-- #/ container -->
-        </div>
         <!--**********************************
             Content body end
         ***********************************-->
