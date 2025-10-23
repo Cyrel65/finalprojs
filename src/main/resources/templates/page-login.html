@@ -41,15 +41,21 @@
                         <div class="card login-form mb-0">
                             <div class="card-body pt-5">
                                 <a class="text-center" th:href="@{/}"> <h4>Rosella</h4></a>
-        
-                                <form class="mt-5 mb-5 login-input">
+
+                                <form class="mt-5 mb-5 login-input" th:action="@{/login}" method="post">
                                     <div class="form-group">
-                                        <input type="email" class="form-control" placeholder="Email">
+                                        <input type="email" class="form-control" placeholder="Email" name="email" required>
                                     </div>
+
                                     <div class="form-group">
-                                        <input type="password" class="form-control" placeholder="Password">
+                                        <input type="password" class="form-control" placeholder="Password" name="password" required>
                                     </div>
-                                    <a th:href="@{/}" class="btn login-form__btn submit w-100">Sign In</a>
+
+                                    <button type="submit" class="btn login-form__btn submit w-100">Sign In</button>
+
+                                    <div th:if="${loginError}" class="alert alert-danger mt-3" role="alert">
+                                        <p th:text="${loginError}"></p>
+                                    </div>
 
                                 </form>
                                 <p class="mt-5 login-form__footer">Dont have account? <a th:href="@{/register}" class="text-primary">Sign Up</a> now</p>
