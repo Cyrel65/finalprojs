@@ -144,12 +144,16 @@ public class controller {
         return "about"; }
 
 
-    @GetMapping("/section")
-    public String section() {
-        return "table-datatable"; }
+    @GetMapping("/scores")
+    public String scores() {
+        return "scores"; }
 
     @GetMapping("/records")
     public String Record() {
         return "records"; }
+
+    @GetMapping("/section")
+    public String Section() {
+        return "table-datatable"; }
 }
 
