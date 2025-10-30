@@ -11,4 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Spring Data JPA implements this method to find a User by email.
     Optional<User> findByEmail(String email);
+
 }

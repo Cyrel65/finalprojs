@@ -14,7 +14,7 @@ public class User {
     private String name;
     private String email;
     private String password; // 🚨 IMPORTANT: In production, this MUST be hashed!
-
+    private int points = 0;
     // Default Constructor (required by JPA)
     public User() {
     }
@@ -51,5 +51,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 }
