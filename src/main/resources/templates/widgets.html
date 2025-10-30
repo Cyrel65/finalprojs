@@ -309,6 +309,13 @@
                 </div>
             </div>
 
+            <div th:if="${success}" class="alert alert-success mt-3" role="alert">
+                <span th:text="${success}">Success message placeholder.</span>
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
+                <span th:text="${error}">Danger message placeholder.</span>
+            </div>
 
             <!-- row -->
 

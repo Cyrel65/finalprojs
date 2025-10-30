@@ -72,15 +72,14 @@ public class BoxController {
     @Transactional
     public String executeRedeem(@RequestParam Long boxId, HttpSession session, RedirectAttributes redirectAttributes) {
 
-        // 1. Authentication Check using HttpSession (The FIX)
+        // 1. Authentication Check using HttpSession
         String userEmail = (String) session.getAttribute("userEmail");
         if (userEmail == null) {
-            redirectAttributes.addFlashAttribute("error", "Authentication required for redemption.");
-            return "redirect:/login"; // Redirects to login if not authenticated
+            redirectAttributes.addFlashAttribute("error", "Authentication failed. Please log in to redeem items.");
+            return "redirect:/login";
         }
 
         // 2. Fetch the current User by email
-        // We use findByEmail because the session stores the user's email.
         Optional<User> userOptional = userRepository.findByEmail(userEmail);
 
         if (userOptional.isEmpty()) {
@@ -93,15 +92,22 @@ public class BoxController {
         // 3. Get the Box
         Optional<Box> boxOptional = boxRepository.findById(boxId);
         if (boxOptional.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Error: Item not found.");
+            redirectAttributes.addFlashAttribute("error", "Error: The selected item could not be found.");
             return "redirect:/redeem";
         }
         Box boxToRedeem = boxOptional.get();
 
 
-        // 4. CRITICAL BUSINESS LOGIC: Check Points
+        // 4. CRITICAL BUSINESS LOGIC: Check Points (Updated Error Message)
         if (user.getPoints() < boxToRedeem.getPoints()) {
-            redirectAttributes.addFlashAttribute("error", "Redemption failed: Insufficient points.");
+            int required = boxToRedeem.getPoints();
+            int available = user.getPoints();
+            int needed = required - available;
+
+            // Detailed Error Alert Message
+            redirectAttributes.addFlashAttribute("error",
+                    "Redemption failed: Insufficient points. You need " + required + " points, but only have " + available + ". You are short " + needed + " points."
+            );
             return "redirect:/redeem";
         }
 
@@ -117,7 +123,10 @@ public class BoxController {
         user.setPoints(newPoints);
         userRepository.save(user); // UPDATES USER POINTS
 
-        redirectAttributes.addFlashAttribute("success", "Item redeemed successfully! " + boxToRedeem.getPoints() + " points deducted.");
+        // Detailed Success Alert Message
+        redirectAttributes.addFlashAttribute("success",
+                "Success! You redeemed '" + boxToRedeem.getTypeOfTest() + "'. A total of " + boxToRedeem.getPoints() + " points was deducted. Your new balance is " + user.getPoints() + " points."
+        );
         return "redirect:/redeem";
     }
 
