@@ -11,343 +11,275 @@
 
 <body>
 
-    <!--*******************
-        Preloader start
-    ********************-->
-    <div id="preloader">
-        <div class="loader">
-            <svg class="circular" viewBox="25 25 50 50">
-                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
-            </svg>
-        </div>
+<div id="preloader">
+    <div class="loader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+        </svg>
     </div>
-    <!--*******************
-        Preloader end
-    ********************-->
+</div>
+<div id="main-wrapper">
 
-    
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
-    <div id="main-wrapper">
-
-        <!--**********************************
-            Nav header start
-        ***********************************-->
-        <div class="nav-header">
-            <div class="brand-logo">
-                <a href="index.html">
-                    <b class="logo-abbr"><img src="images/logo.png" alt=""> </b>
-                    <span class="logo-compact"><img src="./images/logo-compact.png" alt=""></span>
-                    <span class="brand-title">
+    <div class="nav-header">
+        <div class="brand-logo">
+            <a href="index.html">
+                <b class="logo-abbr"><img src="images/logo.png" alt=""> </b>
+                <span class="logo-compact"><img src="./images/logo-compact.png" alt=""></span>
+                <span class="brand-title">
                         <img src="images/logo-text.png" alt="">
                     </span>
-                </a>
-            </div>
+            </a>
         </div>
-        <!--**********************************
-            Nav header end
-        ***********************************-->
+    </div>
+    <div class="header">
+        <div class="header-content clearfix">
 
-        <!--**********************************
-            Header start
-        ***********************************-->
-        <div class="header">    
-            <div class="header-content clearfix">
-                
-                <div class="nav-control">
-                    <div class="hamburger">
-                        <span class="toggle-icon"><i class="icon-menu"></i></span>
-                    </div>
-                </div>
-                <div class="header-left">
-                    <div class="input-group icons">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
-                        </div>
-                        <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
-                        <div class="drop-down   d-md-none">
-							<form action="#">
-								<input type="text" class="form-control" placeholder="Search">
-							</form>
-                        </div>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <ul class="clearfix">
-                        <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
-                                <i class="mdi mdi-email-outline"></i>
-                                <span class="badge gradient-1 badge-pill badge-primary">3</span>
-                            </a>
-                            <div class="drop-down animated fadeIn dropdown-menu">
-                                <div class="dropdown-content-heading d-flex justify-content-between">
-                                    <span class="">3 New Messages</span>  
-                                    
-                                </div>
-                                <div class="dropdown-content-body">
-                                    <ul>
-                                        <li class="notification-unread">
-                                            <a href="javascript:void()">
-                                                <img class="float-left mr-3 avatar-img" src="images/avatar/1.jpg" alt="">
-                                                <div class="notification-content">
-                                                    <div class="notification-heading">Saiful Islam</div>
-                                                    <div class="notification-timestamp">08 Hours ago</div>
-                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="notification-unread">
-                                            <a href="javascript:void()">
-                                                <img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg" alt="">
-                                                <div class="notification-content">
-                                                    <div class="notification-heading">Adam Smith</div>
-                                                    <div class="notification-timestamp">08 Hours ago</div>
-                                                    <div class="notification-text">Can you do me a favour?</div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void()">
-                                                <img class="float-left mr-3 avatar-img" src="images/avatar/3.jpg" alt="">
-                                                <div class="notification-content">
-                                                    <div class="notification-heading">Barak Obama</div>
-                                                    <div class="notification-timestamp">08 Hours ago</div>
-                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void()">
-                                                <img class="float-left mr-3 avatar-img" src="images/avatar/4.jpg" alt="">
-                                                <div class="notification-content">
-                                                    <div class="notification-heading">Hilari Clinton</div>
-                                                    <div class="notification-timestamp">08 Hours ago</div>
-                                                    <div class="notification-text">Hello</div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    
-                                </div>
-                            </div>
-                        </li>
-                        <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
-                                <i class="mdi mdi-bell-outline"></i>
-                                <span class="badge badge-pill gradient-2 badge-primary">3</span>
-                            </a>
-                            <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
-                                <div class="dropdown-content-heading d-flex justify-content-between">
-                                    <span class="">2 New Notifications</span>  
-                                    
-                                </div>
-                                <div class="dropdown-content-body">
-                                    <ul>
-                                        <li>
-                                            <a href="javascript:void()">
-                                                <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
-                                                <div class="notification-content">
-                                                    <h6 class="notification-heading">Events near you</h6>
-                                                    <span class="notification-text">Within next 5 days</span> 
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void()">
-                                                <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
-                                                <div class="notification-content">
-                                                    <h6 class="notification-heading">Event Started</h6>
-                                                    <span class="notification-text">One hour ago</span> 
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void()">
-                                                <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
-                                                <div class="notification-content">
-                                                    <h6 class="notification-heading">Event Ended Successfully</h6>
-                                                    <span class="notification-text">One hour ago</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void()">
-                                                <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
-                                                <div class="notification-content">
-                                                    <h6 class="notification-heading">Events to Join</h6>
-                                                    <span class="notification-text">After two days</span> 
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    
-                                </div>
-                            </div>
-                        </li>
-                        <li class="icons dropdown">
-                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
-                                <span class="activity active"></span>
-                                <img src="images/user/1.png" height="40" width="40" alt="">
-                            </div>
-                            <div class="drop-down dropdown-profile   dropdown-menu">
-                                <div class="dropdown-content-body">
-                                    <ul>
-                                        <li>
-                                            <a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a>
-                                        </li>
-                                        <li>
-                                            <a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
-                                        </li>
-
-                                        <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+            <div class="nav-control">
+                <div class="hamburger">
+                    <span class="toggle-icon"><i class="icon-menu"></i></span>
                 </div>
             </div>
-        </div>
-        <!--**********************************
-            Header end ti-comment-alt
-        ***********************************-->
+            <div class="header-left">
+                <div class="input-group icons">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+                    </div>
+                    <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
+                    <div class="drop-down   d-md-none">
+                        <form action="#">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <ul class="clearfix">
+                    <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
+                        <i class="mdi mdi-email-outline"></i>
+                        <span class="badge gradient-1 badge-pill badge-primary">3</span>
+                    </a>
+                        <div class="drop-down animated fadeIn dropdown-menu">
+                            <div class="dropdown-content-heading d-flex justify-content-between">
+                                <span class="">3 New Messages</span>
 
-        <div class="nk-sidebar">
-            <div class="nk-nav-scroll">
-                <ul class="metismenu" id="menu">
+                            </div>
+                            <div class="dropdown-content-body">
+                                <ul>
+                                    <li class="notification-unread">
+                                        <a href="javascript:void()">
+                                            <img class="float-left mr-3 avatar-img" src="images/avatar/1.jpg" alt="">
+                                            <div class="notification-content">
+                                                <div class="notification-heading">Saiful Islam</div>
+                                                <div class="notification-timestamp">08 Hours ago</div>
+                                                <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="notification-unread">
+                                        <a href="javascript:void()">
+                                            <img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg" alt="">
+                                            <div class="notification-content">
+                                                <div class="notification-heading">Adam Smith</div>
+                                                <div class="notification-timestamp">08 Hours ago</div>
+                                                <div class="notification-text">Can you do me a favour?</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void()">
+                                            <img class="float-left mr-3 avatar-img" src="images/avatar/3.jpg" alt="">
+                                            <div class="notification-content">
+                                                <div class="notification-heading">Barak Obama</div>
+                                                <div class="notification-timestamp">08 Hours ago</div>
+                                                <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void()">
+                                            <img class="float-left mr-3 avatar-img" src="images/avatar/4.jpg" alt="">
+                                            <div class="notification-content">
+                                                <div class="notification-heading">Hilari Clinton</div>
+                                                <span class="notification-timestamp">08 Hours ago</span>
+                                                <div class="notification-text">Hello</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
 
-                    <li>
-                        <a th:href="@{/}">
-                            <span class="nav-text">Dashboard</span>
-                        </a>
+                            </div>
+                        </div>
                     </li>
-                    <li class="mega-menu mega-menu-sm">
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
-                        </a>
-                        <ul aria-expanded="false">
-                            <li><a th:href="@{/login}">Signout</a></li>
-                            <li><a th:href="@{/forgotpass}">Forgot Password</a></li>
-                            <li><a th:href="@{/helpFeed}">Help and Feedback</a></li>
+                    <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
+                        <i class="mdi mdi-bell-outline"></i>
+                        <span class="badge badge-pill gradient-2 badge-primary">3</span>
+                    </a>
+                        <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
+                            <div class="dropdown-content-heading d-flex justify-content-between">
+                                <span class="">2 New Notifications</span>
 
-                        </ul>
+                            </div>
+                            <div class="dropdown-content-body">
+                                <ul>
+                                    <li>
+                                        <a href="javascript:void()">
+                                            <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                                            <div class="notification-content">
+                                                <h6 class="notification-heading">Events near you</h6>
+                                                <span class="notification-text">Within next 5 days</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void()">
+                                            <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                                            <div class="notification-content">
+                                                <h6 class="notification-heading">Event Started</h6>
+                                                <span class="notification-text">One hour ago</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void()">
+                                            <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                                            <div class="notification-content">
+                                                <h6 class="notification-heading">Event Ended Successfully</h6>
+                                                <span class="notification-text">One hour ago</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void()">
+                                            <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                                            <div class="notification-content">
+                                                <h6 class="notification-heading">Events to Join</h6>
+                                                <span class="notification-text">After two days</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
                     </li>
+                    <li class="icons dropdown">
+                        <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                            <span class="activity active"></span>
+                            <img src="images/user/1.png" height="40" width="40" alt="">
+                        </div>
+                        <div class="drop-down dropdown-profile   dropdown-menu">
+                            <div class="dropdown-content-body">
+                                <ul>
+                                    <li>
+                                        <a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
+                                    </li>
 
-                    <li>
-                        <a th:href="@{/inbox}" aria-expanded="false">
-                            <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
-                        </a>
-
+                                    <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </li>
-                    <li>
-                        <a th:href="@{/profile}">
-                            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span>
-                        </a>
-
-                    </li>
-
-
-                    <li>
-                        <a th:href="@{/redeem}" aria-expanded="false">
-                            <i class="icon-badge menu-icon"></i><span class="nav-text">Redeem</span>
-                        </a>
-                    </li>
-
-
-
-
-                    <!--
-                                     <li>
-                                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                                             <i class="icon-menu menu-icon"></i><span class="nav-text">Table</span>
-                                         </a>
-                                         <ul aria-expanded="false">
-                                             <li><a href="./table-basic.html" aria-expanded="false">Basic Table</a></li>
-                                             <li><a href="./table-datatable.html" aria-expanded="false">Data Table</a></li>
-                                         </ul>
-                                     </li>  -->
-
-
-
                 </ul>
             </div>
         </div>
-        <!--
-            Sidebar end
-           -->
+    </div>
+    <div class="nk-sidebar">
+        <div class="nk-nav-scroll">
+            <ul class="metismenu" id="menu">
 
-        <!--**********************************
-            Content body start
-        ***********************************-->
-        <div class="content-body">
+                <li>
+                    <a th:href="@{/}">
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="mega-menu mega-menu-sm">
+                    <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a th:href="@{/login}">Signout</a></li>
+                        <li><a th:href="@{/forgotpass}">Forgot Password</a></li>
+                        <li><a th:href="@{/helpFeed}">Help and Feedback</a></li>
 
-            <div class="row page-titles mx-0">
-                <div class="col p-md-0">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Home</a></li>
-                    </ol>
-                </div>
+                    </ul>
+                </li>
+
+                <li>
+                    <a th:href="@{/inbox}" aria-expanded="false">
+                        <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
+                    </a>
+
+                </li>
+                <li>
+                    <a th:href="@{/profile}">
+                        <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span>
+                    </a>
+
+                </li>
+
+
+                <li>
+                    <a th:href="@{/redeem}" aria-expanded="false">
+                        <i class="icon-badge menu-icon"></i><span class="nav-text">Redeem</span>
+                    </a>
+                </li>
+
+
+
+
+            </ul>
+        </div>
+    </div>
+    <div class="content-body">
+
+        <div class="row page-titles mx-0">
+            <div class="col p-md-0">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Home</a></li>
+                </ol>
             </div>
-            <!-- row -->
-
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="media align-items-center mb-4">
-                                    <img class="mr-3" src="images/avatar/11.png" width="80" height="80" alt="">
-                                    <div class="media-body">
-                                        <h3 class="mb-0">Pikamy Cha</h3>
-                                        <p class="text-muted mb-0">Canada</p>
-                                    </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="media align-items-center mb-4">
+                                <img class="mr-3" src="images/avatar/11.png" width="200" height="200" alt="">
+                                <div class="media-body">
+                                    <h3 class="mb-0">
+                                        <strong>NAME:</strong>
+                                        <span th:text="${user.name}">Pikamy Cha</span>
+                                    </h3>
+                                    <span class="email-display" style="font-size: 1.5rem; font-weight: 500; color: #495057;">
+                                        <Strong>EMAIL:</Strong>
+                                        <span th:text="${user.email}">name@domain.com</span>
+                                    </span>
                                 </div>
-                                
-                                <div class="row mb-5">
-                                    <div class="col">
-                                        <div class="card card-profile text-center">
-                                            <span class="mb-1 text-primary"><i class="icon-people"></i></span>
-                                            <h3 class="mb-0">263</h3>
-                                            <p class="text-muted px-4">Following</p>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="card card-profile text-center">
-                                            <span class="mb-1 text-warning"><i class="icon-user-follow"></i></span>
-                                            <h3 class="mb-0">263</h3>
-                                            <p class="text-muted">Followers</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 text-center">
-                                        <button class="btn mb-1 btn-primary">Share Profile</button>
-                                    </div>
-                                </div>
-
-                                <h4>About Me</h4>
-                                <p class="text-muted">Hi, I'm Pikamy, has been the industry standard dummy text ever since the 1500s.</p>
-                                <ul class="card-profile__info">
-                                    <li class="mb-1"><strong class="text-dark mr-4">Mobile</strong> <span>01793931609</span></li>
-                                    <li><strong class="text-dark mr-4">Email</strong> <span>name@domain.com</span></li>
-                                </ul>
                             </div>
-                        </div>  
-                    </div>
+
+                            <div class="row mb-5">
+
+                                <div class="col">
+
+                                </div>
+
+                            </div>
+
+
+                            <ul class="card-profile__info" style="display: none;">
+                            </ul>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
-            <!-- #/ container -->
-
-        <!--**********************************
-            Content body end
-        ***********************************-->
     </div>
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
-
-    <!--**********************************
-        Scripts
-    ***********************************-->
     <script src="plugins/common/common.min.js"></script>
     <script src="js/custom.min.js"></script>
     <script src="js/settings.js"></script>

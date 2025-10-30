@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession; // Use jakarta for modern Spring Boot
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,9 @@ public class controller {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BoxRepository boxRepository;
 
     // --- Registration Logic ---
 
@@ -46,13 +50,14 @@ public class controller {
         return "page-login";
     }
 
-    // NEW: Handler for POST /login: Processes the login attempt
+    // UPDATED: Handler for POST /login: Processes the login attempt and saves user to session
     @PostMapping("/login")
     public String loginUser(@RequestParam String email,
                             @RequestParam String password,
-                            Model model) {
+                            Model model,
+                            HttpSession session) { // Added HttpSession
 
-        // 1. Find User by Email
+        // Find User by Email
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isEmpty()) {
@@ -63,13 +68,12 @@ public class controller {
 
         User user = userOptional.get();
 
-        // 2. Validate Password
-        // 🚨 IMPORTANT: If you were using security (BCrypt), you'd compare the HASH here.
-        // Since you are saving plain text for now, we compare plain text:
+        // Validate Password
         if (user.getPassword().equals(password)) {
 
             // Login Successful!
-            // In a real application, you'd set a session or security context here.
+            // Store the authenticated user's email in the session
+            session.setAttribute("userEmail", user.getEmail());
 
             // Redirect to the index page (or dashboard)
             return "redirect:/";
@@ -82,10 +86,29 @@ public class controller {
     }
 
 
-
+    // Fetches user details from session and database
     @GetMapping("/profile")
-    public String viewProfile() {
-        return "app-profile";
+    public String viewProfile(Model model, HttpSession session) {
+        String userEmail = (String) session.getAttribute("userEmail");
+
+        // Check if the user is logged in
+        if (userEmail == null) {
+            // If not logged in, redirect to login page
+            return "redirect:/login";
+        }
+
+        // Fetch the complete User object from the database using the stored email
+        Optional<User> userOptional = userRepository.findByEmail(userEmail);
+
+        if (userOptional.isPresent()) {
+            // Add the User object to the Model for Thymeleaf to use
+            model.addAttribute("user", userOptional.get());
+            return "app-profile";
+        } else {
+            // Should not happen if registration is correct, but handles case where session data is stale
+            session.invalidate(); // Clear invalid session
+            return "redirect:/login";
+        }
     }
 
     @GetMapping("/inbox")
@@ -109,9 +132,6 @@ public class controller {
     public String viewClass() {
         return "viewclasses"; }
 
-
-    @Autowired
-    private BoxRepository boxRepository;
 
     @GetMapping("/redeem")
     public String viewWidgets(Model model) {
@@ -156,4 +176,3 @@ public class controller {
     public String Section() {
         return "table-datatable"; }
 }
-
