@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="utf-8">
@@ -299,21 +299,22 @@
                 <div class="row">
                     <div class="col-lg-3 col-sm-6">
                         <div class="card gradient-4">
-                            <a href="#" th:href="@{/scores}">
-                            <div class="card-body">
-                                <h3 class="card-title text-white">Class 1</h3>
-                                <div class="d-inline-block">
-                                    <h2 class="text-white">CP 1</h2>
-                                    <p class="text-white mb-0">10:30-11:30</p>
+                            <a th:href="@{/scores(subjectName='CP 1')}">
+                                <div class="card-body">
+                                    <h3 class="card-title text-white">Class 1</h3>
+                                    <div class="d-inline-block">
+                                        <h2 class="text-white">CP 1</h2>
+                                        <p class="text-white mb-0">10:30-11:30</p>
+                                    </div>
+                                    <span class="float-right display-5 opacity-5"><i class="fa fa-heart"></i></span>
                                 </div>
-                                <span class="float-right display-5 opacity-5"><i class="fa fa-heart"></i></span>
-                            </div>
                             </a>
                         </div>
                     </div>
+
                     <div class="col-lg-3 col-sm-6">
                         <div class="card gradient-1">
-                            <a href="#" th:href="@{/scores}">
+                            <a th:href="@{/scores(subjectName='CP 2')}">
                                 <div class="card-body">
                                     <h3 class="card-title text-white">Class 2</h3>
                                     <div class="d-inline-block">
@@ -325,38 +326,38 @@
                             </a>
                         </div>
                     </div>
+
                     <div class="col-lg-3 col-sm-6">
                         <div class="card gradient-3">
-                            <a href="#" th:href="@{/scores}">
-                            <div class="card-body">
-                                <h3 class="card-title text-white">Class 3</h3>
-                                <div class="d-inline-block">
-                                    <h2 class="text-white">IM</h2>
-                                    <p class="text-white mb-0">8:30 - 9:30</p>
+                            <a th:href="@{/scores(subjectName='IM')}">
+                                <div class="card-body">
+                                    <h3 class="card-title text-white">Class 3</h3>
+                                    <div class="d-inline-block">
+                                        <h2 class="text-white">IM</h2>
+                                        <p class="text-white mb-0">8:30 - 9:30</p>
+                                    </div>
+                                    <span class="float-right display-5 opacity-5"><i class="fa fa-users"></i></span>
                                 </div>
-                                <span class="float-right display-5 opacity-5"><i class="fa fa-users"></i></span>
-                            </div>
                             </a>
                         </div>
                     </div>
+
                     <div class="col-lg-3 col-sm-6">
                         <div class="card gradient-4">
-                            <a href="#" th:href="@{/scores}">
-                            <div class="card-body">
-                                <h3 class="card-title text-white">Class 4</h3>
-                                <div class="d-inline-block">
-                                    <h2 class="text-white">ITEL</h2>
-                                    <p class="text-white mb-0">11:30-12:30</p>
+                            <a th:href="@{/scores(subjectName='ITEL')}">
+                                <div class="card-body">
+                                    <h3 class="card-title text-white">Class 4</h3>
+                                    <div class="d-inline-block">
+                                        <h2 class="text-white">ITEL</h2>
+                                        <p class="text-white mb-0">11:30-12:30</p>
+                                    </div>
+                                    <span class="float-right display-5 opacity-5"><i class="fa fa-heart"></i></span>
                                 </div>
-                                <span class="float-right display-5 opacity-5"><i class="fa fa-heart"></i></span>
-                            </div>
                             </a>
                         </div>
                     </div>
                 </div>
-
-
-                </div>
+            </div>
             </div>
             <!-- #/ container -->
         </div>

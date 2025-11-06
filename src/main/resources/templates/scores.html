@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -180,7 +180,7 @@
                                         <a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
                                     </li>
 
-                                    <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                    <li><a th:href="@{/logout}"><i class="icon-key"></i> <span>Logout</span></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -262,42 +262,24 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">MY SCORES</h4>
+                            <h4 class="card-title">My Scores for: <span th:text="${currentSubject}">All Subjects</span></h4>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered zero-configuration">
                                     <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Q1</th>
-                                        <th>Q2</th>
-                                        <th>Q3</th>
-                                        <th>Q4</th>
-                                        <th>Q5</th>
-                                        <th>Quiz Average</th>
-                                        <th>UT1</th>
-                                        <th>UT2</th>
-                                        <th>Unit Test Average</th>
-                                        <th>Term Test %</th>
-                                        <th>Raw Grades %</th>
+                                        <th>Test Name</th>
+                                        <th>Score (%)</th>
+                                        <th>Raw Grade</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Student 1 </td>
-                                        <td>92%</td>
-                                        <td>85%</td>
-                                        <td>75%</td>
-                                        <td>45%</td>
-                                        <td>92%</td>
-                                        <td>85%</td>
-                                        <td>75%</td>
-                                        <td>45%</td>
-                                        <td>92%</td>
-                                        <td>85%</td>
-                                        <td>75%</td>
-
+                                    <tr th:each="score : ${scores}">
+                                        <td th:text="${score.testName}"></td>
+                                        <td th:text="${score.scoreValue} + '%'"></td>
+                                        <td th:text="${score.rawGrade}"></td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(scores)}">
+                                        <td colspan="3">No scores found for <span th:text="${user.name}"></span>.</td>
                                     </tr>
                                     </tbody>
                                 </table>

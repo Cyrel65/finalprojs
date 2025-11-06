@@ -3,8 +3,10 @@ package org.example.finalprojs;
 import org.example.finalprojs.model.Box;
 import org.example.finalprojs.model.User;
 import org.example.finalprojs.model.Message;
+import org.example.finalprojs.model.Score; // NEW: Import Score Model
 import org.example.finalprojs.repository.BoxRepository;
 import org.example.finalprojs.repository.MessageRepository;
+import org.example.finalprojs.repository.ScoreRepository; // NEW: Import Score Repository
 import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,12 @@ public class controller {
 
 
     @Autowired
-    private MessageRepository messageRepository; // ADDED Repository
+    private MessageRepository messageRepository;
+
+    // NEW: Inject the Score Repository for personalized scores view
+    @Autowired
+    private ScoreRepository scoreRepository;
+
 
     // Private Helper Method for Session User
     private Optional<User> getCurrentUser(HttpSession session) {
@@ -44,7 +51,7 @@ public class controller {
         return userRepository.findByEmail(userEmail);
     }
 
-    //  Registration Logic
+    // --- Registration Logic ---
 
     @GetMapping("/register")
     public String viewRegister(Model model) {
@@ -58,13 +65,15 @@ public class controller {
         return "redirect:/login";
     }
 
+    // --- Authentication Handlers ---
+
     // Handler for GET /login: Shows the login page
     @GetMapping("/login")
     public String viewLogin() {
         return "page-login";
     }
 
-    //  Handler for POST /login: Processes the login attempt and saves user to session
+    // Handler for POST /login: Processes the login attempt and saves user to session
     @PostMapping("/login")
     public String loginUser(@RequestParam String email,
                             @RequestParam String password,
@@ -81,7 +90,7 @@ public class controller {
 
         User user = userOptional.get();
 
-        // Validate Password
+        // Validate Password (WARNING: Use a PasswordEncoder here in production!)
         if (user.getPassword().equals(password)) {
 
             // Login Successful! Store the authenticated user's email in the session
@@ -95,11 +104,18 @@ public class controller {
         }
     }
 
+    // NEW: Logout Handler
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login?logout";
+    }
+
 
     // Fetches user details from session and database
     @GetMapping("/profile")
     public String viewProfile(Model model, HttpSession session) {
-        Optional<User> userOptional = getCurrentUser(session); // REFACTORED to use helper method
+        Optional<User> userOptional = getCurrentUser(session);
 
         // Check if the user is logged in
         if (userOptional.isEmpty()) {
@@ -112,12 +128,11 @@ public class controller {
 
     // --- Message/Email Handlers ---
 
-    // Fetches the messages for the current user directly using the Repository
+    // Fetches the messages for the current user directly using the Repository (Need to update viewInbox() for security)
     @GetMapping("/inbox")
     public String viewInbox() {
         return "email-inbox";
     }
-
 
 
     //Simple handler for the read message page, as conversation logic is not needed
@@ -185,10 +200,53 @@ public class controller {
     }
 
 
-    //  Other Views
+    // --- Personalized Scores Handler ---
 
-    @GetMapping("/table")
-    public String viewTable() {return "table-basic";}
+    /**
+     * Handles /scores and /table to show the personalized score data.
+     */
+    @GetMapping({"/scores", "/table"})
+    public String viewScores(
+            @RequestParam(required = false) String subjectName, // Capture the subjectName URL parameter
+            Model model,
+            HttpSession session) {
+
+        Optional<User> userOptional = getCurrentUser(session);
+
+        if (userOptional.isEmpty()) {
+            return "redirect:/login";
+        }
+
+        User user = userOptional.get();
+        List<Score> userScores;
+
+        // 1. Check if a subject filter was provided
+        if (subjectName != null && !subjectName.isEmpty()) {
+            // Fetch scores ONLY for the selected subject
+            userScores = scoreRepository.findByUserAndSubject(user, subjectName);
+
+            // Add the subject name to the model to display it on the page title
+            model.addAttribute("currentSubject", subjectName);
+        } else {
+            // If no filter is provided, fetch all scores (default view)
+            userScores = scoreRepository.findByUserOrderBySubjectAsc(user);
+            model.addAttribute("currentSubject", "All Subjects");
+        }
+
+        // 2. Add Data to Model
+        model.addAttribute("user", user);
+        model.addAttribute("scores", userScores);
+
+        // 3. The view now shows only the filtered scores
+        return "scores";
+    }
+
+
+    //  --- Other Views ---
+
+    // Original /table mapping (overridden above)
+    // @GetMapping("/table")
+    // public String viewTable() {return "table-basic";}
 
     @GetMapping("/viewclass")
     public String viewClass() {return "viewclasses";}
@@ -206,12 +264,11 @@ public class controller {
     @GetMapping("/about")
     public String About() {return "about";}
 
-    @GetMapping("/scores")
-    public String scores() {return "scores";}
 
     @GetMapping("/records")
     public String Record() {return "records";}
 
     @GetMapping("/section")
     public String Section() {return "table-datatable";}
+
 }
