@@ -1,12 +1,11 @@
 package org.example.finalprojs;
 
-import org.example.finalprojs.model.Box;
 import org.example.finalprojs.model.User;
 import org.example.finalprojs.model.Message;
-import org.example.finalprojs.model.Score; // NEW: Import Score Model
+import org.example.finalprojs.model.GradeReport;
+import org.example.finalprojs.repository.GradeReportRepository;
 import org.example.finalprojs.repository.BoxRepository;
 import org.example.finalprojs.repository.MessageRepository;
-import org.example.finalprojs.repository.ScoreRepository; // NEW: Import Score Repository
 import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,12 +16,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Standard Java Utility Imports (Fixes "Cannot resolve symbol" errors)
+import java.util.List;
+import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
+
 import jakarta.servlet.http.HttpSession;
 
 import java.time.LocalDateTime;
-import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
+import java.security.Principal; // Not strictly used, but kept from original structure
+
 
 @Controller
 public class controller {
@@ -33,13 +38,11 @@ public class controller {
     @Autowired
     private BoxRepository boxRepository;
 
-
     @Autowired
     private MessageRepository messageRepository;
 
-    // NEW: Inject the Score Repository for personalized scores view
     @Autowired
-    private ScoreRepository scoreRepository;
+    private GradeReportRepository gradeReportRepository;
 
 
     // Private Helper Method for Session User
@@ -67,20 +70,17 @@ public class controller {
 
     // --- Authentication Handlers ---
 
-    // Handler for GET /login: Shows the login page
     @GetMapping("/login")
     public String viewLogin() {
         return "page-login";
     }
 
-    // Handler for POST /login: Processes the login attempt and saves user to session
     @PostMapping("/login")
     public String loginUser(@RequestParam String email,
                             @RequestParam String password,
                             Model model,
                             HttpSession session) {
 
-        // Find User by Email (Returns Optional<User>)
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isEmpty()) {
@@ -90,21 +90,15 @@ public class controller {
 
         User user = userOptional.get();
 
-        // Validate Password (WARNING: Use a PasswordEncoder here in production!)
         if (user.getPassword().equals(password)) {
-
-            // Login Successful! Store the authenticated user's email in the session
             session.setAttribute("userEmail", user.getEmail());
-
             return "redirect:/";
-
         } else {
             model.addAttribute("loginError", "Login failed: Incorrect password.");
             return "page-login";
         }
     }
 
-    // NEW: Logout Handler
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
@@ -112,36 +106,28 @@ public class controller {
     }
 
 
-    // Fetches user details from session and database
     @GetMapping("/profile")
     public String viewProfile(Model model, HttpSession session) {
         Optional<User> userOptional = getCurrentUser(session);
-
-        // Check if the user is logged in
         if (userOptional.isEmpty()) {
             return "redirect:/login";
         }
-
         model.addAttribute("user", userOptional.get());
         return "app-profile";
     }
 
     // --- Message/Email Handlers ---
 
-    // Fetches the messages for the current user directly using the Repository (Need to update viewInbox() for security)
     @GetMapping("/inbox")
     public String viewInbox() {
         return "email-inbox";
     }
 
-
-    //Simple handler for the read message page, as conversation logic is not needed
     @GetMapping("/read")
     public String viewRead() {
         return "email-read";
     }
 
-    // Ensures the user is logged in before allowing them to compose
     @GetMapping("/compose")
     public String viewCompose(HttpSession session) {
         if (getCurrentUser(session).isEmpty()) {
@@ -150,7 +136,6 @@ public class controller {
         return "email-compose";
     }
 
-    // Handler for sending the message, now accepting recipientEmail instead of recipientId
     @PostMapping("/send-message")
     public String sendMessage(
             @RequestParam("recipientEmail") String recipientEmail,
@@ -170,83 +155,129 @@ public class controller {
         }
 
         try {
-            // Find Recipient by Email
             User recipient = userRepository.findByEmail(recipientEmail)
                     .orElseThrow(() -> new RuntimeException("Recipient not found with email: " + recipientEmail));
 
-            // Optional check: Prevent sending email to self
             if (sender.getEmail().equalsIgnoreCase(recipientEmail)) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Cannot send message to yourself.");
                 return "redirect:/compose";
             }
 
-            // Create and save the Message
             Message message = new Message(
                     sender,
                     recipient,
                     content,
                     LocalDateTime.now()
             );
-            messageRepository.save(message); // Save using the injected repository
+            messageRepository.save(message);
 
             redirectAttributes.addFlashAttribute("successMessage", "Message sent successfully!");
-            // Redirect to inbox after successful send
             return "redirect:/inbox";
         } catch (RuntimeException e) {
-            // This catches the Recipient not found exception
             redirectAttributes.addFlashAttribute("errorMessage", "Error sending message: " + e.getMessage());
             return "redirect:/compose";
         }
     }
 
+    // --- Personalized Grade Report Handler ---
 
-    // --- Personalized Scores Handler ---
-
-    /**
-     * Handles /scores and /table to show the personalized score data.
-     */
     @GetMapping({"/scores", "/table"})
     public String viewScores(
-            @RequestParam(required = false) String subjectName, // Capture the subjectName URL parameter
+            @RequestParam(required = false) String subjectName,
             Model model,
             HttpSession session) {
 
         Optional<User> userOptional = getCurrentUser(session);
-
         if (userOptional.isEmpty()) {
             return "redirect:/login";
         }
-
         User user = userOptional.get();
-        List<Score> userScores;
 
-        // 1. Check if a subject filter was provided
-        if (subjectName != null && !subjectName.isEmpty()) {
-            // Fetch scores ONLY for the selected subject
-            userScores = scoreRepository.findByUserAndSubject(user, subjectName);
+        model.addAttribute("currentSubject", subjectName != null ? subjectName : "All Subjects");
+        model.addAttribute("user", user);
 
-            // Add the subject name to the model to display it on the page title
-            model.addAttribute("currentSubject", subjectName);
+        // 1. Fetch the single GradeReport for the user and subject
+        Optional<GradeReport> reportOptional = gradeReportRepository.findByUserAndSubject(user, subjectName);
+
+        GradeReport report;
+
+        if (reportOptional.isEmpty()) {
+            // If no report found, create an empty one for Thymeleaf to display zeros/dashes
+            report = new GradeReport();
+            report.setSubject(subjectName);
+            report.setUser(user);
+            // Defaulting overall grade to 10% (Attendance) if all other scores are zero
+            report.setOverallGrade(0.0);
         } else {
-            // If no filter is provided, fetch all scores (default view)
-            userScores = scoreRepository.findByUserOrderBySubjectAsc(user);
-            model.addAttribute("currentSubject", "All Subjects");
+            report = reportOptional.get();
+            // 2. Calculate the overall grade based on the raw points fetched
+            double calculatedOverall = calculateOverallGrade(report);
+            report.setOverallGrade(calculatedOverall);
         }
 
-        // 2. Add Data to Model
-        model.addAttribute("user", user);
-        model.addAttribute("scores", userScores);
+        // 3. Pass the full report object to the model
+        model.addAttribute("report", report);
 
-        // 3. The view now shows only the filtered scores
         return "scores";
     }
 
 
-    //  --- Other Views ---
+    // --- Grade Calculation Logic ---
 
-    // Original /table mapping (overridden above)
-    // @GetMapping("/table")
-    // public String viewTable() {return "table-basic";}
+    private double calculateOverallGrade(GradeReport report) {
+
+        // --- CONSTANTS FOR WEIGHTING AND MAX POINTS ---
+        final int MAX_SC_POINTS = 10;
+        final int MAX_TS_POINTS = 20;
+        final int MAX_UT_POINTS = 50;
+        final int MAX_TT_POINTS = 50;
+
+        final double WEIGHT_SC_TS = 0.30;
+        final double WEIGHT_UT = 0.30;
+        final double WEIGHT_TT = 0.30;
+        final double WEIGHT_ATTENDANCE = 0.10;
+
+
+        // 1. Calculate Self Check & Task Sheet Category (30% Weight)
+        int totalSelfCheckTaskEarned =
+                report.getSelfCheck1() + report.getSelfCheck2() + report.getSelfCheck3() +
+                        report.getSelfCheck4() + report.getSelfCheck5() +
+                        report.getTaskSheet1() + report.getTaskSheet2() + report.getTaskSheet3();
+
+        int totalSelfCheckTaskMax = (5 * MAX_SC_POINTS) + (3 * MAX_TS_POINTS); // 110 max points
+
+        double selfCheckTaskPercentage = (double) totalSelfCheckTaskEarned / totalSelfCheckTaskMax;
+        double weightedSelfCheckTask = selfCheckTaskPercentage * WEIGHT_SC_TS;
+
+
+        // 2. Calculate Unit Test Category (30% Weight)
+        int totalUnitTestEarned = report.getUnitTest1() + report.getUnitTest2();
+        int totalUnitTestMax = 2 * MAX_UT_POINTS; // 100 max points
+
+        double unitTestPercentage = (double) totalUnitTestEarned / totalUnitTestMax;
+        double weightedUnitTest = unitTestPercentage * WEIGHT_UT;
+
+
+        // 3. Calculate Term Test Category (30% Weight)
+        int totalTermTestEarned = report.getTermTest();
+        int totalTermTestMax = MAX_TT_POINTS; // 50 max points
+
+        double termTestPercentage = (double) totalTermTestEarned / totalTermTestMax;
+        double weightedTermTest = termTestPercentage * WEIGHT_TT;
+
+
+        // 4. Calculate Attendance (10% Weight)
+        double attendancePercentage = (double) report.getAttendance() / 100.0; // Attendance is stored as 0-100%
+        double weightedAttendance = attendancePercentage * WEIGHT_ATTENDANCE;
+
+
+        // 5. Calculate Final Overall Grade and convert to display percentage (0-100)
+        double overallGrade = weightedSelfCheckTask + weightedUnitTest + weightedTermTest + weightedAttendance;
+
+        return overallGrade * 100.0;
+    }
+
+    //  --- Other Views ---
 
     @GetMapping("/viewclass")
     public String viewClass() {return "viewclasses";}
