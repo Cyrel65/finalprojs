@@ -24,6 +24,9 @@ import java.util.Optional;
 public class BoxController {
 
     @Autowired
+    private RedeemItemRepository redeemItemRepository;
+
+    @Autowired
     private BoxRepository boxRepository;
 
     @Autowired
