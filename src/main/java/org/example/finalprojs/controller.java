@@ -116,6 +116,28 @@ public class controller {
         return "app-profile";
     }
 
+    // Unified method for updating profile picture
+    @PostMapping("/update/profile-picture")
+    public String updateProfilePicture(@RequestParam String profilePictureUrl, HttpSession session, RedirectAttributes redirectAttributes) {
+        Optional<User> userOptional = getCurrentUser(session);
+        if (userOptional.isEmpty()) {
+            return "redirect:/";
+        }
+
+        try {
+            User user = userOptional.get();
+            user.setProfilePictureUrl(profilePictureUrl);
+            userRepository.save(user);
+            redirectAttributes.addFlashAttribute("success", "Profile picture updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to update profile picture: " + e.getMessage());
+        }
+
+        return "redirect:/profile";
+    }
+
+
+
     // --- Message/Email Handlers ---
 
     @GetMapping("/inbox")

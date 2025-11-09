@@ -16,7 +16,7 @@ public class TestDataInitializer implements CommandLineRunner {
     private UserRepository userRepository;
 
     @Autowired
-    private ScoreRepository scoreRepository;
+   // private ScoreRepository scoreRepository;
 
     @Override
     public void run(String... args) throws Exception {

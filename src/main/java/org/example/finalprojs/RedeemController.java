@@ -5,6 +5,7 @@ import org.example.finalprojs.model.Box;
 import org.example.finalprojs.model.RedeemTransaction;
 import org.example.finalprojs.model.User;
 import org.example.finalprojs.repository.BoxRepository;
+import org.example.finalprojs.repository.RedeemItemRepository;
 import org.example.finalprojs.repository.RedeemTransactionRepository;
 import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class BoxController {
+public class RedeemController {
 
     @Autowired
     private RedeemItemRepository redeemItemRepository;
@@ -161,7 +162,7 @@ public class BoxController {
         List<Box> allBoxes = boxRepository.findAll();
         model.addAttribute("boxes", allBoxes);
 
-        return "widgets";
+        return "redeem";
     }
 
     // --- 5. Redeem History GET Mapping (Completes the history feature) ---

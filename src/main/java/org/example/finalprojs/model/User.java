@@ -10,11 +10,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // These field names must match the th:field attributes in your HTML
+
     private String name;
     private String email;
-    private String password; // 🚨 IMPORTANT: In production, this MUST be hashed!
+    private String password;
     private int points = 0;
+    @Column(name = "profile_picture_url", length = 1000)
+    private String profilePictureUrl;
     // Default Constructor (required by JPA)
     public User() {
     }
@@ -59,5 +61,13 @@ public class User {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
     }
 }

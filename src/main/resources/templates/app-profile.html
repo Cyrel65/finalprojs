@@ -18,6 +18,7 @@
         </svg>
     </div>
 </div>
+
 <div id="main-wrapper">
 
     <div class="nav-header">
@@ -31,9 +32,9 @@
             </a>
         </div>
     </div>
+
     <div class="header">
         <div class="header-content clearfix">
-
             <div class="nav-control">
                 <div class="hamburger">
                     <span class="toggle-icon"><i class="icon-menu"></i></span>
@@ -45,7 +46,7 @@
                         <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
                     </div>
                     <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
-                    <div class="drop-down   d-md-none">
+                    <div class="drop-down d-md-none">
                         <form action="#">
                             <input type="text" class="form-control" placeholder="Search">
                         </form>
@@ -54,6 +55,7 @@
             </div>
             <div class="header-right">
                 <ul class="clearfix">
+                    <!-- Messages -->
                     <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
                         <i class="mdi mdi-email-outline"></i>
                         <span class="badge gradient-1 badge-pill badge-primary">3</span>
@@ -61,7 +63,6 @@
                         <div class="drop-down animated fadeIn dropdown-menu">
                             <div class="dropdown-content-heading d-flex justify-content-between">
                                 <span class="">3 New Messages</span>
-
                             </div>
                             <div class="dropdown-content-body">
                                 <ul>
@@ -106,10 +107,10 @@
                                         </a>
                                     </li>
                                 </ul>
-
                             </div>
                         </div>
                     </li>
+                    <!-- Notifications -->
                     <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
                         <i class="mdi mdi-bell-outline"></i>
                         <span class="badge badge-pill gradient-2 badge-primary">3</span>
@@ -117,7 +118,6 @@
                         <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
                             <div class="dropdown-content-heading d-flex justify-content-between">
                                 <span class="">2 New Notifications</span>
-
                             </div>
                             <div class="dropdown-content-body">
                                 <ul>
@@ -158,25 +158,20 @@
                                         </a>
                                     </li>
                                 </ul>
-
                             </div>
                         </div>
                     </li>
+                    <!-- User Profile -->
                     <li class="icons dropdown">
-                        <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                        <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                             <span class="activity active"></span>
                             <img src="images/user/1.png" height="40" width="40" alt="">
                         </div>
-                        <div class="drop-down dropdown-profile   dropdown-menu">
+                        <div class="drop-down dropdown-profile dropdown-menu">
                             <div class="dropdown-content-body">
                                 <ul>
-                                    <li>
-                                        <a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a>
-                                    </li>
-                                    <li>
-                                        <a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
-                                    </li>
-
+                                    <li><a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a></li>
+                                    <li><a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a></li>
                                     <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
                                 </ul>
                             </div>
@@ -186,15 +181,11 @@
             </div>
         </div>
     </div>
+
     <div class="nk-sidebar">
         <div class="nk-nav-scroll">
             <ul class="metismenu" id="menu">
-
-                <li>
-                    <a th:href="@{/}">
-                        <span class="nav-text">Dashboard</span>
-                    </a>
-                </li>
+                <li><a th:href="@{/}"><span class="nav-text">Dashboard</span></a></li>
                 <li class="mega-menu mega-menu-sm">
                     <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                         <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
@@ -203,36 +194,15 @@
                         <li><a th:href="@{/login}">Signout</a></li>
                         <li><a th:href="@{/forgotpass}">Forgot Password</a></li>
                         <li><a th:href="@{/helpFeed}">Help and Feedback</a></li>
-
                     </ul>
                 </li>
-
-                <li>
-                    <a th:href="@{/inbox}" aria-expanded="false">
-                        <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
-                    </a>
-
-                </li>
-                <li>
-                    <a th:href="@{/profile}">
-                        <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span>
-                    </a>
-
-                </li>
-
-
-                <li>
-                    <a th:href="@{/redeem}" aria-expanded="false">
-                        <i class="icon-badge menu-icon"></i><span class="nav-text">Redeem</span>
-                    </a>
-                </li>
-
-
-
-
+                <li><a th:href="@{/inbox}" aria-expanded="false"><i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span></a></li>
+                <li><a th:href="@{/profile}"><i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span></a></li>
+                <li><a th:href="@{/redeem}" aria-expanded="false"><i class="icon-badge menu-icon"></i><span class="nav-text">Redeem</span></a></li>
             </ul>
         </div>
     </div>
+
     <div class="content-body">
 
         <div class="row page-titles mx-0">
@@ -243,33 +213,73 @@
                 </ol>
             </div>
         </div>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="media align-items-center mb-4">
-                                <img class="mr-3" src="images/avatar/11.png" width="200" height="200" alt="">
+                                <img class="mr-3" th:src="${user.profilePictureUrl}" width="200" height="200" alt="">
                                 <div class="media-body">
                                     <h3 class="mb-0">
                                         <strong>NAME:</strong>
                                         <span th:text="${user.name}">Pikamy Cha</span>
                                     </h3>
                                     <span class="email-display" style="font-size: 1.5rem; font-weight: 500; color: #495057;">
-                                        <Strong>EMAIL:</Strong>
+                                        <strong>EMAIL:</strong>
                                         <span th:text="${user.email}">name@domain.com</span>
                                     </span>
+                                    <!-- Change Profile Picture Dropdown -->
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-secondary" id="changeProfileBtn">Change Profile Picture</button>
+
+                                        <!-- Dropdown Input and Update Button (hidden initially) -->
+                                        <div id="profilePicInputContainer" style="display: none; margin-top: 10px;">
+                                            <form th:action="@{/update/profile-picture}" method="post">
+                                                <input type="text" name="profilePictureUrl" id="profilePicUrl" class="form-control mb-2" placeholder="Enter image URL" required>
+                                                <button type="submit" class="btn btn-primary">Update Picture</button>
+                                                <button type="button" class="btn btn-secondary" id="cancelProfileBtn">Cancel</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
-                            <div class="row mb-5">
-
-                                <div class="col">
-
+                            <!-- Change Details Form -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card mt-4" style="border: 1px solid #e0e0e0; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-4">Update Profile</h5>
+                                            <form th:action="@{/profile/update}" method="post">
+                                                <div class="form-group mb-3">
+                                                    <label for="name">Change Name</label>
+                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter new name" th:value="${user.name}">
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label for="email">Change Email</label>
+                                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter new email" th:value="${user.email}">
+                                                </div>
+                                                <div class="form-group mb-4">
+                                                    <label for="currentpassword">Enter current password</label>
+                                                    <input type="password" class="form-control" id="currentpassword" name="cpassword" placeholder="Enter current password">
+                                                </div>
+                                                <div class="form-group mb-4">
+                                                    <label for="newpassword">Enter new password</label>
+                                                    <input type="password" class="form-control" id="newpassword" name="npassword" placeholder="Enter new password">
+                                                </div>
+                                                <div class="form-group mb-4">
+                                                    <label for="retypepassword">Re-type new password</label>
+                                                    <input type="password" class="form-control" id="retypepassword" name="rpassword" placeholder="Re-type new password">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-
                             </div>
-
 
                             <ul class="card-profile__info" style="display: none;">
                             </ul>
@@ -280,12 +290,28 @@
         </div>
 
     </div>
+
     <script src="plugins/common/common.min.js"></script>
     <script src="js/custom.min.js"></script>
     <script src="js/settings.js"></script>
     <script src="js/gleek.js"></script>
     <script src="js/styleSwitcher.js"></script>
+    <script>
+        const changeBtn = document.getElementById('changeProfileBtn');
+        const inputContainer = document.getElementById('profilePicInputContainer');
+        const cancelBtn = document.getElementById('cancelProfileBtn');
+
+        changeBtn.addEventListener('click', () => {
+            changeBtn.style.display = 'none';
+            inputContainer.style.display = 'block';
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            inputContainer.style.display = 'none';
+            changeBtn.style.display = 'inline-block';
+        });
+
+    </script>
 
 </body>
-
 </html>
