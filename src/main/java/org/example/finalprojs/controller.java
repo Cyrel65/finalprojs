@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 // Standard Java Utility Imports (Fixes "Cannot resolve symbol" errors)
 import java.util.List;
 import java.util.Optional;
@@ -135,6 +136,57 @@ public class controller {
 
         return "redirect:/profile";
     }
+
+    @PostMapping("/profile/update")
+    public String updateProfile(
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam("cpassword") String currentPassword,
+            @RequestParam(value = "npassword", required = false) String newPassword,
+            @RequestParam(value = "rpassword", required = false) String retypePassword,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        Optional<User> userOptional = getCurrentUser(session);
+        if (userOptional.isEmpty()) {
+            return "redirect:/login";
+        }
+
+        User user = userOptional.get();
+
+        // --- Verify current password ---
+        if (!user.getPassword().equals(currentPassword)) {
+            redirectAttributes.addFlashAttribute("error", "Current password is incorrect.");
+            return "redirect:/profile";
+        }
+
+        // --- Check email uniqueness ---
+        Optional<User> existing = userRepository.findByEmail(email);
+        if (existing.isPresent() && !existing.get().getId().equals(user.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Email is already in use.");
+            return "redirect:/profile";
+        }
+
+        // --- Update name and email ---
+        user.setName(name);
+        user.setEmail(email);
+
+        // --- Update password if provided ---
+        if (newPassword != null && !newPassword.isEmpty()) {
+            if (!newPassword.equals(retypePassword)) {
+                redirectAttributes.addFlashAttribute("error", "New passwords do not match.");
+                return "redirect:/profile";
+            }
+            user.setPassword(newPassword);
+        }
+
+        // --- Save changes ---
+        userRepository.save(user);
+
+        redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
+        return "redirect:/profile";
+    }
+
 
 
 
