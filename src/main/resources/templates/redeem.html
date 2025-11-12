@@ -267,11 +267,7 @@
 
 
 
-                    <li>
-                        <a th:href="@{/redeem}" aria-expanded="false">
-                            <i class="icon-badge menu-icon"></i><span class="nav-text">Redeem</span>
-                        </a>
-                    </li>
+
 
 
 
@@ -322,57 +318,39 @@
             <div class="container-fluid">
 
                 <div class="d-flex justify-content-between align-items-center mb-4 px-4">
-
-                    <div class="d-flex">
-                        <button type="button" class="btn btn-primary mr-2" id="toggleFormBtn">
-                            <i class="fa fa-plus"></i> Add New Box
-                        </button>
-                        <button type="button" class="btn btn-danger" id="clearAllBtn" style="display: none;">
-                            <i class="fa fa-trash"></i> Clear All Saved Boxes
-                        </button>
+                    <div>
+                        <h4 class="mb-0">Rewards for: <span th:text="${currentSubject}">Selected Subject</span></h4>
+                        <p th:if="${error}" class="text-danger mt-2" th:text="${error}">Error Message</p>
                     </div>
 
                     <ul class="clearfix list-unstyled m-0">
                         <li class="icons dropdown d-flex align-items-center">
-                <span class="badge badge-pill badge-primary p-2" style="font-size: 14px; color: black !important;">
-                    <i class="icon-badge menu-icon mr-1"></i>
-                    <span th:text="${currentPoints}">0</span> Points
-                </span>
+            <span class="badge badge-pill badge-primary p-2" style="font-size: 14px; color: black !important;">
+                <i class="icon-badge menu-icon mr-1"></i>
+                <span th:text="${currentPoints}">0</span> Points
+            </span>
                         </li>
                     </ul>
                 </div>
 
-                <div id="inlineForm" style="display: none;" class="p-3 mb-4 border rounded bg-light mx-4">
-                    <h4>Define New Box Details</h4>
-                    <form th:action="@{/createBox}" method="post">
-                        <div class="form-group">
-                            <label for="pointsInputInline">Points</label>
-                            <input type="number" class="form-control" name="points" id="pointsInputInline" placeholder="Enter points" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="messageInputInline">Type of Test</label>
-                            <input type="text" class="form-control" name="typeOfTest" id="messageInputInline" placeholder="Enter the type of Test you want" required>
-                        </div>
-                        <button type="submit" id="createCardBtn" class="btn btn-success mt-2">Create Box</button>
-                    </form>
-                </div>
-
                 <div class="row px-4" id="cardContainer">
-
-                    <div th:each="box : ${boxes}" class="col-4">
+                    <div th:each="item : ${items}" class="col-4">
                         <div class="card">
                             <div class="card-body">
                                 <div class="text-center">
                                     <span class="display-5"><i class="icon-diamond gradient-4-text"></i></span>
-                                    <h2 class="mt-3" th:text="${box.points} + ' Points'">Points</h2>
-                                    <p th:text="${box.typeOfTest}">Type of Test</p>
+                                    <h2 class="mt-3" th:text="${item.rewardName}">Bonus Points</h2>
+                                    <p th:text="'Adds ' + ${item.pointsAwarded} + ' points to ' + ${item.targetAssessment} + '.'">Details</p>
 
                                     <form th:action="@{/redeem/execute}" method="post">
-                                        <input type="hidden" name="boxId" th:value="${box.id}" />
+                                        <input type="hidden" name="itemId" th:value="${item.id}" />
+                                        <input type="hidden" name="subject" th:value="${item.subject}" />
 
                                         <button type="submit"
-                                                class="btn gradient-4 btn-lg border-0 btn-rounded px-5">
-                                            Redeem now
+                                                class="btn btn-lg border-0 btn-rounded px-5"
+                                                th:classappend="${currentPoints >= item.cost} ? 'gradient-4' : 'btn-secondary'"
+                                                th:disabled="${currentPoints < item.cost}">
+                                            Redeem for <span th:text="${item.cost}">100</span> Points
                                         </button>
                                     </form>
                                 </div>
@@ -380,19 +358,9 @@
                         </div>
                     </div>
 
-                    <div th:if="${boxes.empty}" class="col-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <span class="display-5"><i class="icon-diamond gradient-4-text"></i></span>
-                                    <h2 class="mt-3">No Items Available</h2>
-                                    <p>Check back later!</p>
-                                    <button class="btn gradient-4 btn-lg border-0 btn-rounded px-5" disabled>Redeem now</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div th:if="${items.empty}" class="col-12">
+                        <p class="text-center">No rewards available for this subject.</p>
                     </div>
-
                 </div>
 
             </div>        <!--**********************************

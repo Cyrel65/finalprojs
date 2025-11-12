@@ -2,10 +2,13 @@ package org.example.finalprojs;
 
 import jakarta.servlet.http.HttpSession;
 import org.example.finalprojs.model.Box;
+import org.example.finalprojs.model.GradeReport; // New Dependency
+import org.example.finalprojs.model.RedeemItem; // New Dependency
 import org.example.finalprojs.model.RedeemTransaction;
 import org.example.finalprojs.model.User;
 import org.example.finalprojs.repository.BoxRepository;
-import org.example.finalprojs.repository.RedeemItemRepository;
+import org.example.finalprojs.repository.GradeReportRepository; // New Dependency
+import org.example.finalprojs.repository.RedeemItemRepository; // New Dependency
 import org.example.finalprojs.repository.RedeemTransactionRepository;
 import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +19,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.transaction.annotation.Transactional;
-import java.security.Principal;
+
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+// Class name changed from BoxController to RedeemController for clarity
 @Controller
 public class RedeemController {
 
@@ -36,26 +42,36 @@ public class RedeemController {
     @Autowired
     private RedeemTransactionRepository redeemTransactionRepository;
 
+    @Autowired
+    private GradeReportRepository gradeReportRepository; // NEW: Dependency for grade updates
+
     // Placeholder for the current user's ID (Teacher access assumed)
     private static final Long CURRENT_USER_ID = 1L;
 
-    // --- 1. Dashboard GET Mapping (To Display Boxes) ---
+    // Helper method
+    private Optional<User> getCurrentUser(HttpSession session) {
+        String userEmail = (String) session.getAttribute("userEmail");
+        if (userEmail == null) {
+            return Optional.empty();
+        }
+        return userRepository.findByEmail(userEmail);
+    }
+
+    // --- 1. Dashboard GET Mapping (Standard) ---
     @GetMapping("/")
     public String viewDashboard(Model model) {
-
         List<Box> allBoxes = boxRepository.findAll();
         model.addAttribute("boxes", allBoxes);
-
         return "index";
     }
 
-    // --- 2. Box Creation POST Mapping (Teacher functionality) ---
+    // --- 2. Box Creation POST Mapping (Teacher functionality - assumes creating a Box) ---
     @PostMapping("/createBox")
     public String createNewBox(@RequestParam int points,
                                @RequestParam String typeOfTest,
                                RedirectAttributes redirectAttributes) {
 
-        // NOTE: This uses the hardcoded ID for simplicity.
+        // NOTE: This should ideally be updated to save a RedeemItem if you stop using Box for rewards.
         User currentUser = userRepository.findById(CURRENT_USER_ID)
                 .orElse(null);
 
@@ -70,126 +86,147 @@ public class RedeemController {
         return "redirect:/redeem";
     }
 
-    // --- 3. Redeem Execution POST Mapping (Core Point Deduction) ---
-    // --- 3. Redeem Execution POST Mapping (The core point deduction logic) ---
-    @PostMapping("/redeem/execute")
-    @Transactional
-    public String executeRedeem(@RequestParam Long boxId, HttpSession session, RedirectAttributes redirectAttributes) {
+    // --- 3. Dynamic Redeem Page GET Mapping (Subject-specific) ---
+    @GetMapping("/redeem")
+    public String viewRedeemPage(
+            @RequestParam(required = false) String subjectName,
+            Model model,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
 
-        // 1. Authentication Check using HttpSession
-        String userEmail = (String) session.getAttribute("userEmail");
-        if (userEmail == null) {
-            redirectAttributes.addFlashAttribute("error", "Authentication failed. Please log in to redeem items.");
-            return "redirect:/login";
-        }
-
-        // 2. Fetch the current User by email
-        Optional<User> userOptional = userRepository.findByEmail(userEmail);
-
+        Optional<User> userOptional = getCurrentUser(session);
         if (userOptional.isEmpty()) {
-            session.invalidate(); // Clear stale session
-            redirectAttributes.addFlashAttribute("error", "User session error: Account not found.");
             return "redirect:/login";
         }
         User user = userOptional.get();
 
-        // 3. Get the Box
-        Optional<Box> boxOptional = boxRepository.findById(boxId);
-        if (boxOptional.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Error: The selected item could not be found.");
-            return "redirect:/redeem";
-        }
-        Box boxToRedeem = boxOptional.get();
+        // 1. Get current points from User
+        model.addAttribute("currentPoints", user.getPoints());
+        model.addAttribute("currentSubject", subjectName);
 
-
-        // 4. CRITICAL BUSINESS LOGIC: Check Points (Updated Error Message)
-        if (user.getPoints() < boxToRedeem.getPoints()) {
-            int required = boxToRedeem.getPoints();
-            int available = user.getPoints();
-            int needed = required - available;
-
-            // Detailed Error Alert Message
-            redirectAttributes.addFlashAttribute("error",
-                    "Redemption failed: Insufficient points. You need " + required + " points, but only have " + available + ". You are short " + needed + " points."
-            );
-            return "redirect:/redeem";
+        // 2. Fetch Redeemable Items based on Subject
+        if (subjectName == null || subjectName.isEmpty()) {
+            // Display general error if subject is missing
+            model.addAttribute("error", "Please select a subject to view rewards.");
+            model.addAttribute("items", new ArrayList<RedeemItem>());
+        } else {
+            // Fetch items specific to the subject using the new Repository
+            List<RedeemItem> items = redeemItemRepository.findBySubject(subjectName);
+            model.addAttribute("items", items);
         }
 
-        // 5. Record the Transaction
-        RedeemTransaction transaction = new RedeemTransaction();
-        transaction.setBox(boxToRedeem);
-        transaction.setUser(user);
-        transaction.setRedeemDate(LocalDateTime.now());
-        redeemTransactionRepository.save(transaction); // SAVES HISTORY
-
-        // 6. DEDUCT POINTS and SAVE UPDATED USER
-        int newPoints = user.getPoints() - boxToRedeem.getPoints();
-        user.setPoints(newPoints);
-        userRepository.save(user); // UPDATES USER POINTS
-
-        // Detailed Success Alert Message
-        redirectAttributes.addFlashAttribute("success",
-                "Success! You redeemed '" + boxToRedeem.getTypeOfTest() + "'. A total of " + boxToRedeem.getPoints() + " points was deducted. Your new balance is " + user.getPoints() + " points."
-        );
-        return "redirect:/redeem";
-    }
-
-    // --- 4. ADDED: Redeem Page GET Mapping (Loads the main redemption view) ---
-    @GetMapping("/redeem")
-    public String viewWidgets(Model model, HttpSession session) {
-
-        // Use the email from the session, matching your custom authentication
-        String userEmail = (String) session.getAttribute("userEmail");
-
-        if (userEmail == null) {
-            return "redirect:/login";
-        }
-
-        // Fetch User and Safely Handle Optional
-        Optional<User> userOptional = userRepository.findByEmail(userEmail);
-
-        if (userOptional.isEmpty()) {
-            session.invalidate();
-            return "redirect:/login";
-        }
-
-        User currentUser = userOptional.get();
-
-        // Add the user's point total to the model
-        model.addAttribute("currentPoints", currentUser.getPoints());
-
-        // Also fetch the boxes list
-        List<Box> allBoxes = boxRepository.findAll();
-        model.addAttribute("boxes", allBoxes);
-
+        // NOTE: Renaming the return view from 'widgets' to 'redeem'
         return "redeem";
     }
 
-    // --- 5. Redeem History GET Mapping (Completes the history feature) ---
+    // --- 4. Redemption Execution POST Mapping (NEW LOGIC: Update GradeReport) ---
+    @PostMapping("/redeem/execute")
+    @Transactional
+    public String executeRedeem(
+            @RequestParam Long itemId, // Using itemId instead of boxId
+            @RequestParam String subject, // NEW: Subject name required to find GradeReport
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        Optional<User> userOptional = getCurrentUser(session);
+        if (userOptional.isEmpty()) {
+            return "redirect:/login";
+        }
+        User user = userOptional.get();
+
+        // 1. Get the RedeemItem
+        RedeemItem item = redeemItemRepository.findById(itemId)
+                .orElseGet(() -> {
+                    redirectAttributes.addFlashAttribute("error", "Reward item not found.");
+                    return null;
+                });
+
+        if (item == null) {
+            return "redirect:/redeem?subjectName=" + subject;
+        }
+
+        // 2. CRITICAL BUSINESS LOGIC: Check Points
+        if (user.getPoints() < item.getCost()) { // Check against the item's cost
+            redirectAttributes.addFlashAttribute("error",
+                    "Redemption failed: Insufficient points. Cost: " + item.getCost() + ", Available: " + user.getPoints() + "."
+            );
+            return "redirect:/redeem?subjectName=" + subject;
+        }
+
+        // 3. Find the student's GradeReport for the subject
+        GradeReport report = gradeReportRepository.findByUserAndSubject(user, subject)
+                .orElseGet(() -> {
+                    redirectAttributes.addFlashAttribute("error", "Grade report not found for subject: " + subject);
+                    return null;
+                });
+
+        if (report == null) {
+            return "redirect:/redeem?subjectName=" + subject;
+        }
+
+        try {
+            // 4. Dynamically Update GradeReport field using Reflection
+            String targetField = item.getTargetAssessment(); // e.g., "unitTest1"
+
+            String capitalizedField = targetField.substring(0, 1).toUpperCase() + targetField.substring(1);
+            String getterName = "get" + capitalizedField;
+            String setterName = "set" + capitalizedField;
+
+            // Get current score
+            Method getter = GradeReport.class.getMethod(getterName);
+            int currentScore = (Integer) getter.invoke(report);
+
+            // Calculate new score
+            int newScore = currentScore + item.getPointsAwarded();
+
+            // Update the report object
+            Method setter = GradeReport.class.getMethod(setterName, int.class);
+            setter.invoke(report, newScore);
+
+            // 5. Save the updated GradeReport and Deduct Points
+            gradeReportRepository.save(report);
+
+            int newPoints = user.getPoints() - item.getCost();
+            user.setPoints(newPoints);
+            userRepository.save(user);
+
+            // 6. Record Transaction History
+            RedeemTransaction transaction = new RedeemTransaction();
+            // NOTE: Since RedeemTransaction uses Box, we'll use a placeholder Box to avoid breaking history.
+            Box placeholderBox = boxRepository.findById(CURRENT_USER_ID).orElse(null);
+            if (placeholderBox != null) {
+                transaction.setBox(placeholderBox);
+            }
+            transaction.setUser(user);
+            transaction.setRedeemDate(LocalDateTime.now());
+            redeemTransactionRepository.save(transaction);
+
+            redirectAttributes.addFlashAttribute("success",
+                    "SUCCESS! " + item.getPointsAwarded() + " points added to your " + targetField + " in " + subject + ".");
+
+        } catch (Exception e) {
+            // The @Transactional annotation will roll back point deduction if grade update fails.
+            redirectAttributes.addFlashAttribute("error", "Error processing reward: Failed to update grade (" + e.getMessage() + "). Points were not deducted.");
+        }
+
+        // Redirect to the updated scores page
+        return "redirect:/scores?subjectName=" + subject;
+    }
+
+    // --- 5. Redeem History GET Mapping (Standard) ---
     @GetMapping("/redeem/history")
     public String viewRedeemHistory(Model model, HttpSession session) {
 
-        String userEmail = (String) session.getAttribute("userEmail");
-
-        if (userEmail == null) {
-            return "redirect:/login";
-        }
-
-        // 1. Fetch User
-        Optional<User> userOptional = userRepository.findByEmail(userEmail);
-
+        Optional<User> userOptional = getCurrentUser(session);
         if (userOptional.isEmpty()) {
-            session.invalidate();
             return "redirect:/login";
         }
-
         User user = userOptional.get();
 
-        // 2. Fetch all transactions for this user, ordered by date
         List<RedeemTransaction> history = redeemTransactionRepository.findByUserOrderByRedeemDateDesc(user);
 
         model.addAttribute("history", history);
 
-        return "redeem_history"; // Your history template
+        return "redeem_history";
     }
 }
