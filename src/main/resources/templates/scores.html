@@ -257,7 +257,22 @@
                 </ol>
             </div>
         </div>
+
         <div class="container-fluid">
+
+            <div th:if="${successHtml}" class="mt-3">
+                <div th:utext="${successHtml}"></div>
+            </div>
+            <div th:if="${errorMessage}" class="mt-3">
+                <div th:utext="${errorMessage}"></div>
+            </div>
+            <div th:if="${success}" class="alert alert-success mt-3" role="alert">
+                <span th:text="${success}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
+                <span th:text="${error}"></span>
+            </div>
+
             <div class="row">
                 <div class="col-12">
                     <div class="card">

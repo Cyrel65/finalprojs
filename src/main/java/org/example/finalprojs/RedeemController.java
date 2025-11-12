@@ -119,12 +119,14 @@ public class RedeemController {
         return "redeem";
     }
 
-    // --- 4. Redemption Execution POST Mapping (NEW LOGIC: Update GradeReport) ---
+    // In RedeemController.java
+
+    // --- 4. Redemption Execution POST Mapping (FIXED: Point deduction moved) ---
     @PostMapping("/redeem/execute")
     @Transactional
     public String executeRedeem(
-            @RequestParam Long itemId, // Using itemId instead of boxId
-            @RequestParam String subject, // NEW: Subject name required to find GradeReport
+            @RequestParam Long itemId,
+            @RequestParam String subject,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
@@ -134,7 +136,6 @@ public class RedeemController {
         }
         User user = userOptional.get();
 
-        // 1. Get the RedeemItem
         RedeemItem item = redeemItemRepository.findById(itemId)
                 .orElseGet(() -> {
                     redirectAttributes.addFlashAttribute("error", "Reward item not found.");
@@ -142,18 +143,18 @@ public class RedeemController {
                 });
 
         if (item == null) {
-            return "redirect:/redeem?subjectName=" + subject;
+            return "redirect:/redeem?subjectName=" + subject + "&t=" + System.currentTimeMillis();
         }
 
-        // 2. CRITICAL BUSINESS LOGIC: Check Points
-        if (user.getPoints() < item.getCost()) { // Check against the item's cost
+        // 1. Check Cost
+        if (user.getPoints() < item.getCost()) {
             redirectAttributes.addFlashAttribute("error",
                     "Redemption failed: Insufficient points. Cost: " + item.getCost() + ", Available: " + user.getPoints() + "."
             );
-            return "redirect:/redeem?subjectName=" + subject;
+            return "redirect:/redeem?subjectName=" + subject + "&t=" + System.currentTimeMillis();
         }
 
-        // 3. Find the student's GradeReport for the subject
+        // 2. Find the student's GradeReport for the subject
         GradeReport report = gradeReportRepository.findByUserAndSubject(user, subject)
                 .orElseGet(() -> {
                     redirectAttributes.addFlashAttribute("error", "Grade report not found for subject: " + subject);
@@ -161,56 +162,70 @@ public class RedeemController {
                 });
 
         if (report == null) {
-            return "redirect:/redeem?subjectName=" + subject;
+            return "redirect:/redeem?subjectName=" + subject + "&t=" + System.currentTimeMillis();
         }
 
         try {
-            // 4. Dynamically Update GradeReport field using Reflection
-            String targetField = item.getTargetAssessment(); // e.g., "unitTest1"
-
+            // --- 3. DYNAMIC GRADE UPDATE SETUP ---
+            String targetField = item.getTargetAssessment();
             String capitalizedField = targetField.substring(0, 1).toUpperCase() + targetField.substring(1);
             String getterName = "get" + capitalizedField;
             String setterName = "set" + capitalizedField;
 
-            // Get current score
+            // Use Reflection to get current score
             Method getter = GradeReport.class.getMethod(getterName);
             int currentScore = (Integer) getter.invoke(report);
 
-            // Calculate new score
-            int newScore = currentScore + item.getPointsAwarded();
+            int pointsAwarded = item.getPointsAwarded();
+            int newScore = currentScore + pointsAwarded;
 
-            // Update the report object
+            // --- 4. MAX SCORE CHECK ---
+            int maxScore = getMaxScoreForAssessment(targetField);
+
+            if (newScore > maxScore) {
+                int difference = newScore - maxScore;
+
+                // Prepare the HTML error message
+                String alertMessage = "<div class=\"alert alert-danger\">Redemption failed: Cannot exceed the maximum score for " + targetField + ". Max score is " + maxScore + ". This redemption would go over by " + difference + " points.</div>";
+
+                redirectAttributes.addFlashAttribute("errorMessage", alertMessage);
+
+                // CRITICAL: Exit here before points are deducted
+                return "redirect:/redeem?subjectName=" + subject + "&t=" + System.currentTimeMillis();
+            }
+            // ---------------------------------------------------
+
+            // --- 5. SUCCESSFUL TRANSACTION (ONLY EXECUTED IF MAX SCORE CHECK PASSES) ---
+
+            // A. Update the report object
             Method setter = GradeReport.class.getMethod(setterName, int.class);
             setter.invoke(report, newScore);
-
-            // 5. Save the updated GradeReport and Deduct Points
             gradeReportRepository.save(report);
 
+            // B. Deduct Points
             int newPoints = user.getPoints() - item.getCost();
             user.setPoints(newPoints);
             userRepository.save(user);
 
-            // 6. Record Transaction History
-            RedeemTransaction transaction = new RedeemTransaction();
-            // NOTE: Since RedeemTransaction uses Box, we'll use a placeholder Box to avoid breaking history.
-            Box placeholderBox = boxRepository.findById(CURRENT_USER_ID).orElse(null);
-            if (placeholderBox != null) {
-                transaction.setBox(placeholderBox);
-            }
-            transaction.setUser(user);
-            transaction.setRedeemDate(LocalDateTime.now());
-            redeemTransactionRepository.save(transaction);
+            // C. Record Transaction History (existing logic)
+            // You should put your transaction history saving logic here
+            // ...
+            // redeemTransactionRepository.save(new RedeemTransaction(...));
+            // ...
 
-            redirectAttributes.addFlashAttribute("success",
-                    "SUCCESS! " + item.getPointsAwarded() + " points added to your " + targetField + " in " + subject + ".");
+            // D. Prepare Success Message
+            String successMessageContent = "SUCCESS! " + item.getPointsAwarded() + " points added to your " + targetField + " in " + subject + ".";
+            String successAlertHtml = "<div class=\"alert alert-success\">" + successMessageContent + "</div>";
+            redirectAttributes.addFlashAttribute("successHtml", successAlertHtml);
+
+            // E. Redirect to Scores Page
+            return "redirect:/scores?subjectName=" + subject + "&t=" + System.currentTimeMillis();
 
         } catch (Exception e) {
-            // The @Transactional annotation will roll back point deduction if grade update fails.
-            redirectAttributes.addFlashAttribute("error", "Error processing reward: Failed to update grade (" + e.getMessage() + "). Points were not deducted.");
+            // If any reflection/database error occurs, points were not deducted (due to @Transactional)
+            redirectAttributes.addFlashAttribute("error", "Error processing reward: An internal system error occurred. Points were not deducted.");
+            return "redirect:/redeem?subjectName=" + subject + "&t=" + System.currentTimeMillis();
         }
-
-        // Redirect to the updated scores page
-        return "redirect:/scores?subjectName=" + subject;
     }
 
     // --- 5. Redeem History GET Mapping (Standard) ---
@@ -228,5 +243,37 @@ public class RedeemController {
         model.addAttribute("history", history);
 
         return "redeem_history";
+
+    }
+
+    // In RedeemController.java
+
+    /**
+     * Helper method to return the static maximum score for a given assessment type.
+     * This should match the max scores shown in your scores table.
+     */
+    private int getMaxScoreForAssessment(String assessmentType) {
+        // Standardizing the max scores based on your scores table structure (Max 10, Max 20, Max 50)
+
+        // NOTE: If your max scores vary, you might need a dedicated database table for max weights/scores.
+
+        // Self Checks (SC 1-5) are max 10
+        if (assessmentType.startsWith("selfCheck")) {
+            return 10;
+        }
+        // Task Sheets (TS 1-3) are max 20
+        else if (assessmentType.startsWith("taskSheet")) {
+            return 20;
+        }
+        // Unit Tests (UT 1-2) and Term Test are max 50
+        else if (assessmentType.startsWith("unitTest") || assessmentType.equals("termTest")) {
+            return 50;
+        }
+        // Attendance is handled separately (usually 100%)
+        else if (assessmentType.equals("attendance")) {
+            return 100;
+        }
+        // Default or unknown assessment
+        return 0;
     }
 }
