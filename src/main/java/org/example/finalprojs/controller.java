@@ -1,11 +1,11 @@
 package org.example.finalprojs;
 
-import org.example.finalprojs.model.User;
-import org.example.finalprojs.model.Message;
+import jakarta.servlet.http.HttpSession;
+import org.example.finalprojs.model.Box;
 import org.example.finalprojs.model.GradeReport;
-import org.example.finalprojs.repository.GradeReportRepository;
+import org.example.finalprojs.model.User;
 import org.example.finalprojs.repository.BoxRepository;
-import org.example.finalprojs.repository.MessageRepository;
+import org.example.finalprojs.repository.GradeReportRepository;
 import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,20 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-// Standard Java Utility Imports (Fixes "Cannot resolve symbol" errors)
-import java.util.List;
+import java.lang.reflect.Method;
 import java.util.Optional;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
 
-import jakarta.servlet.http.HttpSession;
-
-import java.time.LocalDateTime;
-import java.security.Principal; // Not strictly used, but kept from original structure
-
-
+// This controller now handles Authentication, Profile, and Scores
 @Controller
 public class controller {
 
@@ -38,9 +28,6 @@ public class controller {
 
     @Autowired
     private BoxRepository boxRepository;
-
-    @Autowired
-    private MessageRepository messageRepository;
 
     @Autowired
     private GradeReportRepository gradeReportRepository;
@@ -106,6 +93,8 @@ public class controller {
         return "redirect:/login?logout";
     }
 
+
+    // --- Profile Handlers ---
 
     @GetMapping("/profile")
     public String viewProfile(Model model, HttpSession session) {
@@ -183,75 +172,13 @@ public class controller {
         // --- Save changes ---
         userRepository.save(user);
 
+        // If email was changed, update session attribute
+        session.setAttribute("userEmail", user.getEmail());
+
         redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
         return "redirect:/profile";
     }
 
-
-
-
-    // --- Message/Email Handlers ---
-
-    @GetMapping("/inbox")
-    public String viewInbox() {
-        return "email-inbox";
-    }
-
-    @GetMapping("/read")
-    public String viewRead() {
-        return "email-read";
-    }
-
-    @GetMapping("/compose")
-    public String viewCompose(HttpSession session) {
-        if (getCurrentUser(session).isEmpty()) {
-            return "redirect:/login";
-        }
-        return "email-compose";
-    }
-
-    @PostMapping("/send-message")
-    public String sendMessage(
-            @RequestParam("recipientEmail") String recipientEmail,
-            @RequestParam("content") String content,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
-
-        Optional<User> senderOptional = getCurrentUser(session);
-        if (senderOptional.isEmpty()) {
-            return "redirect:/login";
-        }
-        User sender = senderOptional.get();
-
-        if (content == null || content.trim().isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Message content cannot be empty.");
-            return "redirect:/compose";
-        }
-
-        try {
-            User recipient = userRepository.findByEmail(recipientEmail)
-                    .orElseThrow(() -> new RuntimeException("Recipient not found with email: " + recipientEmail));
-
-            if (sender.getEmail().equalsIgnoreCase(recipientEmail)) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Cannot send message to yourself.");
-                return "redirect:/compose";
-            }
-
-            Message message = new Message(
-                    sender,
-                    recipient,
-                    content,
-                    LocalDateTime.now()
-            );
-            messageRepository.save(message);
-
-            redirectAttributes.addFlashAttribute("successMessage", "Message sent successfully!");
-            return "redirect:/inbox";
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Error sending message: " + e.getMessage());
-            return "redirect:/compose";
-        }
-    }
 
     // --- Personalized Grade Report Handler ---
 
@@ -280,7 +207,6 @@ public class controller {
             report = new GradeReport();
             report.setSubject(subjectName);
             report.setUser(user);
-            // Defaulting overall grade to 10% (Attendance) if all other scores are zero
             report.setOverallGrade(0.0);
         } else {
             report = reportOptional.get();

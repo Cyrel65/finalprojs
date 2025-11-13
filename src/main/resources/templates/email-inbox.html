@@ -226,6 +226,22 @@
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </li>
+
+                    <li>
+                        <a th:href="@{/profile}">
+                            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span>
+                        </a>
+
+                    </li>
+
+
+                    <li>
+                        <a th:href="@{/inbox}" aria-expanded="false">
+                            <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
+                        </a>
+
+                    </li>
+
                     <li class="mega-menu mega-menu-sm">
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
@@ -238,18 +254,6 @@
                         </ul>
                     </li>
 
-                    <li>
-                        <a th:href="@{/inbox}" aria-expanded="false">
-                            <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
-                        </a>
-
-                    </li>
-                    <li>
-                        <a th:href="@{/profile}">
-                            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span>
-                        </a>
-
-                    </li>
 
 
 
@@ -293,75 +297,111 @@
             <!-- row -->
 
             <div class="container-fluid">
+                <!-- START: ADD THIS FLASH MESSAGE BLOCK -->
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${success}"></span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${error}"></span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- END: FLASH MESSAGE BLOCK -->
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
+                                <!-- START of fixed email-left-box section -->
                                 <div class="email-left-box"><a th:href="@{/compose}" class="btn btn-primary btn-block">Compose</a>
-                                    <div class="mail-list mt-4"><a th:href="@{/inbox}" class="list-group-item border-0 text-primary p-r-0"><i class="fa fa-inbox font-18 align-middle mr-2"></i> <b>Inbox</b> <span class="badge badge-primary badge-sm float-right m-t-5">198</span> </a>
-                                    </div>
+                                    <div class="mail-list mt-4">
+                                        <!-- 1. Inbox Link -->
+                                        <a th:href="@{/inbox}" class="list-group-item border-0 text-primary p-r-0">
+                                            <i class="fa fa-inbox font-18 align-middle mr-2"></i> Inbox
+                                            <span th:text="${unreadCount != null ? unreadCount : (messages != null ? messages.size() : 0)}" class="badge badge-primary badge-sm float-right m-t-5"></span>
+                                        </a>
 
+                                        <!-- 2. Sent Link (NEW) -->
+                                        <a th:href="@{/sent}" class="list-group-item border-0 p-r-0">
+                                            <i class="fa fa-paper-plane font-18 align-middle mr-2"></i>Sent
+                                            <!-- NOTE: Changed variable to 'sentCount' for accuracy, if you implement it -->
+                                            <span th:text="${sentCount != null ? sentCount : (messages != null ? messages.size() : 0)}" class="badge badge-primary badge-sm float-right m-t-5"></span>
+                                        </a>
+                                    </div>
                                 </div>
+                                <!-- END of fixed email-left-box section -->
+
                                 <div class="email-right-box">
                                     <div role="toolbar" class="toolbar">
                                         <div class="btn-group">
                                             <button aria-expanded="false" data-toggle="dropdown" class="btn btn-dark dropdown-toggle" type="button">More <span class="caret m-l-5"></span>
                                             </button>
                                             <div class="dropdown-menu"><span class="dropdown-header">More Option :</span>  <a href="javascript: void(0);" class="dropdown-item">Mark as Unread</a>  <a href="javascript: void(0);" class="dropdown-item">Add to Tasks</a>  <a href="javascript: void(0);"
-                                                class="dropdown-item">Add Star</a>  <a href="javascript: void(0);" class="dropdown-item">Mute</a>
+                                                                                                                                                                                                                                                                              class="dropdown-item">Add Star</a>  <a href="javascript: void(0);" class="dropdown-item">Mute</a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="email-list m-t-15">
 
+                                        <!-- Show message if inbox is empty -->
+                                        <div th:if="${messages == null || messages.isEmpty()}" class="text-center p-5 text-muted">
+                                            You have no messages in your inbox.
+                                        </div>
 
+                                        <!-- START: DYNAMIC MESSAGE LIST ITERATION (Corrected for Safe Navigation) -->
+                                        <div th:each="message : ${messages}"
+                                             th:classappend="${message.getRead() ? '' : 'unread'}"
+                                             class="message">
 
-
-
-
-                                        <div class="message">
-                                            <a href="email-read.html">
+                                            <a th:href="@{/read(messageId=${message.id})}">
                                                 <div class="col-mail col-mail-1">
                                                     <div class="email-checkbox">
-                                                        <input type="checkbox" id="chk19">
-                                                        <label class="toggle" for="chk19"></label>
-                                                    </div><span class="star-toggle ti-star"></span>
+                                                        <!-- Checkbox IDs are made unique using message.id -->
+                                                        <input type="checkbox" th:id="'chk' + ${message.id}">
+                                                        <label class="toggle" th:for="'chk' + ${message.id}"></label>
+                                                    </div>
+                                                    <span class="star-toggle ti-star"></span>
                                                 </div>
                                                 <div class="col-mail col-mail-2">
-                                                    <div class="subject">Almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</div>
-                                                    <div class="date">11:49 am</div>
+                                                    <div class="subject">
+                                                        <!-- CRITICAL FIX: Use ?. to safely access sender name, or use 'System Message' as fallback -->
+                                                        <span th:text="${message.sender?.name ?: 'System Message'}" class="text-dark font-weight-bold mr-2">Sender Name</span>
+                                                        <span th:text="${message.subject}">Message Subject</span>
+                                                        -
+                                                        <!-- Use #strings.abbreviate and provide a fallback for null content -->
+                                                        <span th:text="' - ' + ${#strings.abbreviate(message.content ?: 'No preview available', 40)}" class="message-snippet text-muted">Content Snippet</span>
+                                                    </div>
+                                                    <!-- Formatted Timestamp -->
+                                                    <div class="date" th:text="${#temporals.format(message.timestamp, 'MMM dd, HH:mm')}">Timestamp</div>
                                                 </div>
                                             </a>
                                         </div>
-                                        <div class="message unread">
-                                            <a href="email-read.html">
-                                                <div class="col-mail col-mail-1">
-                                                    <div class="email-checkbox">
-                                                        <input type="checkbox" id="chk20">
-                                                        <label class="toggle" for="chk20"></label>
-                                                    </div><span class="star-toggle ti-star"></span>
-                                                </div>
-                                                <div class="col-mail col-mail-2">
-                                                    <div class="subject">Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of</div>
-                                                    <div class="date">11:49 am</div>
-                                                </div>
-                                            </a>
+                                        <!-- END: DYNAMIC MESSAGE LIST ITERATION -->
+
+                                    </div>
+                                    <!-- panel -->
+                                    <div class="row">
+                                        <div class="col-7">
+
                                         </div>
-                                        <div class="message">
-                                            <a href="email-read.html">
-                                                <div class="col-mail col-mail-1">
-                                                    <div class="email-checkbox">
-                                                        <input type="checkbox" id="chk21">
-                                                        <label class="toggle" for="chk21"></label>
-                                                    </div><span class="star-toggle ti-star"></span>
-                                                </div>
-                                                <div class="col-mail col-mail-2">
-                                                    <div class="subject">Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of</div>
-                                                    <div class="date">11:49 am</div>
-                                                </div>
-                                            </a>
+                                        <div class="col-5">
+                                            <div class="btn-group float-right">
+                                                <button class="btn btn-gradient" type="button"><i class="fa fa-angle-left"></i>
+                                                </button>
+                                                <button class="btn btn-dark" type="button"><i class="fa fa-angle-right"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                                     <!-- panel -->
                                     <div class="row">
                                         <div class="col-7">
