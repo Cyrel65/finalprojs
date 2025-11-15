@@ -329,12 +329,16 @@
                                     </div>
                                     <div class="email-list m-t-15">
 
-                                        <!-- Show message if inbox is empty -->
+                                        <!--
+                                            UPDATED: Empty message check
+                                            Now displays contextually correct message for Inbox or Sent.
+                                        -->
                                         <div th:if="${messages == null || messages.isEmpty()}" class="text-center p-5 text-muted">
-                                            You have no messages in your inbox.
+                                            <span th:if="${pageTitle == 'Sent Messages'}">You have not sent any messages.</span>
+                                            <span th:unless="${pageTitle == 'Sent Messages'}">You have no messages in your inbox.</span>
                                         </div>
 
-                                        <!-- START: DYNAMIC MESSAGE LIST ITERATION (Corrected for Safe Navigation) -->
+                                        <!-- START: DYNAMIC MESSAGE LIST ITERATION -->
                                         <div th:each="message : ${messages}"
                                              th:classappend="${message.getRead() ? '' : 'unread'}"
                                              class="message">
@@ -350,8 +354,16 @@
                                                 </div>
                                                 <div class="col-mail col-mail-2">
                                                     <div class="subject">
-                                                        <!-- CRITICAL FIX: Use ?. to safely access sender name, or use 'System Message' as fallback -->
-                                                        <span th:text="${message.sender?.name ?: 'System Message'}" class="text-dark font-weight-bold mr-2">Sender Name</span>
+                                                        <!--
+                                                            CRITICAL FIX: Conditional display for Sender vs Recipient.
+                                                            If pageTitle is 'Sent Messages', display the Recipient's name.
+                                                            Otherwise (inbox), display the Sender's name.
+                                                        -->
+                                                        <span
+                                                                th:with="displayName=${pageTitle == 'Sent Messages' ? message.recipient?.name : message.sender?.name}"
+                                                                th:text="${displayName ?: 'System Message'}"
+                                                                class="text-dark font-weight-bold mr-2">Contact Name
+                                                        </span>
                                                         <span th:text="${message.subject}">Message Subject</span>
                                                         -
                                                         <!-- Use #strings.abbreviate and provide a fallback for null content -->

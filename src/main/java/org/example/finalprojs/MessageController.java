@@ -292,32 +292,33 @@ public class MessageController {
     public String sentMessages(Model model, HttpSession session) {
         Optional<User> currentUserOptional = getCurrentUser(session);
         if (currentUserOptional.isEmpty()) {
-            // If no user is logged in, redirect to login
+            // 1. If no user is logged in, redirect to login
             return "redirect:/login";
         }
         User currentUser = currentUserOptional.get();
 
-        // 1. Fetch messages where the current user is the SENDER, sorted by timestamp
-        // NOTE: Assuming findBySenderOrderByTimestampDesc exists in your repository
+        // 2. Fetch messages where the current user is the SENDER
         List<Message> sentMessages = messageRepository.findBySenderOrderByTimestampDesc(currentUser);
         model.addAttribute("messages", sentMessages);
 
-        // 2. Calculate SENT count for the Sent folder badge (required for the link badge)
-        // NOTE: Requires countBySender(User sender) in your MessageRepository
+        // 3. Calculate SENT count
         long sentCount = messageRepository.countBySender(currentUser);
         model.addAttribute("sentCount", sentCount);
 
-        // 3. Calculate UNREAD count for the Inbox badge (required for the link badge)
-        // We must fetch all received messages to get this count.
+        // 4. Calculate UNREAD count
         List<Message> receivedMessages = messageRepository.findByRecipient(currentUser);
         long unreadCount = receivedMessages.stream().filter(m -> !m.isRead()).count();
         model.addAttribute("unreadCount", unreadCount);
 
+        // 5. CRITICAL FIX: Add the currentUser object to the model
+        // This allows the header (profile picture) to render without error.
+        model.addAttribute("user", currentUser);
 
-        // 4. Add a title variable to highlight the active menu item in the sidebar
+
+        // 6. Add a title variable to highlight the active menu item
         model.addAttribute("pageTitle", "Sent Messages");
 
-        // 5. Return the same inbox template (it will reuse the table structure)
+        // 7. Return the template
         return "email-inbox";
     }
 }
