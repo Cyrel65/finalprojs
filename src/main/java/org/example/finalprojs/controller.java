@@ -1,10 +1,8 @@
 package org.example.finalprojs;
 
 import jakarta.servlet.http.HttpSession;
-import org.example.finalprojs.model.Box;
 import org.example.finalprojs.model.GradeReport;
 import org.example.finalprojs.model.User;
-import org.example.finalprojs.repository.BoxRepository;
 import org.example.finalprojs.repository.GradeReportRepository;
 import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 // This controller now handles Authentication, Profile, and Scores
@@ -26,8 +23,7 @@ public class controller {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private BoxRepository boxRepository;
+
 
     @Autowired
     private GradeReportRepository gradeReportRepository;

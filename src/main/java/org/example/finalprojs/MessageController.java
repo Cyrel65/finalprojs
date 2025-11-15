@@ -48,17 +48,18 @@ public class MessageController {
         }
         User currentUser = userOptional.get();
 
+        // Fix 1: Add currentUser for the header/sidebar profile picture
+        model.addAttribute("user", currentUser);
+
         // 1. Fetch messages for the inbox, sorted by timestamp
-        // NOTE: Requires findByRecipientOrderByTimestampDesc in your MessageRepository
         List<Message> receivedMessages = messageRepository.findByRecipientOrderByTimestampDesc(currentUser);
         model.addAttribute("messages", receivedMessages);
 
-        // 2. Calculate UNREAD count for the Inbox badge (required for the link badge)
+        // 2. Calculate UNREAD count (already here, but ensuring it's in the model)
         long unreadCount = receivedMessages.stream().filter(m -> !m.isRead()).count();
         model.addAttribute("unreadCount", unreadCount);
 
-        // 3. Calculate SENT count for the Sent folder badge (required for the link badge)
-        // NOTE: Requires countBySender(User sender) in your MessageRepository
+        // Fix 2: Calculate SENT count for the header/sidebar badge
         long sentCount = messageRepository.countBySender(currentUser);
         model.addAttribute("sentCount", sentCount);
 
@@ -76,6 +77,9 @@ public class MessageController {
         }
         User currentUser = userOptional.get();
 
+        // Fix 1: Add currentUser for the header/sidebar profile picture
+        model.addAttribute("user", currentUser);
+
         Optional<Message> messageOptional = messageRepository.findById(messageId);
         if (messageOptional.isEmpty()) {
             model.addAttribute("error", "Message not found.");
@@ -84,7 +88,7 @@ public class MessageController {
 
         Message message = messageOptional.get();
 
-        // --- Security Check: Ensure user is EITHER the recipient OR the sender ---
+        // --- Security Check: (No change) ---
         Long currentUserId = currentUser.getId();
 
         if (!message.getRecipient().getId().equals(currentUserId) &&
@@ -94,26 +98,50 @@ public class MessageController {
             return "email-inbox";
         }
 
-        // --- Mark as Read Logic ---
-        // Only mark as read if the current user is the RECIPIENT AND the message is currently unread.
+        // --- Mark as Read Logic: (No change) ---
         if (message.getRecipient().getId().equals(currentUserId) && !message.isRead()) {
             message.setRead(true);
             messageRepository.save(message);
         }
 
         model.addAttribute("message", message);
+
+        // Fix 2: Add Message Counts for the header/sidebar badges
+        List<Message> allReceivedMessages = messageRepository.findByRecipient(currentUser);
+        long unreadCount = allReceivedMessages.stream().filter(m -> !m.isRead()).count();
+        model.addAttribute("unreadCount", unreadCount);
+
+        long sentCount = messageRepository.countBySender(currentUser);
+        model.addAttribute("sentCount", sentCount);
+
         return "email-read";
     }
 
-    @   GetMapping("/compose")
+    @GetMapping("/compose")
     public String viewCompose(Model model, HttpSession session) {
-        if (getCurrentUser(session).isEmpty()) {
+        Optional<User> userOptional = getCurrentUser(session);
+        if (userOptional.isEmpty()) {
             return "redirect:/login";
         }
+        User currentUser = userOptional.get();
 
-        // Populate model with all users so the user can select a recipient
+        // Fix 1: Add currentUser for the header/sidebar profile picture
+        model.addAttribute("user", currentUser);
+
+        // Fix 2: Add Message Counts for the header/sidebar badges
+        List<Message> receivedMessages = messageRepository.findByRecipient(currentUser);
+        long unreadCount = receivedMessages.stream().filter(m -> !m.isRead()).count();
+        model.addAttribute("unreadCount", unreadCount);
+
+        long sentCount = messageRepository.countBySender(currentUser);
+        model.addAttribute("sentCount", sentCount);
+
+        // Populate model with all users so the user can select a recipient (Your original logic)
         List<User> allUsers = userRepository.findAll();
         model.addAttribute("allUsers", allUsers);
+
+        // Set page title
+        model.addAttribute("pageTitle", "Compose Message");
 
         return "email-compose";
     }
@@ -233,6 +261,32 @@ public class MessageController {
     // Inside MessageController.java
 
     // Inside MessageController.java
+
+    @GetMapping("/")
+    public String viewDashboard(Model model, HttpSession session) {
+        // 1. Authentication Check
+        Optional<User> userOptional = getCurrentUser(session);
+        if (userOptional.isEmpty()) {
+            return "redirect:/login";
+        }
+        User currentUser = userOptional.get();
+
+        // 2. Add the User object (Fixes the SpEL error)
+        model.addAttribute("user", currentUser);
+
+        // 3. Add Message Counts (required by the header/sidebar)
+        List<Message> receivedMessages = messageRepository.findByRecipient(currentUser);
+        long unreadCount = receivedMessages.stream().filter(m -> !m.isRead()).count();
+        model.addAttribute("unreadCount", unreadCount);
+
+        long sentCount = messageRepository.countBySender(currentUser);
+        model.addAttribute("sentCount", sentCount);
+
+        // 4. Set page title
+        model.addAttribute("pageTitle", "Dashboard");
+
+        return "index";
+    }
 
     @GetMapping("/sent")
     public String sentMessages(Model model, HttpSession session) {

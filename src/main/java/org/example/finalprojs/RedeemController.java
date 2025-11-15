@@ -1,16 +1,12 @@
 package org.example.finalprojs;
 
+import org.example.finalprojs.repository.MessageRepository;
 import jakarta.servlet.http.HttpSession;
-import org.example.finalprojs.model.Box;
 import org.example.finalprojs.model.GradeReport; // New Dependency
 import org.example.finalprojs.model.RedeemItem; // New Dependency
 import org.example.finalprojs.model.RedeemTransaction;
 import org.example.finalprojs.model.User;
-import org.example.finalprojs.repository.BoxRepository;
-import org.example.finalprojs.repository.GradeReportRepository; // New Dependency
-import org.example.finalprojs.repository.RedeemItemRepository; // New Dependency
-import org.example.finalprojs.repository.RedeemTransactionRepository;
-import org.example.finalprojs.repository.UserRepository;
+import org.example.finalprojs.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.transaction.annotation.Transactional;
+import org.example.finalprojs.model.Message; // <-- ADD THIS LINE
+
 
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +31,7 @@ public class RedeemController {
     private RedeemItemRepository redeemItemRepository;
 
     @Autowired
-    private BoxRepository boxRepository;
+    private MessageRepository messageRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -57,34 +54,9 @@ public class RedeemController {
         return userRepository.findByEmail(userEmail);
     }
 
-    // --- 1. Dashboard GET Mapping (Standard) ---
-    @GetMapping("/")
-    public String viewDashboard(Model model) {
-        List<Box> allBoxes = boxRepository.findAll();
-        model.addAttribute("boxes", allBoxes);
-        return "index";
-    }
 
-    // --- 2. Box Creation POST Mapping (Teacher functionality - assumes creating a Box) ---
-    @PostMapping("/createBox")
-    public String createNewBox(@RequestParam int points,
-                               @RequestParam String typeOfTest,
-                               RedirectAttributes redirectAttributes) {
 
-        // NOTE: This should ideally be updated to save a RedeemItem if you stop using Box for rewards.
-        User currentUser = userRepository.findById(CURRENT_USER_ID)
-                .orElse(null);
 
-        if (currentUser == null) {
-            redirectAttributes.addFlashAttribute("error", "System error: Default user not found.");
-            return "redirect:/login";
-        }
-
-        Box newBox = new Box(points, typeOfTest, currentUser);
-        boxRepository.save(newBox);
-
-        return "redirect:/redeem";
-    }
 
     // --- 3. Dynamic Redeem Page GET Mapping (Subject-specific) ---
     @GetMapping("/redeem")
@@ -98,13 +70,24 @@ public class RedeemController {
         if (userOptional.isEmpty()) {
             return "redirect:/login";
         }
-        User user = userOptional.get();
+        User currentUser = userOptional.get();
 
-        // 1. Get current points from User
-        model.addAttribute("currentPoints", user.getPoints());
+        // FIX 1: Add currentUser object for the header/sidebar profile picture
+        model.addAttribute("user", currentUser);
+
+        // FIX 2: Add Message Counts for the header/sidebar badges
+        List<Message> receivedMessages = messageRepository.findByRecipient(currentUser);
+        long unreadCount = receivedMessages.stream().filter(m -> !m.isRead()).count();
+        model.addAttribute("unreadCount", unreadCount);
+
+        long sentCount = messageRepository.countBySender(currentUser);
+        model.addAttribute("sentCount", sentCount);
+
+        // 1. Get current points from User (using the variable assigned above)
+        model.addAttribute("currentPoints", currentUser.getPoints());
         model.addAttribute("currentSubject", subjectName);
 
-        // 2. Fetch Redeemable Items based on Subject
+        // 2. Fetch Redeemable Items based on Subject (Your original logic)
         if (subjectName == null || subjectName.isEmpty()) {
             // Display general error if subject is missing
             model.addAttribute("error", "Please select a subject to view rewards.");
@@ -114,6 +97,9 @@ public class RedeemController {
             List<RedeemItem> items = redeemItemRepository.findBySubject(subjectName);
             model.addAttribute("items", items);
         }
+
+        // Set page title
+        model.addAttribute("pageTitle", "Redeem Rewards");
 
         // NOTE: Renaming the return view from 'widgets' to 'redeem'
         return "redeem";
