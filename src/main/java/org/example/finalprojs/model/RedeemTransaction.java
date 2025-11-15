@@ -1,5 +1,3 @@
-// src/main/java/org/example/finalprojs/model/RedeemTransaction.java
-
 package org.example.finalprojs.model;
 
 import jakarta.persistence.*;
@@ -15,9 +13,10 @@ public class RedeemTransaction {
     @JoinColumn(name = "user_id")
     private User user; // The user who redeemed the item
 
+    // --- REPLACED: Link to the new RedeemItem instead of the deprecated Box ---
     @ManyToOne
-    @JoinColumn(name = "box_id")
-    private Box box; // The box that was redeemed
+    @JoinColumn(name = "redeem_item_id")
+    private RedeemItem redeemItem; // The specific redeemable reward item that was used
 
     private LocalDateTime redeemDate = LocalDateTime.now();
 
@@ -25,15 +24,17 @@ public class RedeemTransaction {
     public RedeemTransaction() {
     }
 
-    // Getters and Setters (REQUIRED)
+    // Getters and Setters (Updated for RedeemItem)
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
-    public Box getBox() { return box; }
-    public void setBox(Box box) { this.box = box; }
+    // --- Updated Getter/Setter ---
+    public RedeemItem getRedeemItem() { return redeemItem; }
+    public void setRedeemItem(RedeemItem redeemItem) { this.redeemItem = redeemItem; }
+    // ---------------------------
 
     public LocalDateTime getRedeemDate() { return redeemDate; }
     public void setRedeemDate(LocalDateTime redeemDate) { this.redeemDate = redeemDate; }
