@@ -11,4 +11,7 @@ public interface RedeemTransactionRepository extends JpaRepository<RedeemTransac
 
     // Custom method to fetch history for a specific user, ordered by date
     List<RedeemTransaction> findByUserOrderByRedeemDateDesc(User user);
+
+    // Add this method to allow the service to fetch history by user, ordered by date
+    List<RedeemTransaction> findAllByUserOrderByRedeemDateDesc(User user);
 }

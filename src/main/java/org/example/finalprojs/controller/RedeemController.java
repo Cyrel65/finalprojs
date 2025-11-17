@@ -1,5 +1,6 @@
 package org.example.finalprojs.controller;
 
+import org.example.finalprojs.model.RedeemTransaction;
 import org.example.finalprojs.model.User;
 import org.example.finalprojs.model.RedeemItem;
 import org.example.finalprojs.service.MessageService; // Dependency for counts
@@ -65,6 +66,17 @@ public class RedeemController {
 
         model.addAttribute("currentPoints", currentUser.getPoints());
         model.addAttribute("currentSubject", subjectName);
+
+        // --- ADD THIS BLOCK TO LOAD TRANSACTION DATA FOR THE MODAL ---
+        try {
+            List<RedeemTransaction> transactions = redeemService.findTransactionsByUser(currentUser);
+            model.addAttribute("transactions", transactions);
+        } catch (Exception e) {
+            // Handle error case by sending an empty list
+            model.addAttribute("transactions", new ArrayList<RedeemTransaction>());
+            System.err.println("Error fetching transactions for modal: " + e.getMessage());
+        }
+        // -----------------------------------------------------------
 
         if (subjectName == null || subjectName.isEmpty()) {
             model.addAttribute("error", "Please select a subject to view rewards.");

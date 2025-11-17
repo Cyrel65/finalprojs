@@ -224,4 +224,7 @@ public class MainController {
     @GetMapping("/section")
     public String Section() {return "table-datatable";}
 
+    @GetMapping("/modal")
+    public String Modal() {return "ui-modal";}
+
 }

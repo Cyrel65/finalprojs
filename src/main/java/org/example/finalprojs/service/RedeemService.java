@@ -2,10 +2,10 @@ package org.example.finalprojs.service;
 
 import org.example.finalprojs.model.User;
 import org.example.finalprojs.model.RedeemItem;
-import org.example.finalprojs.model.RedeemTransaction;
+import org.example.finalprojs.model.RedeemTransaction; // IMPORTANT: Ensure this is imported
 import org.example.finalprojs.model.GradeReport;
 import org.example.finalprojs.repository.RedeemItemRepository;
-import org.example.finalprojs.repository.RedeemTransactionRepository;
+import org.example.finalprojs.repository.RedeemTransactionRepository; // IMPORTANT: Used for new method
 import org.example.finalprojs.repository.UserRepository;
 import org.example.finalprojs.repository.GradeReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +46,18 @@ public class RedeemService {
 
     public List<RedeemItem> findRedeemItemsBySubject(String subjectName) {
         return redeemItemRepository.findBySubject(subjectName);
+    }
+
+    /**
+     * Finds all redemption transactions for a specific user, ordered by date.
+     * This resolves the 'Cannot resolve method' error in the controller.
+     * @param user The user whose history is requested.
+     * @return A list of RedeemTransaction objects.
+     */
+    public List<RedeemTransaction> findTransactionsByUser(User user) {
+        // ASSUMPTION: The RedeemTransactionRepository has a method defined as:
+        // List<RedeemTransaction> findAllByUserOrderByRedeemDateDesc(User user);
+        return redeemTransactionRepository.findAllByUserOrderByRedeemDateDesc(user);
     }
 
     // --- Core Transaction Logic ---
