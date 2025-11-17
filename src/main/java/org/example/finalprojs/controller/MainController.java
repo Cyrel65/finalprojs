@@ -5,6 +5,7 @@ import org.example.finalprojs.model.GradeReport;
 import org.example.finalprojs.model.User;
 import org.example.finalprojs.service.GradeService;
 import org.example.finalprojs.service.UserService;
+import org.example.finalprojs.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +22,14 @@ public class MainController {
 
     private final UserService userService;
     private final GradeService gradeService;
+    private final MessageService messageService;
 
     // Use constructor injection for all dependencies (Best Practice)
     @Autowired
-    public MainController(UserService userService, GradeService gradeService) {
+    public MainController(UserService userService, GradeService gradeService, MessageService messageService) {
         this.userService = userService;
         this.gradeService = gradeService;
+        this.messageService = messageService;
     }
 
     // Private Helper Method for Session User (Uses UserService for lookup)
@@ -91,7 +94,9 @@ public class MainController {
         if (userOptional.isEmpty()) {
             return "redirect:/login";
         }
-        model.addAttribute("user", userOptional.get());
+        User user = userOptional.get();
+        model.addAttribute("user", user);
+        model.addAttribute("unreadCount", messageService.getUnreadCount(user));
         return "app-profile";
     }
 
@@ -167,6 +172,7 @@ public class MainController {
         model.addAttribute("currentSubject", subjectName != null ? subjectName : "All Subjects");
         model.addAttribute("user", user);
         model.addAttribute("report", report);
+        model.addAttribute("unreadCount", messageService.getUnreadCount(user));
 
         return "scores";
     }
@@ -181,10 +187,32 @@ public class MainController {
     public String viewPassword() {return "forgot-password";}
 
     @GetMapping("/helpFeed")
-    public String viewHelpFeed() {return "help-feedback";}
+    public String viewHelpFeed(Model model, HttpSession session) {
+        // 1. Authenticate and check user session
+        Optional<User> userOptional = getCurrentUser(session);
+        if (userOptional.isEmpty()) {
+            return "redirect:/login"; // Redirect if not logged in
+        }
+
+        User currentUser = userOptional.get();
+
+        // 2. Add required data to the model
+        model.addAttribute("user", currentUser);
+        model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
+
+        return "help-feedback"; // Return your original view name
+    }
 
     @GetMapping("/newindex")
-    public String newindex() {return "index";}
+    public String newindex(Model model, HttpSession session) {
+        Optional<User> userOptional = getCurrentUser(session);
+        if (userOptional.isPresent()) {
+            User currentUser = userOptional.get();
+            model.addAttribute("user", currentUser);
+            model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
+        }
+        return "index";
+    }
 
     @GetMapping("/about")
     public String About() {return "about";}
