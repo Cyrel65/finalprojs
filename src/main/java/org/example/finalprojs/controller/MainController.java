@@ -3,6 +3,7 @@ package org.example.finalprojs.controller;
 import jakarta.servlet.http.HttpSession;
 import org.example.finalprojs.model.GradeReport;
 import org.example.finalprojs.model.User;
+import org.example.finalprojs.service.FeedbackService;
 import org.example.finalprojs.service.GradeService;
 import org.example.finalprojs.service.UserService;
 import org.example.finalprojs.service.MessageService;
@@ -23,13 +24,15 @@ public class MainController {
     private final UserService userService;
     private final GradeService gradeService;
     private final MessageService messageService;
+    private final FeedbackService feedbackService;
 
     // Use constructor injection for all dependencies (Best Practice)
     @Autowired
-    public MainController(UserService userService, GradeService gradeService, MessageService messageService) {
+    public MainController(UserService userService, GradeService gradeService, MessageService messageService,  FeedbackService feedbackService) {
         this.userService = userService;
         this.gradeService = gradeService;
         this.messageService = messageService;
+        this.feedbackService = feedbackService;
     }
 
     // Private Helper Method for Session User (Uses UserService for lookup)
@@ -201,6 +204,38 @@ public class MainController {
         model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
 
         return "help-feedback"; // Return your original view name
+    }
+
+    @PostMapping("/submitFeedback")
+    public String submitFeedback(
+            @RequestParam("comment") String commentText,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        // 1. Authenticate and check user session (using the existing helper method)
+        Optional<User> userOptional = getCurrentUser(session);
+        if (userOptional.isEmpty()) {
+            return "redirect:/login";
+        }
+
+        try {
+            User user = userOptional.get();
+            Long userId = user.getId(); // Assuming User has a getId() method
+
+            // 2. Call the service to submit the feedback
+            feedbackService.submitFeedback(userId, commentText);
+
+            redirectAttributes.addFlashAttribute("success", "Thank you for your feedback! We appreciate you taking the time to write to us.");
+        } catch (IllegalArgumentException e) {
+            // Handles validation errors (e.g., comment is empty)
+            redirectAttributes.addFlashAttribute("error", "Submission failed: " + e.getMessage());
+        } catch (Exception e) {
+            // General error handling
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred during submission.");
+        }
+
+        // Redirects back to the GET /helpFeed endpoint to show status messages
+        return "redirect:/helpFeed";
     }
 
     @GetMapping("/newindex")
