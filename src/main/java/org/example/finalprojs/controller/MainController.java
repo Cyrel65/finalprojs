@@ -24,7 +24,7 @@ public class MainController {
     private final UserService userService;
     private final GradeService gradeService;
     private final MessageService messageService;
-    private final FeedbackService feedbackService;
+
 
     // Use constructor injection for all dependencies (Best Practice)
     @Autowired
@@ -32,7 +32,6 @@ public class MainController {
         this.userService = userService;
         this.gradeService = gradeService;
         this.messageService = messageService;
-        this.feedbackService = feedbackService;
     }
 
     // Private Helper Method for Session User (Uses UserService for lookup)
@@ -188,55 +187,6 @@ public class MainController {
 
     @GetMapping("/forgotpass")
     public String viewPassword() {return "forgot-password";}
-
-    @GetMapping("/helpFeed")
-    public String viewHelpFeed(Model model, HttpSession session) {
-        // 1. Authenticate and check user session
-        Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
-            return "redirect:/login"; // Redirect if not logged in
-        }
-
-        User currentUser = userOptional.get();
-
-        // 2. Add required data to the model
-        model.addAttribute("user", currentUser);
-        model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
-
-        return "help-feedback"; // Return your original view name
-    }
-
-    @PostMapping("/submitFeedback")
-    public String submitFeedback(
-            @RequestParam("comment") String commentText,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
-
-        // 1. Authenticate and check user session (using the existing helper method)
-        Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
-            return "redirect:/login";
-        }
-
-        try {
-            User user = userOptional.get();
-            Long userId = user.getId(); // Assuming User has a getId() method
-
-            // 2. Call the service to submit the feedback
-            feedbackService.submitFeedback(userId, commentText);
-
-            redirectAttributes.addFlashAttribute("success", "Thank you for your feedback! We appreciate you taking the time to write to us.");
-        } catch (IllegalArgumentException e) {
-            // Handles validation errors (e.g., comment is empty)
-            redirectAttributes.addFlashAttribute("error", "Submission failed: " + e.getMessage());
-        } catch (Exception e) {
-            // General error handling
-            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred during submission.");
-        }
-
-        // Redirects back to the GET /helpFeed endpoint to show status messages
-        return "redirect:/helpFeed";
-    }
 
     @GetMapping("/newindex")
     public String newindex(Model model, HttpSession session) {
