@@ -3,6 +3,7 @@ package org.example.finalprojs.controller;
 import jakarta.servlet.http.HttpSession;
 import org.example.finalprojs.model.GradeReport;
 import org.example.finalprojs.model.User;
+import org.example.finalprojs.service.FeedbackService;
 import org.example.finalprojs.service.GradeService;
 import org.example.finalprojs.service.UserService;
 import org.example.finalprojs.service.MessageService;
@@ -24,9 +25,10 @@ public class MainController {
     private final GradeService gradeService;
     private final MessageService messageService;
 
+
     // Use constructor injection for all dependencies (Best Practice)
     @Autowired
-    public MainController(UserService userService, GradeService gradeService, MessageService messageService) {
+    public MainController(UserService userService, GradeService gradeService, MessageService messageService,  FeedbackService feedbackService) {
         this.userService = userService;
         this.gradeService = gradeService;
         this.messageService = messageService;
@@ -185,23 +187,6 @@ public class MainController {
 
     @GetMapping("/forgotpass")
     public String viewPassword() {return "forgot-password";}
-
-    @GetMapping("/helpFeed")
-    public String viewHelpFeed(Model model, HttpSession session) {
-        // 1. Authenticate and check user session
-        Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
-            return "redirect:/login"; // Redirect if not logged in
-        }
-
-        User currentUser = userOptional.get();
-
-        // 2. Add required data to the model
-        model.addAttribute("user", currentUser);
-        model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
-
-        return "help-feedback"; // Return your original view name
-    }
 
     @GetMapping("/newindex")
     public String newindex(Model model, HttpSession session) {
