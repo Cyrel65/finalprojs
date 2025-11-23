@@ -1,7 +1,10 @@
 package org.example.finalprojs.model;
 
 import jakarta.persistence.*;
-import java.lang.Math; // Import Math for min() function
+import java.lang.Math;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "grade_reports")
@@ -224,5 +227,34 @@ public class GradeReport {
                 System.err.println("Warning: Invalid assessment name provided for redemption: " + assessmentName);
                 break;
         }
+    }
+
+    /**
+     * NEW STATIC METHOD: Uses reflection to retrieve the exact field names
+     * that represent assessments in this model. This is used to synchronize
+     * the JavaFX ComboBox options.
+     * @return A list of assessment field names (Strings).
+     */
+    public static List<String> getAssessmentFieldNames() {
+        List<String> assessmentNames = new ArrayList<>();
+        // Get all declared fields in the GradeReport class
+        Field[] fields = GradeReport.class.getDeclaredFields();
+
+        // Iterate through fields and filter based on name pattern
+        for (Field field : fields) {
+            String name = field.getName();
+            if (name.startsWith("selfCheck") ||
+                    name.startsWith("taskSheet") ||
+                    name.startsWith("unitTest") ||
+                    name.equals("termTest") ||
+                    name.equals("attendance")) {
+
+                // Exclude the calculated 'overallGrade' or primary IDs/Users
+                if (field.getType().equals(int.class) || field.getType().equals(Integer.class)) {
+                    assessmentNames.add(name);
+                }
+            }
+        }
+        return assessmentNames;
     }
 }
