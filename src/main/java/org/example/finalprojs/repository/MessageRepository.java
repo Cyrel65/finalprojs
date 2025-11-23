@@ -1,7 +1,7 @@
 package org.example.finalprojs.repository;
 
 import org.example.finalprojs.model.Message;
-import org.example.finalprojs.model.User; // Import User
+import org.example.finalprojs.model.User; // Keep Import User if needed elsewhere, but not for these methods
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,39 +13,37 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
     /**
-     * Finds all messages where the given User is the recipient, ordered by newest first.
-     * This is the method needed to populate the inbox.
+     * Finds all messages where the given ID (String) is the recipient, ordered by newest first.
+     * FIX: Changed parameter from User to String ID.
      */
-    List<Message> findByRecipientOrderByTimestampDesc(User recipient);
+    List<Message> findByRecipientIdOrderByTimestampDesc(String recipientId);
+
+    // --- FIX: The Custom Queries are likely no longer needed/won't work after model change ---
+    // If you need these, they must be completely rewritten to use String senderId/recipientId
+    // and cannot use JOIN FETCH on User entities as before.
+
+    // @Query("SELECT m FROM Message m " + ...
+    // List<Message> findAllMessagesWithUsers(@Param("userId") Long userId);
+
+    // @Query("SELECT m FROM Message m " + ...
+    // List<Message> findConversationBetweenUsers(@Param("user1Id") Long user1Id, ...);
 
 
+    /**
+     * Fetch sent messages ordered by time.
+     * FIX: Changed parameter from User to String ID.
+     */
+    List<Message> findBySenderIdOrderByTimestampDesc(String senderId);
 
+    /**
+     * REQUIRED NEW METHOD for counting sent items:
+     * FIX: Changed parameter from User to String ID.
+     */
+    long countBySenderId(String senderId);
 
-    @Query("SELECT m FROM Message m " +
-            "JOIN FETCH m.sender " +
-            "JOIN FETCH m.recipient " +
-            "WHERE m.sender.id = :userId OR m.recipient.id = :userId " +
-            "ORDER BY m.timestamp DESC")
-    List<Message> findAllMessagesWithUsers(@Param("userId") Long userId);
-
-    @Query("SELECT m FROM Message m " +
-            "JOIN FETCH m.sender " +
-            "JOIN FETCH m.recipient " +
-            "WHERE (m.sender.id = :user1Id AND m.recipient.id = :user2Id) " +
-            "   OR (m.sender.id = :user2Id AND m.recipient.id = :user1Id) " +
-            "ORDER BY m.timestamp ASC")
-    List<Message> findConversationBetweenUsers(@Param("user1Id") Long user1Id,
-                                               @Param("user2Id") Long user2Id);
-
-    // 2. Fetch sent messages ordered by time (REQUIRED FIX for /sent list)
-    List<Message> findBySenderOrderByTimestampDesc(User sender);
-
-    // REQUIRED NEW METHOD for counting sent items:
-    long countBySender(User sender);
-
-    // For calculating the unread count (used in Inbox badge)
-    List<Message> findByRecipient(User recipient);
-
-
-
+    /**
+     * For calculating the unread count (used in Inbox badge).
+     * FIX: Changed parameter from User to String ID.
+     */
+    List<Message> findByRecipientId(String recipientId);
 }

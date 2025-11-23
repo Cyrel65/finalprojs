@@ -11,17 +11,15 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Connects to the User entity for the sender
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
+    // FIX: Change from @ManyToOne User entity to a raw String column (sender_id)
+    // This allows the field to hold Teacher IDs, Student IDs, or external emails.
+    @Column(name = "sender_id", nullable = false)
+    private String senderId;
 
-    // Connects to the User entity for the recipient
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipient_id", nullable = false)
-    private User recipient;
+    // FIX: Change from @ManyToOne User entity to a raw String column (recipient_id)
+    @Column(name = "recipient_id", nullable = false)
+    private String recipientId;
 
-    // NEW FIELD: Subject
     @Column(name = "subject", nullable = true)
     private String subject;
 
@@ -37,19 +35,17 @@ public class Message {
     // Default constructor
     public Message() {}
 
-    // Updated Constructor for creating a new message
-    public Message(User sender, User recipient, String subject, String content, LocalDateTime timestamp) {
-        this.sender = sender;
-        this.recipient = recipient;
-        this.subject = subject; // Set the subject
+    // Updated Constructor for creating a new message, now accepting String IDs
+    public Message(String senderId, String recipientId, String subject, String content, LocalDateTime timestamp) {
+        this.senderId = senderId;
+        this.recipientId = recipientId;
+        this.subject = subject;
         this.content = content;
         this.timestamp = timestamp;
         this.isRead = false;
     }
 
-    // --- Getters and Setters (REQUIRED FOR JPA/THYMELEAF) ---
-    // Please ensure all necessary getters and setters are present in your full file,
-    // including the new ones for 'subject'.
+    // --- Getters and Setters (Updated for String IDs) ---
 
     public Long getId() {
         return id;
@@ -59,20 +55,22 @@ public class Message {
         this.id = id;
     }
 
-    public User getSender() {
-        return sender;
+    // NEW GETTER/SETTER for senderId (String)
+    public String getSenderId() {
+        return senderId;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
-    public User getRecipient() {
-        return recipient;
+    // NEW GETTER/SETTER for recipientId (String)
+    public String getRecipientId() {
+        return recipientId;
     }
 
-    public void setRecipient(User recipient) {
-        this.recipient = recipient;
+    public void setRecipientId(String recipientId) {
+        this.recipientId = recipientId;
     }
 
     public String getSubject() {

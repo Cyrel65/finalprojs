@@ -3,6 +3,7 @@ package org.example.finalprojs.controller;
 import jakarta.servlet.http.HttpSession;
 import org.example.finalprojs.model.Message;
 import org.example.finalprojs.model.User;
+import org.example.finalprojs.model.Teacher;
 import org.example.finalprojs.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,28 +28,46 @@ public class MessageController {
     }
 
 
-    // Private Helper Method for Session User (Uses service for lookup)
-    private Optional<User> getCurrentUser(HttpSession session) {
+    // 🛑 CRITICAL FIX: Helper method now correctly searches BOTH User (Student) and Teacher tables
+    // to retrieve the specific object needed by the MessageService.
+    private Object getCurrentSender(HttpSession session) {
+        // Assume 'userEmail' is set upon successful login for both Teachers and Students
         String userEmail = (String) session.getAttribute("userEmail");
-        if (userEmail == null) {
-            return Optional.empty();
+        if (userEmail == null || userEmail.isEmpty()) {
+            return null;
         }
-        return messageService.findUserByEmail(userEmail);
+
+        // 1. Try finding Teacher
+        // NOTE: This relies on MessageService having a findTeacherByEmail method.
+        Optional<Teacher> teacherOptional = messageService.findTeacherByEmail(userEmail);
+        if (teacherOptional.isPresent()) {
+            return teacherOptional.get();
+        }
+
+        // 2. Try finding Student (User)
+        // NOTE: This relies on MessageService having a findUserByEmail method.
+        Optional<User> userOptional = messageService.findUserByEmail(userEmail);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        }
+
+        return null;
     }
 
     // --- Dashboard Handler ---
 
     @GetMapping("/")
     public String viewDashboard(Model model, HttpSession session) {
-        Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
+        Object senderObject = getCurrentSender(session);
+        if (senderObject == null) {
             return "redirect:/login";
         }
-        User currentUser = userOptional.get();
 
-        model.addAttribute("user", currentUser);
-        model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
-        model.addAttribute("sentCount", messageService.getSentCount(currentUser));
+        // Pass the generic object to the model and service methods
+        model.addAttribute("user", senderObject);
+        // FIX: Consolidate service calls to optimize
+        model.addAttribute("unreadCount", messageService.getUnreadCount(senderObject));
+        model.addAttribute("sentCount", messageService.getSentCount(senderObject));
         model.addAttribute("pageTitle", "Dashboard");
 
         return "index";
@@ -58,20 +77,20 @@ public class MessageController {
 
     @GetMapping("/inbox")
     public String viewInbox(Model model, HttpSession session) {
-        Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
+        Object senderObject = getCurrentSender(session);
+        if (senderObject == null) {
             return "redirect:/login";
         }
-        User currentUser = userOptional.get();
 
         // Delegate retrieval to service
-        List<Message> receivedMessages = messageService.getInboxMessages(currentUser);
+        List<Message> receivedMessages = messageService.getInboxMessages(senderObject);
 
-        // Add to model
-        model.addAttribute("user", currentUser);
+        // FIX: Pass the user object for template access (e.g., displaying name/email)
+        model.addAttribute("user", senderObject);
+        model.addAttribute("messageService", messageService);
         model.addAttribute("messages", receivedMessages);
-        model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
-        model.addAttribute("sentCount", messageService.getSentCount(currentUser));
+        model.addAttribute("unreadCount", messageService.getUnreadCount(senderObject));
+        model.addAttribute("sentCount", messageService.getSentCount(senderObject));
         model.addAttribute("pageTitle", "Inbox");
 
         return "email-inbox";
@@ -79,20 +98,19 @@ public class MessageController {
 
     @GetMapping("/sent")
     public String sentMessages(Model model, HttpSession session) {
-        Optional<User> currentUserOptional = getCurrentUser(session);
-        if (currentUserOptional.isEmpty()) {
+        Object senderObject = getCurrentSender(session);
+        if (senderObject == null) {
             return "redirect:/login";
         }
-        User currentUser = currentUserOptional.get();
 
         // Delegate retrieval to service
-        List<Message> sentMessages = messageService.getSentMessages(currentUser);
+        List<Message> sentMessages = messageService.getSentMessages(senderObject);
 
-        // Add to model
-        model.addAttribute("user", currentUser);
+        model.addAttribute("user", senderObject);
+        model.addAttribute("messageService", messageService);
         model.addAttribute("messages", sentMessages);
-        model.addAttribute("sentCount", messageService.getSentCount(currentUser));
-        model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
+        model.addAttribute("sentCount", messageService.getSentCount(senderObject));
+        model.addAttribute("unreadCount", messageService.getUnreadCount(senderObject));
         model.addAttribute("pageTitle", "Sent Messages");
 
         return "email-inbox";
@@ -100,11 +118,10 @@ public class MessageController {
 
     @GetMapping("/read")
     public String viewRead(@RequestParam Long messageId, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
+        Object senderObject = getCurrentSender(session);
+        if (senderObject == null) {
             return "redirect:/login";
         }
-        User currentUser = userOptional.get();
 
         Optional<Message> messageOptional = messageService.getMessageById(messageId);
         if (messageOptional.isEmpty()) {
@@ -115,38 +132,41 @@ public class MessageController {
         Message message = messageOptional.get();
 
         // Security Check: Delegate access validation to the service
-        if (!messageService.userCanAccessMessage(currentUser, message)) {
+        if (!messageService.userCanAccessMessage(senderObject, message)) {
             redirectAttributes.addFlashAttribute("error", "Access denied. This message is not yours.");
             return "redirect:/inbox";
         }
 
         // Mark as Read Logic: Delegate to the service
-        messageService.markMessageAsRead(message, currentUser);
+        messageService.markMessageAsRead(message, senderObject);
 
-        // Add to model
-        model.addAttribute("user", currentUser);
+        // Display names are crucial here
+        model.addAttribute("senderDisplayName", messageService.getDisplayNameForId(message.getSenderId()));
+        model.addAttribute("recipientDisplayName", messageService.getDisplayNameForId(message.getRecipientId()));
+
+        model.addAttribute("user", senderObject);
         model.addAttribute("message", message);
-        model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
-        model.addAttribute("sentCount", messageService.getSentCount(currentUser));
+        model.addAttribute("unreadCount", messageService.getUnreadCount(senderObject));
+        model.addAttribute("sentCount", messageService.getSentCount(senderObject));
 
         return "email-read";
     }
 
     @GetMapping("/compose")
     public String viewCompose(Model model, HttpSession session) {
-        Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
+        Object senderObject = getCurrentSender(session);
+        if (senderObject == null) {
             return "redirect:/login";
         }
-        User currentUser = userOptional.get();
 
-        // Delegate user list retrieval to service
+        // FIX: If you use the User list for a dropdown, ensure you handle Teachers too.
+        // For now, only sending 'User' list as per original code, but if Teachers are needed,
+        // messageService.getAllUsers() must be updated to combine both User and Teacher lists.
         List<User> allUsers = messageService.getAllUsers();
 
-        // Add to model
-        model.addAttribute("user", currentUser);
-        model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
-        model.addAttribute("sentCount", messageService.getSentCount(currentUser));
+        model.addAttribute("user", senderObject);
+        model.addAttribute("unreadCount", messageService.getUnreadCount(senderObject));
+        model.addAttribute("sentCount", messageService.getSentCount(senderObject));
         model.addAttribute("allUsers", allUsers);
         model.addAttribute("pageTitle", "Compose Message");
 
@@ -161,24 +181,22 @@ public class MessageController {
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        Optional<User> senderOptional = getCurrentUser(session);
-        if (senderOptional.isEmpty()) {
+        Object senderObject = getCurrentSender(session);
+        if (senderObject == null) {
             return "redirect:/login";
         }
-        User sender = senderOptional.get();
 
         try {
-            // Delegate all validation and sending logic to the service
-            messageService.sendMessage(sender, recipientEmail, subject, content);
+            // Pass the generic sender object to the service
+            messageService.sendMessage(senderObject, recipientEmail, subject, content);
 
             redirectAttributes.addFlashAttribute("success", "Message sent successfully!");
             return "redirect:/inbox";
         } catch (IllegalArgumentException e) {
-            // Catch validation errors (empty content, self-send) from the service
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/compose";
         } catch (RuntimeException e) {
-            // Catch recipient not found or other runtime issues
+            // Catch broader errors like Recipient not found, database errors, etc.
             redirectAttributes.addFlashAttribute("error", "Error sending message: " + e.getMessage());
             return "redirect:/compose";
         }
@@ -191,27 +209,24 @@ public class MessageController {
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        Optional<User> senderOptional = getCurrentUser(session);
-        if (senderOptional.isEmpty()) {
+        Object senderObject = getCurrentSender(session);
+        if (senderObject == null) {
             return "redirect:/login";
         }
-        User sender = senderOptional.get();
 
         // Prepare redirect URL for error handling
         String errorRedirect = "redirect:/read?messageId=" + originalMessageId;
 
         try {
-            // Delegate all reply logic to the service
-            messageService.sendReply(originalMessageId, content, sender);
+            // Pass the generic sender object to the service
+            messageService.sendReply(originalMessageId, content, senderObject);
 
             redirectAttributes.addFlashAttribute("success", "Reply sent successfully!");
             return "redirect:/inbox";
         } catch (IllegalArgumentException e) {
-            // Catch validation errors (empty content, self-send) from the service
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return errorRedirect;
         } catch (RuntimeException e) {
-            // Catch original message not found or other runtime issues
             redirectAttributes.addFlashAttribute("error", "Failed to send reply: " + e.getMessage());
             return errorRedirect;
         }

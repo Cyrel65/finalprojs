@@ -310,7 +310,7 @@
                                     </div>
                                     <div class="read-content">
                                         <div class="media-body">
-                                            <h5 class="m-b-3" th:text="${message.sender?.name ?: 'System Message'}">Ingredia Nutrisha</h5>
+                                            <h5 class="m-b-3" th:text="${senderDisplayName}">Ingredia Nutrisha</h5>
                                             <p class="m-b-2" th:text="${#temporals.format(message.timestamp, 'dd MMMM yyyy, HH:mm')}">20 May 2018</p>
                                         </div>
                                             
@@ -320,7 +320,7 @@
                                         <div class="media-body">
                                             <span class="float-right" th:text="${#temporals.format(message.timestamp, 'HH:mm a')}">07:23 AM</span>
                                             <h4 class="m-0 text-primary" th:text="${message.subject}">A collection of textile samples lay spread</h4>
-                                            <small class="text-muted">To: <span th:text="${message.recipient?.email ?: 'Unknown Recipient'}">Me,invernessmckenzie@example.com</span></small>
+                                            <small class="text-muted">To: <span th:text="${recipientDisplayName}">Me,invernessmckenzie@example.com</span></small>
                                         </div>
                                     </div>
 
