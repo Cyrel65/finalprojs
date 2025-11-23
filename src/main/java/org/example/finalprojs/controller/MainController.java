@@ -25,25 +25,21 @@ public class MainController {
     private final GradeService gradeService;
     private final MessageService messageService;
 
-
-    // Use constructor injection for all dependencies (Best Practice)
     @Autowired
-    public MainController(UserService userService, GradeService gradeService, MessageService messageService,  FeedbackService feedbackService) {
+    public MainController(UserService userService, GradeService gradeService, MessageService messageService, FeedbackService feedbackService) {
         this.userService = userService;
         this.gradeService = gradeService;
         this.messageService = messageService;
     }
 
-    // Private Helper Method for Session User (Uses UserService for lookup)
+    // Helper: get current user from session
     private Optional<User> getCurrentUser(HttpSession session) {
         String userEmail = (String) session.getAttribute("userEmail");
-        if (userEmail == null) {
-            return Optional.empty();
-        }
+        if (userEmail == null) return Optional.empty();
         return userService.findUserByEmail(userEmail);
     }
 
-    // --- Registration Logic (Delegated) ---
+    // --- Registration ---
 
     @GetMapping("/register")
     public String viewRegister(Model model) {
@@ -52,12 +48,20 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user) {
+    public String registerUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+        // Validate that section is selected
+        if (user.getSection() == null || user.getSection().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Please select a section!");
+            return "redirect:/register";
+        }
+
+        // Save user (including section)
         userService.registerUser(user);
+        redirectAttributes.addFlashAttribute("success", "Registration successful! You can now log in.");
         return "redirect:/login";
     }
 
-    // --- Authentication Handlers (Delegated) ---
+    // --- Login / Logout ---
 
     @GetMapping("/login")
     public String viewLogin() {
@@ -87,15 +91,13 @@ public class MainController {
         return "redirect:/login?logout";
     }
 
-
-    // --- Profile Handlers (Delegated) ---
+    // --- Profile ---
 
     @GetMapping("/profile")
     public String viewProfile(Model model, HttpSession session) {
         Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
-            return "redirect:/login";
-        }
+        if (userOptional.isEmpty()) return "redirect:/login";
+
         User user = userOptional.get();
         model.addAttribute("user", user);
         model.addAttribute("unreadCount", messageService.getUnreadCount(user));
@@ -105,9 +107,7 @@ public class MainController {
     @PostMapping("/update/profile-picture")
     public String updateProfilePicture(@RequestParam String profilePictureUrl, HttpSession session, RedirectAttributes redirectAttributes) {
         Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
-            return "redirect:/login";
-        }
+        if (userOptional.isEmpty()) return "redirect:/login";
 
         try {
             User user = userOptional.get();
@@ -116,61 +116,47 @@ public class MainController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Failed to update profile picture: " + e.getMessage());
         }
-
         return "redirect:/profile";
     }
 
     @PostMapping("/profile/update")
-    public String updateProfile(
-            @RequestParam String name,
-            @RequestParam String email,
-            @RequestParam("cpassword") String currentPassword,
-            @RequestParam(value = "npassword", required = false) String newPassword,
-            @RequestParam(value = "rpassword", required = false) String retypePassword,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
+    public String updateProfile(@RequestParam String name,
+                                @RequestParam String email,
+                                @RequestParam("cpassword") String currentPassword,
+                                @RequestParam(value = "npassword", required = false) String newPassword,
+                                @RequestParam(value = "rpassword", required = false) String retypePassword,
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
 
         Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
-            return "redirect:/login";
-        }
+        if (userOptional.isEmpty()) return "redirect:/login";
+
         User user = userOptional.get();
 
         try {
-            // Delegate all complex validation and saving to the UserService
             User updatedUser = userService.updateProfile(user, name, email, currentPassword, newPassword, retypePassword);
-
-            // If email was changed successfully, update session attribute
             session.setAttribute("userEmail", updatedUser.getEmail());
-
             redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
         } catch (IllegalArgumentException e) {
-            // Catch validation errors (e.g., incorrect password, email already used)
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         return "redirect:/profile";
     }
 
-
-    // --- Personalized Grade Report Handler (Delegated) ---
+    // --- Grades / Reports ---
 
     @GetMapping({"/scores", "/table"})
-    public String viewScores(
-            @RequestParam(required = false) String subjectName,
-            Model model,
-            HttpSession session) {
+    public String viewScores(@RequestParam(required = false) String subjectName,
+                             Model model,
+                             HttpSession session) {
 
         Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isEmpty()) {
-            return "redirect:/login";
-        }
-        User user = userOptional.get();
+        if (userOptional.isEmpty()) return "redirect:/login";
 
-        // Delegate fetching and calculation logic to the GradeService
+        User user = userOptional.get();
         GradeReport report = gradeService.getReportForDisplay(user, subjectName);
 
-        // Add to model
         model.addAttribute("currentSubject", subjectName != null ? subjectName : "All Subjects");
         model.addAttribute("user", user);
         model.addAttribute("report", report);
@@ -179,34 +165,30 @@ public class MainController {
         return "scores";
     }
 
-
-    // --- Other Views (Simple redirects remain in the Controller) ---
+    // --- Other Pages ---
 
     @GetMapping("/viewclass")
-    public String viewClass() {return "viewclasses";}
+    public String viewClass() { return "viewclasses"; }
 
     @GetMapping("/forgotpass")
-    public String viewPassword() {return "forgot-password";}
+    public String viewPassword() { return "forgot-password"; }
 
     @GetMapping("/newindex")
     public String newindex(Model model, HttpSession session) {
         Optional<User> userOptional = getCurrentUser(session);
-        if (userOptional.isPresent()) {
-            User currentUser = userOptional.get();
-            model.addAttribute("user", currentUser);
-            model.addAttribute("unreadCount", messageService.getUnreadCount(currentUser));
-        }
+        userOptional.ifPresent(user -> {
+            model.addAttribute("user", user);
+            model.addAttribute("unreadCount", messageService.getUnreadCount(user));
+        });
         return "index";
     }
 
     @GetMapping("/about")
-    public String About() {return "about";}
-
+    public String about() { return "about"; }
 
     @GetMapping("/records")
-    public String Record() {return "records";}
+    public String record() { return "records"; }
 
     @GetMapping("/section")
-    public String Section() {return "table-datatable";}
-
+    public String section() { return "table-datatable"; }
 }

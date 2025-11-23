@@ -3,20 +3,24 @@ package org.example.finalprojs.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users") // Maps this class to a table named 'users' in MySQL
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String name;
     private String email;
     private String password;
     private int points = 0;
+
     @Column(name = "profile_picture_url", length = 1000)
     private String profilePictureUrl;
+
+    @Column(nullable = false)
+    private String section;   // <-- NEW COLUMN
+
     // Default Constructor (required by JPA)
     public User() {
     }
@@ -69,5 +73,13 @@ public class User {
 
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
     }
 }
