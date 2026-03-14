@@ -4,10 +4,10 @@ import org.example.finalprojs.model.User;
 import org.example.finalprojs.model.RedeemItem;
 import org.example.finalprojs.model.RedeemTransaction; // IMPORTANT: Ensure this is imported
 import org.example.finalprojs.model.GradeReport;
+import org.example.finalprojs.repository.GradeReportRepository;
 import org.example.finalprojs.repository.RedeemItemRepository;
 import org.example.finalprojs.repository.RedeemTransactionRepository; // IMPORTANT: Used for new method
 import org.example.finalprojs.repository.UserRepository;
-import org.example.finalprojs.repository.GradeReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

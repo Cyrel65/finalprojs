@@ -15,17 +15,18 @@ public class User {
     private String password;
     private int points = 0;
 
-    @Column(name = "profile_picture_url", length = 1000)
+    @Column(name = "profile_picture_url", columnDefinition = "TEXT")
     private String profilePictureUrl;
 
     @Column(nullable = false)
-    private String section;   // <-- NEW COLUMN
+    private String section;
 
-    // Default Constructor (required by JPA)
+    private String subject;
+
+    private String startTime;
+
     public User() {
     }
-
-    // --- Getters and Setters ---
 
     public Long getId() {
         return id;
@@ -81,5 +82,21 @@ public class User {
 
     public void setSection(String section) {
         this.section = section;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 }

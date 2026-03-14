@@ -9,6 +9,7 @@ import java.util.Optional;
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
-    // Method needed for looking up the recipient when sending a message
     Optional<Teacher> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

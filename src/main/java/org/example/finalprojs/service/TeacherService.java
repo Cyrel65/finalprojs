@@ -17,9 +17,18 @@ public class TeacherService {
         this.teacherRepository = teacherRepository;
     }
 
-    /**
-     * Finds a Teacher by their ID (used when a String ID is read from the message table).
-     */
+    public Teacher register(Teacher teacher) {
+        if (teacherRepository.existsByEmail(teacher.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+        return teacherRepository.save(teacher);
+    }
+
+    public Optional<Teacher> login(String email, String password) {
+        return teacherRepository.findByEmail(email)
+                .filter(t -> t.getPassword().equals(password));
+    }
+
     public Optional<Teacher> findTeacherById(String id) {
         try {
             Long longId = Long.valueOf(id);
@@ -29,9 +38,6 @@ public class TeacherService {
         }
     }
 
-    /**
-     * Finds a Teacher by their email (used when validating a recipient email).
-     */
     public Optional<Teacher> findTeacherByEmail(String email) {
         return teacherRepository.findByEmail(email);
     }

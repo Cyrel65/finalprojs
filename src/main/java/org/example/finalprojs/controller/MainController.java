@@ -155,7 +155,7 @@ public class MainController {
         if (userOptional.isEmpty()) return "redirect:/login";
 
         User user = userOptional.get();
-        GradeReport report = gradeService.getReportForDisplay(user, subjectName);
+        GradeReport report = gradeService.getGradeReport(user, subjectName);
 
         model.addAttribute("currentSubject", subjectName != null ? subjectName : "All Subjects");
         model.addAttribute("user", user);
