@@ -87,6 +87,7 @@ public class MessageController {
         model.addAttribute("unreadCount", messageService.getUnreadCount(senderObject));
         model.addAttribute("sentCount", messageService.getSentCount(senderObject));
         model.addAttribute("pageTitle", "Inbox");
+        model.addAttribute("messageService", messageService);
 
         return "email-inbox";
     }
@@ -101,6 +102,7 @@ public class MessageController {
         model.addAttribute("sentCount", messageService.getSentCount(senderObject));
         model.addAttribute("unreadCount", messageService.getUnreadCount(senderObject));
         model.addAttribute("pageTitle", "Sent Messages");
+        model.addAttribute("messageService", messageService);
 
         return "email-inbox";
     }
