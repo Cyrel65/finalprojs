@@ -7,6 +7,7 @@ import org.example.finalprojs.repository.TeacherClassRepository;
 import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -25,6 +26,8 @@ public class GradeService {
         this.teacherClassRepository = teacherClassRepository;
         this.userRepository = userRepository;
     }
+
+    // ─── UNCHANGED ────────────────────────────────────────────────────────────
 
     public List<Map<String, Object>> getRankingsBySection(String section) {
         var classes = teacherClassRepository.findBySection(section);
@@ -79,5 +82,45 @@ public class GradeService {
         result.put("attendance",   report.getAttendance());
         result.put("overallGrade", report.getOverallGrade());
         return result;
+    }
+
+    // ─── NEW: Called by GradeController when Flutter saves a grade ───────────
+
+    @Transactional
+    public GradeReport updateGrade(Long userId, String subject, Map<String, Object> payload) {
+        User student = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + userId));
+
+        GradeReport report = gradeReportRepository
+                .findByUserAndSubject(student, subject)
+                .orElse(new GradeReport(student, subject));
+
+        report.setSelfCheck1(toInt(payload.get("selfCheck1")));
+        report.setSelfCheck2(toInt(payload.get("selfCheck2")));
+        report.setSelfCheck3(toInt(payload.get("selfCheck3")));
+        report.setSelfCheck4(toInt(payload.get("selfCheck4")));
+        report.setSelfCheck5(toInt(payload.get("selfCheck5")));
+        report.setTaskSheet1(toInt(payload.get("taskSheet1")));
+        report.setTaskSheet2(toInt(payload.get("taskSheet2")));
+        report.setTaskSheet3(toInt(payload.get("taskSheet3")));
+        report.setUnitTest1(toInt(payload.get("unitTest1")));
+        report.setUnitTest2(toInt(payload.get("unitTest2")));
+        report.setTermTest(toInt(payload.get("termTest")));
+        report.setAttendance(toInt(payload.get("attendance")));
+        report.setOverallGrade(toDouble(payload.get("overallGrade")));
+
+        return gradeReportRepository.save(report);
+    }
+
+    // ─── Private helpers ──────────────────────────────────────────────────────
+
+    private int toInt(Object val) {
+        if (val == null) return 0;
+        return Integer.parseInt(val.toString());
+    }
+
+    private double toDouble(Object val) {
+        if (val == null) return 0.0;
+        return Double.parseDouble(val.toString());
     }
 }

@@ -1,5 +1,6 @@
 package org.example.finalprojs.controller;
 
+import org.example.finalprojs.model.GradeReport;
 import org.example.finalprojs.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +22,12 @@ public class GradeController {
         this.gradeService = gradeService;
     }
 
-    /**
-     * GET /api/grades/rankings/{section}
-     * Used by Flutter StudentRankingsScreen.
-     * Returns all students in a section sorted by overall grade descending.
-     */
     @GetMapping("/rankings/{section}")
     public ResponseEntity<List<Map<String, Object>>> getRankings(@PathVariable String section) {
         List<Map<String, Object>> rankings = gradeService.getRankingsBySection(section);
         return ResponseEntity.ok(rankings);
     }
 
-    /**
-     * GET /api/grades/report?email=john@email.com&subject=Math
-     * Used by Flutter ClassDetailScreen on every load.
-     * Returns the full grade breakdown for one student + subject so grades
-     * are always in sync with the database when the teacher revisits a class.
-     *
-     * FIX: The previous version used Map.of() with more than 10 key-value pairs,
-     * which exceeds the overload limit of Map.of() in Java (max 10 pairs).
-     * Fixed by using a LinkedHashMap instead.
-     */
     @GetMapping("/report")
     public ResponseEntity<Map<String, Object>> getGradeReport(
             @RequestParam String email,
@@ -50,8 +36,6 @@ public class GradeController {
             Map<String, Object> report = gradeService.getGradeReport(email, subject);
             return ResponseEntity.ok(report);
         } catch (RuntimeException e) {
-            // Student has no grades saved yet — return all zeros so Flutter
-            // populates the form with empty/zero values instead of crashing.
             Map<String, Object> empty = new LinkedHashMap<>();
             empty.put("selfCheck1",   0);
             empty.put("selfCheck2",   0);
@@ -67,6 +51,32 @@ public class GradeController {
             empty.put("attendance",   0);
             empty.put("overallGrade", 0.0);
             return ResponseEntity.ok(empty);
+        }
+    }
+
+    // ─── NEW: This was the missing endpoint causing scores not to save ────────
+    @PostMapping("/update")
+    public ResponseEntity<?> updateGrade(@RequestBody Map<String, Object> payload) {
+        try {
+            if (payload.get("userId") == null || payload.get("subject") == null) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("message", "userId and subject are required"));
+            }
+
+            Long userId = Long.valueOf(payload.get("userId").toString());
+            String subject = (String) payload.get("subject");
+
+            GradeReport saved = gradeService.updateGrade(userId, subject, payload);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Grade updated successfully",
+                    "gradeId", saved.getId()
+            ));
+
+        } catch (RuntimeException e) {
+            System.err.println("[GradeController] updateGrade failed: " + e.getMessage());
+            return ResponseEntity.status(500)
+                    .body(Map.of("message", "Update failed: " + e.getMessage()));
         }
     }
 }
