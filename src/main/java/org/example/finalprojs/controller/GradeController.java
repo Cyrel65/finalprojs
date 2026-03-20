@@ -22,11 +22,32 @@ public class GradeController {
         this.gradeService = gradeService;
     }
 
+    // ── GET /api/grades/rankings/{section} ────────────────────────────────────
+    // Returns students in a section ranked by their average overall grade
+    // across ALL subjects taught in that section.
+    // Used by Flutter StudentRankingsScreen.
+
     @GetMapping("/rankings/{section}")
-    public ResponseEntity<List<Map<String, Object>>> getRankings(@PathVariable String section) {
-        List<Map<String, Object>> rankings = gradeService.getRankingsBySection(section);
-        return ResponseEntity.ok(rankings);
+    public ResponseEntity<List<Map<String, Object>>> getRankingsBySection(
+            @PathVariable String section) {
+        return ResponseEntity.ok(gradeService.getRankingsBySection(section));
     }
+
+    // ── GET /api/grades/rankings/subject/{subject}/section/{section} ──────────
+    // Returns students in a section ranked for ONE specific subject.
+    // Used when teacher wants to see rankings per class/subject.
+
+    @GetMapping("/rankings/subject/{subject}/section/{section}")
+    public ResponseEntity<List<Map<String, Object>>> getRankingsBySubjectAndSection(
+            @PathVariable String subject,
+            @PathVariable String section) {
+        return ResponseEntity.ok(
+                gradeService.getRankingsBySubjectAndSection(subject, section));
+    }
+
+    // ── GET /api/grades/report ────────────────────────────────────────────────
+    // Returns grade breakdown for one student + subject.
+    // Recalculates overall grade with correct formula before returning.
 
     @GetMapping("/report")
     public ResponseEntity<Map<String, Object>> getGradeReport(
@@ -54,7 +75,10 @@ public class GradeController {
         }
     }
 
-    // ─── NEW: This was the missing endpoint causing scores not to save ────────
+    // ── POST /api/grades/update ───────────────────────────────────────────────
+    // Called by Flutter teacher app when saving a student's grades.
+    // Recalculates overall grade server-side with correct formula.
+
     @PostMapping("/update")
     public ResponseEntity<?> updateGrade(@RequestBody Map<String, Object> payload) {
         try {
@@ -69,8 +93,9 @@ public class GradeController {
             GradeReport saved = gradeService.updateGrade(userId, subject, payload);
 
             return ResponseEntity.ok(Map.of(
-                    "message", "Grade updated successfully",
-                    "gradeId", saved.getId()
+                    "message",      "Grade updated successfully",
+                    "gradeId",      saved.getId(),
+                    "overallGrade", saved.getOverallGrade()
             ));
 
         } catch (RuntimeException e) {

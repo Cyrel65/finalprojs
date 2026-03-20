@@ -1,10 +1,14 @@
 package org.example.finalprojs.controller;
 
 import org.example.finalprojs.model.User;
+import org.example.finalprojs.repository.GradeReportRepository;
+import org.example.finalprojs.repository.RedeemTransactionRepository;
+import org.example.finalprojs.repository.StudentPointsRepository;
 import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,71 +21,74 @@ import java.util.Optional;
 public class StudentApiController {
 
     private final UserRepository userRepository;
+    private final GradeReportRepository gradeReportRepository;
+    private final StudentPointsRepository studentPointsRepository;
+    private final RedeemTransactionRepository redeemTransactionRepository;
 
     @Autowired
-    public StudentApiController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public StudentApiController(UserRepository userRepository,
+                                GradeReportRepository gradeReportRepository,
+                                StudentPointsRepository studentPointsRepository,
+                                RedeemTransactionRepository redeemTransactionRepository) {
+        this.userRepository             = userRepository;
+        this.gradeReportRepository      = gradeReportRepository;
+        this.studentPointsRepository    = studentPointsRepository;
+        this.redeemTransactionRepository = redeemTransactionRepository;
     }
 
-    // Returns all students currently enrolled in a section
     @GetMapping("/section/{section}")
     public ResponseEntity<List<User>> getStudentsBySection(@PathVariable String section) {
         List<User> students = userRepository.findBySection(section);
         return ResponseEntity.ok(students);
     }
 
-    // FIX: Enroll an existing DB user into a section by email only.
-    // NEVER creates a new user — looks up the email in users table.
-    // Flutter sends: { "email": "...", "section": "..." }
-    // Returns 404 if email not found → Flutter shows inline error in dialog.
     @PostMapping("/save")
-    public ResponseEntity<?> enrollStudent(@RequestBody Map<String, Object> payload) {
-        String email   = (String) payload.get("email");
-        String section = (String) payload.get("section");
-
-        if (email == null || section == null) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("message", "Email and section are required."));
+    public ResponseEntity<User> saveStudent(@RequestBody User student) {
+        try {
+            User savedStudent = userRepository.save(student);
+            return new ResponseEntity<>(savedStudent, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        Optional<User> userOpt = userRepository.findByEmail(email.trim().toLowerCase());
-
-        if (userOpt.isEmpty()) {
-            // Returns 404 → Flutter dialog stays open and shows the error inline
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message",
-                            "No account found for \"" + email + "\". " +
-                                    "The student must register on the webapp first."));
-        }
-
-        User student = userOpt.get();
-
-        if (section.equals(student.getSection())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message",
-                            "Student is already enrolled in " + section + "."));
-        }
-
-        student.setSection(section);
-        userRepository.save(student);
-        return ResponseEntity.ok(Map.of("message", "Student enrolled in " + section));
     }
 
-    // FIX: Unenroll a student from their section by setting section = null.
-    // Does NOT delete the user account → no foreign key error with grade_reports.
+    // ── DELETE with cascade ───────────────────────────────────────────────────
+    // Deletes all related records first to avoid foreign key constraint errors,
+    // then deletes the student (User) record.
+
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> unenrollStudent(@PathVariable Long id) {
-        Optional<User> userOpt = userRepository.findById(id);
+    @Transactional
+    public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
+        try {
+            Optional<User> studentOpt = userRepository.findById(id);
+            if (studentOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "Student not found with id: " + id));
+            }
 
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message", "Student not found."));
+            User student = studentOpt.get();
+
+            // 1. Delete grade reports
+            gradeReportRepository.deleteAll(
+                    gradeReportRepository.findByUser(student));
+
+            // 2. Delete per-subject points
+            studentPointsRepository.deleteAll(
+                    studentPointsRepository.findByUser(student));
+
+            // 3. Delete redeem transactions
+            redeemTransactionRepository.deleteAll(
+                    redeemTransactionRepository.findByUser(student));
+
+            // 4. Finally delete the student
+            userRepository.deleteById(id);
+
+            return ResponseEntity.ok(
+                    Map.of("message", "Student and all related data deleted successfully"));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Failed to delete student: " + e.getMessage()));
         }
-
-        User student = userOpt.get();
-        student.setSection(null); // Remove from class — account and grades stay intact
-        userRepository.save(student);
-
-        return ResponseEntity.ok(Map.of("message", "Student unenrolled successfully."));
     }
 }
