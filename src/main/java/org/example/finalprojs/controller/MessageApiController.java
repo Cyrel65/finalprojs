@@ -181,6 +181,8 @@ public class MessageApiController {
             m.put("email",   s.getEmail());
             m.put("section", s.getSection());
             m.put("prefixedId", "S_" + s.getId());
+            m.put("profilePictureUrl",
+                    s.getProfilePictureUrl() != null ? s.getProfilePictureUrl() : "");
             return m;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(result);
