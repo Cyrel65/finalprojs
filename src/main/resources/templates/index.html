@@ -27,9 +27,7 @@
             <a th:href="@{/}">
                 <b class="logo-abbr"><img src="images/logo.png" alt=""> </b>
                 <span class="logo-compact"><img src="./images/logo-compact.png" alt=""></span>
-                <span class="brand-title">
-                    <img src="images/logo-text.png" alt="">
-                </span>
+                <span class="brand-title"><img src="images/logo-text.png" alt=""></span>
             </a>
         </div>
     </div>
@@ -43,20 +41,11 @@
             </div>
             <div class="header-right">
                 <ul class="clearfix">
-
-                    <li class="icons dropdown d-flex align-items-center">
-                        <div class="mr-3">
-                            <a th:href="@{/redeem}" class="btn btn-sm btn-rounded gradient-4 text-white px-3 py-1" style="font-weight: 600;">
-                                <i class="icon-badge mr-1"></i>
-                                Points
-                            </a>
-                        </div>
-                    </li>
-
                     <li class="icons dropdown">
                         <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                             <span class="activity active"></span>
-                            <img th:src="${user.profilePictureUrl != null ? user.profilePictureUrl : 'images/user/1.png'}" height="40" width="40" alt="">
+                            <img th:src="${user.profilePictureUrl != null ? user.profilePictureUrl : 'images/user/1.png'}"
+                                 height="40" width="40" alt="">
                         </div>
                         <div class="drop-down dropdown-profile dropdown-menu">
                             <div class="dropdown-content-body">
@@ -78,7 +67,7 @@
             <ul class="metismenu" id="menu">
                 <li><a th:href="@{/}"><i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span></a></li>
                 <li><a th:href="@{/profile}"><i class="icon-user menu-icon"></i><span class="nav-text">Profile</span></a></li>
-                <li><a th:href="@{/inbox}"><i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span></a></li>
+                <li><a th:href="@{/inbox}"><i class="icon-envelope menu-icon"></i><span class="nav-text">Mail</span></a></li>
             </ul>
         </div>
     </div>
@@ -88,16 +77,32 @@
             <div class="row">
 
                 <div class="col-lg-3 col-sm-6" th:each="classItem : ${teacherClasses}">
-                    <div class="card shadow-sm" th:classappend="${classItemStat.index % 2 == 0 ? 'gradient-4' : 'gradient-3'}">
+                    <div class="card shadow-sm"
+                         th:classappend="${classItemStat.index % 2 == 0 ? 'gradient-4' : 'gradient-3'}">
                         <div class="card-body">
-                            <h3 class="card-title text-white" th:text="${classItem.section}">Section Name</h3>
-                            <div class="d-inline-block">
-                                <h2 class="text-white" th:text="${classItem.subject}">Subject Name</h2>
-                                <p class="text-white mb-0" th:text="${classItem.startTime}">Schedule</p>
-                            </div>
-                            <span class="float-right display-5 opacity-5"><i class="fa fa-university"></i></span>
-                            <div class="mt-4">
-                                <a th:href="@{/scores(subjectName=${classItem.subject}, userEmail=${user.email})}" class="btn btn-light btn-sm btn-rounded text-primary font-weight-bold shadow">View My Scores</a>
+
+                            <h3 class="card-title text-white mb-0" th:text="${classItem.section}">Section</h3>
+                            <h2 class="text-white mt-1" th:text="${classItem.subject}">Subject</h2>
+                            <p class="text-white mb-0" th:text="${classItem.startTime}">Schedule</p>
+
+                            <div class="mt-4" style="display:flex; gap:8px; flex-wrap:wrap;">
+
+                                <!-- Unchanged: View My Scores -->
+                                <a th:href="@{/scores(subjectName=${classItem.subject}, userEmail=${user.email})}"
+                                   class="btn btn-light btn-sm btn-rounded text-primary font-weight-bold shadow">
+                                    View My Scores
+                                </a>
+
+                                <!--
+                                    FIX: passes BOTH subjectName AND section so
+                                    RedeemController can look up the correct
+                                    per-subject points balance from StudentPoints table.
+                                -->
+                                <a th:href="@{/redeem(subjectName=${classItem.subject}, section=${classItem.section})}"
+                                   class="btn btn-warning btn-sm btn-rounded font-weight-bold shadow">
+                                    <i class="icon-badge mr-1"></i> Redeem
+                                </a>
+
                             </div>
                         </div>
                     </div>

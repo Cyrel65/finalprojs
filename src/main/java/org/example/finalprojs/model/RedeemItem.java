@@ -10,49 +10,54 @@ public class RedeemItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // The name of the subject this reward applies to (e.g., "CP 1")
+    // Subject e.g. "ITIM 2"
     private String subject;
 
-    // The name of the reward shown to the student (e.g., "5 Bonus Unit Test Points")
+    // NEW: Section e.g. "CP" — only students in this section can claim this reward
+    private String section;
+
+    // Display name e.g. "5 Bonus Unit Test Points"
     private String rewardName;
 
-    // The assessment column to update in the GradeReport (e.g., "unitTest1", "selfCheck3")
+    // Assessment column to update e.g. "unitTest1"
     private String targetAssessment;
 
-    // The fixed number of points to add to the targetAssessment upon redemption
+    // Points added to the assessment on redemption
     private int pointsAwarded;
 
-    // The cost of the reward in student 'currentPoints' (from the old Box/Points system)
+    // Cost in student points to claim this reward
     private int cost;
 
-    // Default Constructor (JPA)
     public RedeemItem() {}
 
-    // Constructor (Optional, depends on how admin populates)
-    public RedeemItem(String subject, String rewardName, String targetAssessment, int pointsAwarded, int cost) {
-        this.subject = subject;
-        this.rewardName = rewardName;
+    public RedeemItem(String subject, String section, String rewardName,
+                      String targetAssessment, int pointsAwarded, int cost) {
+        this.subject          = subject;
+        this.section          = section;
+        this.rewardName       = rewardName;
         this.targetAssessment = targetAssessment;
-        this.pointsAwarded = pointsAwarded;
-        this.cost = cost;
+        this.pointsAwarded    = pointsAwarded;
+        this.cost             = cost;
     }
 
-    // --- Getters and Setters (MUST BE GENERATED) ---
-    // (Generate all getters and setters for the above fields)
+    public Long getId()                             { return id; }
+    public void setId(Long id)                      { this.id = id; }
 
-    // Example Getters:
-    public Long getId() { return id; }
-    public String getSubject() { return subject; }
-    public String getRewardName() { return rewardName; }
-    public String getTargetAssessment() { return targetAssessment; }
-    public int getPointsAwarded() { return pointsAwarded; }
-    public int getCost() { return cost; }
-    // ... all setters ...
+    public String getSubject()                      { return subject; }
+    public void setSubject(String subject)          { this.subject = subject; }
 
-    public void setId(Long id) { this.id = id; }
-    public void setSubject(String subject) { this.subject = subject; }
-    public void setRewardName(String rewardName) { this.rewardName = rewardName; }
-    public void setTargetAssessment(String targetAssessment) { this.targetAssessment = targetAssessment; }
+    public String getSection()                      { return section; }
+    public void setSection(String section)          { this.section = section; }
+
+    public String getRewardName()                   { return rewardName; }
+    public void setRewardName(String rewardName)    { this.rewardName = rewardName; }
+
+    public String getTargetAssessment()             { return targetAssessment; }
+    public void setTargetAssessment(String t)       { this.targetAssessment = t; }
+
+    public int getPointsAwarded()                   { return pointsAwarded; }
     public void setPointsAwarded(int pointsAwarded) { this.pointsAwarded = pointsAwarded; }
-    public void setCost(int cost) { this.cost = cost; }
+
+    public int getCost()                            { return cost; }
+    public void setCost(int cost)                   { this.cost = cost; }
 }
