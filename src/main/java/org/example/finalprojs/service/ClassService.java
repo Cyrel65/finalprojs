@@ -105,13 +105,15 @@ public class ClassService {
      * Deletes a class and all its associated grade reports.
      */
     @Transactional
-    public void deleteClass(Long classId) {
-        TeacherClass tc = teacherClassRepository.findById(classId)
+    public void deleteClass(Long id) {
+        TeacherClass teacherClass = teacherClassRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Class not found"));
 
-        // deleteBySubject resolves correctly from the single GradeReportRepository
-        gradeReportRepository.deleteBySubject(tc.getSubject());
-        teacherClassRepository.deleteById(classId);
+        // Delete grades first to avoid foreign key issues
+        gradeReportRepository.deleteBySubject(teacherClass.getSubject());
+
+        // Then delete the class
+        teacherClassRepository.delete(teacherClass);
     }
 
     public List<TeacherClass> getClassesByTeacher(Long teacherId) {

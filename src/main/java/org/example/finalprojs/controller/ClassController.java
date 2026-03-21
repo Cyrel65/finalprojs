@@ -9,6 +9,7 @@ import org.example.finalprojs.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.example.finalprojs.service.ClassService;
 
 import java.util.Map;
 import java.util.Optional;
@@ -21,14 +22,17 @@ public class ClassController {
     private final TeacherClassRepository teacherClassRepository;
     private final UserRepository userRepository;
     private final TeacherRepository teacherRepository;
+    private final ClassService classService;
 
     @Autowired
     public ClassController(TeacherClassRepository teacherClassRepository,
                            UserRepository userRepository,
-                           TeacherRepository teacherRepository) {
+                           TeacherRepository teacherRepository, ClassService classService) {
         this.teacherClassRepository = teacherClassRepository;
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
+        this.classService = classService;
+
     }
 
     @PostMapping("/create")
@@ -68,5 +72,16 @@ public class ClassController {
             return ResponseEntity.ok(Map.of("message", "Student added to section " + targetSection));
         }
         return ResponseEntity.status(404).body(Map.of("message", "Student not found"));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteClass(@PathVariable Long id) {
+        try {
+            classService.deleteClass(id);
+            return ResponseEntity.ok(Map.of("message", "Class deleted successfully"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("message", e.getMessage()));
+        }
     }
 }
