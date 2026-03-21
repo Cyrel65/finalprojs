@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Archiva - Student Performance Tracker System Themefisher.com</title>
+    <title>Archiva - Create Student Account</title>
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/images/favicon.png}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
           integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
@@ -13,7 +13,6 @@
 </head>
 
 <body class="h-100">
-<!-- Preloader start -->
 <div id="preloader">
     <div class="loader">
         <svg class="circular" viewBox="25 25 50 50">
@@ -21,57 +20,50 @@
         </svg>
     </div>
 </div>
-<!-- Preloader end -->
 
 <div class="login-form-bg h-100">
     <div class="container h-100">
         <div class="row justify-content-center h-100">
             <div class="col-xl-6">
                 <div class="form-input-content">
-                    <div class="card login-form mb-0">
+                    <div class="card login-form mb-0 border-0 shadow-lg">
                         <div class="card-body pt-5">
-                            <a class="text-center" th:href="@{/}"> <h4>Archiva</h4></a>
+                            <a class="text-center" th:href="@{/}">
+                                <h2 class="font-weight-bold text-primary">Archiva</h2>
+                                <p class="text-muted">Student Registration</p>
+                            </a>
 
                             <form class="mt-5 mb-5 login-input" th:action="@{/register}" th:object="${user}" method="post">
 
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Name" required th:field="*{name}">
+                                    <input type="text" class="form-control" placeholder="Full Name" required th:field="*{name}">
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Email" required th:field="*{email}">
+                                    <input type="email" class="form-control" placeholder="TUP Email Address" required th:field="*{email}">
                                 </div>
 
                                 <div class="form-group">
                                     <input type="password" class="form-control" placeholder="Password" required th:field="*{password}">
                                 </div>
 
-                                <!-- Section Radio Buttons -->
-                                <div class="form-group mt-3">
-                                    <label class="text-white mb-2">Select Section:</label><br>
-
-                                    <label class="mr-3">
-                                        <input type="radio" th:field="*{section}" value="CP" required> CP
-                                    </label>
-
-                                    <label class="mr-3">
-                                        <input type="radio" th:field="*{section}" value="ET"> ET
-                                    </label>
-
-                                    <label class="mr-3">
-                                        <input type="radio" th:field="*{section}" value="ELXT"> ELXT
-                                    </label>
-
-                                    <label class="mr-3">
-                                        <input type="radio" th:field="*{section}" value="CH"> CH
-                                    </label>
+                                <div class="form-group mt-4">
+                                    <label class="text-dark font-weight-bold">Class Section:</label>
+                                    <input type="text" class="form-control"
+                                           placeholder="e.g., CP-3A, ET-2B"
+                                           required th:field="*{section}"
+                                           style="border: 2px solid #f3f3f3;">
+                                    <small class="form-text text-muted mt-2">
+                                        <i class="fa fa-info-circle mr-1"></i>
+                                        Type the section code provided by your teacher to join your class.
+                                    </small>
                                 </div>
 
-                                <button type="submit" class="btn login-form__btn submit w-100">Register</button>
+                                <button type="submit" class="btn login-form__btn submit w-100 mt-4">Create Account</button>
                             </form>
 
-                            <p class="mt-5 login-form__footer">
-                                Have account? <a th:href="@{/login}" class="text-primary">Login</a> now
+                            <p class="mt-5 login-form__footer text-center">
+                                Already have an account? <a th:href="@{/login}" class="text-primary font-weight-bold">Login</a> now
                             </p>
                         </div>
                     </div>
@@ -81,11 +73,10 @@
     </div>
 </div>
 
-<!-- Scripts -->
-<script src="plugins/common/common.min.js"></script>
-<script src="js/custom.min.js"></script>
-<script src="js/settings.js"></script>
-<script src="js/gleek.js"></script>
-<script src="js/styleSwitcher.js"></script>
+<script th:src="@{/plugins/common/common.min.js}"></script>
+<script th:src="@{/js/custom.min.js}"></script>
+<script th:src="@{/js/settings.js}"></script>
+<script th:src="@{/js/gleek.js}"></script>
+<script th:src="@{/js/styleSwitcher.js}"></script>
 </body>
 </html>

@@ -46,16 +46,15 @@ public class MainController {
         model.addAttribute("user", new User());
         return "page-register";
     }
-
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
-        // Validate that section is selected
-        if (user.getSection() == null || user.getSection().isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Please select a section!");
+
+        if (user.getSection() == null || user.getSection().trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Section code is required to join a class!");
             return "redirect:/register";
         }
 
-        // Save user (including section)
+
         userService.registerUser(user);
         redirectAttributes.addFlashAttribute("success", "Registration successful! You can now log in.");
         return "redirect:/login";

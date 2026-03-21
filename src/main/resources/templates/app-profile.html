@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Archiva - Student Performance Tracker System Themefisher.com</title>
+    <title>Archiva - Student Performance Tracker System</title>
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/favicon.png}">
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
@@ -40,124 +40,20 @@
                     <span class="toggle-icon"><i class="icon-menu"></i></span>
                 </div>
             </div>
-            <div class="header-left">
-
-            </div>
+            <div class="header-left"></div>
             <div class="header-right">
                 <ul class="clearfix">
-                    <!-- Messages -->
-
-                        <div class="drop-down animated fadeIn dropdown-menu">
-                            <div class="dropdown-content-heading d-flex justify-content-between">
-                                <span class="">3 New Messages</span>
-                            </div>
-                            <div class="dropdown-content-body">
-                                <ul>
-                                    <li class="notification-unread">
-                                        <a href="javascript:void()">
-                                            <img class="float-left mr-3 avatar-img" th:src="${user.profilePictureUrl}" alt="User Avatar">
-                                            <div class="notification-content">
-                                                <div class="notification-heading">Saiful Islam</div>
-                                                <div class="notification-timestamp">08 Hours ago</div>
-                                                <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-unread">
-                                        <a href="javascript:void()">
-                                            <img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg" alt="">
-                                            <div class="notification-content">
-                                                <div class="notification-heading">Adam Smith</div>
-                                                <div class="notification-timestamp">08 Hours ago</div>
-                                                <div class="notification-text">Can you do me a favour?</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void()">
-                                            <img class="float-left mr-3 avatar-img" src="images/avatar/3.jpg" alt="">
-                                            <div class="notification-content">
-                                                <div class="notification-heading">Barak Obama</div>
-                                                <div class="notification-timestamp">08 Hours ago</div>
-                                                <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void()">
-                                            <img class="float-left mr-3 avatar-img" src="images/avatar/4.jpg" alt="">
-                                            <div class="notification-content">
-                                                <div class="notification-heading">Hilari Clinton</div>
-                                                <span class="notification-timestamp">08 Hours ago</span>
-                                                <div class="notification-text">Hello</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- Notifications -->
-
-                        <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
-                            <div class="dropdown-content-heading d-flex justify-content-between">
-                                <span class="">2 New Notifications</span>
-                            </div>
-                            <div class="dropdown-content-body">
-                                <ul>
-                                    <li>
-                                        <a href="javascript:void()">
-                                            <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
-                                            <div class="notification-content">
-                                                <h6 class="notification-heading">Events near you</h6>
-                                                <span class="notification-text">Within next 5 days</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void()">
-                                            <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
-                                            <div class="notification-content">
-                                                <h6 class="notification-heading">Event Started</h6>
-                                                <span class="notification-text">One hour ago</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void()">
-                                            <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
-                                            <div class="notification-content">
-                                                <h6 class="notification-heading">Event Ended Successfully</h6>
-                                                <span class="notification-text">One hour ago</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void()">
-                                            <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
-                                            <div class="notification-content">
-                                                <h6 class="notification-heading">Events to Join</h6>
-                                                <span class="notification-text">After two days</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- User Profile -->
                     <li class="icons dropdown">
                         <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                             <span class="activity active"></span>
-                            <img th:src="${user.profilePictureUrl}" height="40" width="40" alt="">
+                            <img th:src="${user.profilePictureUrl != null ? user.profilePictureUrl : 'images/user/1.png'}" height="40" width="40" alt="">
                         </div>
                         <div class="drop-down dropdown-profile dropdown-menu">
                             <div class="dropdown-content-body">
                                 <ul>
                                     <li><a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a></li>
                                     <li>
-                                        <a th:href="@{/inbox}"><i class="icon-envelope-open"></i> Inbox <span th:text="${unreadCount != null ? unreadCount : (messages != null ? messages.size() : 0)}" class="badge gradient-3 badge-pill badge-primary"></span>
-                                            </span></a>
+                                        <a th:href="@{/inbox}"><i class="icon-envelope-open"></i> Inbox <span th:text="${unreadCount != null ? unreadCount : 0}" class="badge gradient-3 badge-pill badge-primary"></span></a>
                                     </li>
                                     <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
                                 </ul>
@@ -172,12 +68,9 @@
     <div class="nk-sidebar">
         <div class="nk-nav-scroll">
             <ul class="metismenu" id="menu">
-                <li><a th:href="@{/}"><span class="nav-text">Dashboard</span></a></li>
-                <li><a th:href="@{/profile}"><i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span></a></li>
-
-                <li><a th:href="@{/inbox}" aria-expanded="false"><i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span></a></li>
-
-
+                <li><a th:href="@{/}"><i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span></a></li>
+                <li><a th:href="@{/profile}"><i class="icon-user menu-icon"></i><span class="nav-text">Profile</span></a></li>
+                <li><a th:href="@{/inbox}"><i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span></a></li>
                 <li class="mega-menu mega-menu-sm">
                     <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                         <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
@@ -188,18 +81,14 @@
                         <li><a th:href="@{/helpFeed}">Help and Feedback</a></li>
                     </ul>
                 </li>
-
             </ul>
         </div>
     </div>
 
     <div class="content-body">
-
         <div class="row page-titles mx-0">
             <div class="col p-md-0">
-                <ol class="breadcrumb">
-
-                </ol>
+                <ol class="breadcrumb"></ol>
             </div>
         </div>
 
@@ -209,34 +98,25 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="media align-items-center mb-4">
-                                <img class="mr-3" th:src="${user.profilePictureUrl}" width="200" height="200" alt="">
+                                <img class="mr-3" th:src="${user.profilePictureUrl != null ? user.profilePictureUrl : 'images/user/1.png'}" width="200" height="200" alt="Profile">
                                 <div class="media-body">
-                                    <h3 class="mb-0">
-                                        <strong>NAME:</strong>
-                                        <span th:text="${user.name}">Pikamy Cha</span>
-                                    </h3>
+                                    <h3 class="mb-0"><strong>NAME:</strong> <span th:text="${user.name}">Student Name</span></h3>
                                     <span class="email-display" style="font-size: 1.5rem; font-weight: 500; color: #495057;">
-                                        <strong>EMAIL:</strong>
-                                        <span th:text="${user.email}">name@domain.com</span>
+                                        <strong>EMAIL:</strong> <span th:text="${user.email}">email@tup.edu.ph</span>
                                     </span>
-                                    <!-- Change Profile Picture Dropdown -->
                                     <div class="mt-2">
                                         <button type="button" class="btn btn-secondary" id="changeProfileBtn">Change Profile Picture</button>
-
-                                        <!-- Dropdown Input and Update Button (hidden initially) -->
                                         <div id="profilePicInputContainer" style="display: none; margin-top: 10px;">
                                             <form th:action="@{/update/profile-picture}" method="post">
-                                                <input type="text" name="profilePictureUrl" id="profilePicUrl" class="form-control mb-2" placeholder="Enter image URL" required>
+                                                <input type="text" name="profilePictureUrl" id="profilePicUrl" class="form-control mb-2" placeholder="Enter image URL" required th:value="${user.profilePictureUrl}">
                                                 <button type="submit" class="btn btn-primary">Update Picture</button>
                                                 <button type="button" class="btn btn-secondary" id="cancelProfileBtn">Cancel</button>
                                             </form>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
-                            <!-- Change Details Form -->
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card mt-4" style="border: 1px solid #e0e0e0; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
@@ -248,15 +128,24 @@
                                             <form th:action="@{/profile/update}" method="post">
                                                 <div class="form-group mb-3">
                                                     <label for="name">Change Name</label>
-                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter new name" th:value="${user.name}">
+                                                    <input type="text" class="form-control" id="name" name="name" th:value="${user.name}">
                                                 </div>
                                                 <div class="form-group mb-3">
                                                     <label for="email">Change Email</label>
-                                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter new email" th:value="${user.email}">
+                                                    <input type="email" class="form-control" id="email" name="email" th:value="${user.email}">
                                                 </div>
+
+                                                <div class="form-group mb-3">
+                                                    <label for="section">Registered Section</label>
+                                                    <input type="text" class="form-control" id="section"
+                                                           th:value="${user.section}" readonly tabindex="-1"
+                                                           style="background-color: #f1f3f5; color: #6c757d; cursor: not-allowed; border: 1px solid #ced4da;">
+                                                    <small class="text-muted">Section cannot be modified. Please contact your instructor for class reassignment.</small>
+                                                </div>
+
                                                 <div class="form-group mb-4">
                                                     <label for="currentpassword">Enter current password</label>
-                                                    <input type="password" class="form-control" id="currentpassword" name="cpassword" placeholder="Required">
+                                                    <input type="password" class="form-control" id="currentpassword" name="cpassword" placeholder="Required" required>
                                                 </div>
                                                 <div class="form-group mb-4">
                                                     <label for="newpassword">Enter new password</label>
@@ -272,38 +161,40 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <ul class="card-profile__info" style="display: none;">
-                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <script src="plugins/common/common.min.js"></script>
-    <script src="js/custom.min.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/gleek.js"></script>
-    <script src="js/styleSwitcher.js"></script>
-    <script>
-        const changeBtn = document.getElementById('changeProfileBtn');
-        const inputContainer = document.getElementById('profilePicInputContainer');
-        const cancelBtn = document.getElementById('cancelProfileBtn');
+    <div class="footer">
+        <div class="copyright">
+            <p>Copyright &copy; 2026 Archiva System</p>
+        </div>
+    </div>
+</div>
 
-        changeBtn.addEventListener('click', () => {
-            changeBtn.style.display = 'none';
-            inputContainer.style.display = 'block';
-        });
+<script th:src="@{/plugins/common/common.min.js}"></script>
+<script th:src="@{/js/custom.min.js}"></script>
+<script th:src="@{/js/settings.js}"></script>
+<script th:src="@{/js/gleek.js}"></script>
+<script th:src="@{/js/styleSwitcher.js}"></script>
+<script>
+    const changeBtn = document.getElementById('changeProfileBtn');
+    const inputContainer = document.getElementById('profilePicInputContainer');
+    const cancelBtn = document.getElementById('cancelProfileBtn');
 
-        cancelBtn.addEventListener('click', () => {
-            inputContainer.style.display = 'none';
-            changeBtn.style.display = 'inline-block';
-        });
+    changeBtn.addEventListener('click', () => {
+        changeBtn.style.display = 'none';
+        inputContainer.style.display = 'block';
+    });
 
-    </script>
+    cancelBtn.addEventListener('click', () => {
+        inputContainer.style.display = 'none';
+        changeBtn.style.display = 'inline-block';
+    });
+</script>
 
 </body>
 </html>
