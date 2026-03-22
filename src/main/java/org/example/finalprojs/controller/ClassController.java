@@ -84,4 +84,6 @@ public class ClassController {
             return ResponseEntity.status(500).body(Map.of("message", e.getMessage()));
         }
     }
+
+
 }
