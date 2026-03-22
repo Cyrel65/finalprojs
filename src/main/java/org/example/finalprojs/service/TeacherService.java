@@ -41,4 +41,21 @@ public class TeacherService {
     public Optional<Teacher> findTeacherByEmail(String email) {
         return teacherRepository.findByEmail(email);
     }
+
+    public void updateResetToken(Long teacherId, String token) {
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+        teacher.setResetToken(token);
+        teacherRepository.save(teacher);
+    }
+
+    public void updatePassword(String token, String newPassword) {
+        // Find teacher by the token we sent to their email
+        Teacher teacher = teacherRepository.findByResetToken(token)
+                .orElseThrow(() -> new RuntimeException("Invalid or expired reset token"));
+
+        teacher.setPassword(newPassword); // Saving as plain text
+        teacher.setResetToken(null); // Clear token so it can't be used again
+        teacherRepository.save(teacher);
+    }
 }

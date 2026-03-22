@@ -22,6 +22,10 @@ public class Teacher {
     @Column(name = "profile_picture_url", columnDefinition = "TEXT")
     private String profilePictureUrl;
 
+    // Add this field to store the reset token
+    @Column(name = "reset_token")
+    private String resetToken;
+
     public Teacher() {
     }
 
@@ -63,5 +67,14 @@ public class Teacher {
 
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
+    }
+
+    // Getters and Setters for resetToken
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
     }
 }
