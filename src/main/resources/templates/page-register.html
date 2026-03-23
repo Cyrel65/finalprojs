@@ -1,25 +1,58 @@
 <!DOCTYPE html>
 <html class="h-100" lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Archiva - Create Student Account</title>
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/images/favicon.png}">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{--a:#7571f9;--a2:#a78bfa;--a3:#38bdf8;--gb:rgba(255,255,255,.042);--gbd:rgba(255,255,255,.10);--gbs:rgba(255,255,255,.16);--bg:#06070f;--th:rgba(255,255,255,.92);--tm:rgba(255,255,255,.55);--tl:rgba(255,255,255,.30);--r:18px;--rs:11px;--t:.22s cubic-bezier(.4,0,.2,1);}
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+        html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg)!important;color:var(--tm);-webkit-font-smoothing:antialiased;}
+        .login-form-bg{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:radial-gradient(ellipse 90% 70% at 15% -10%,rgba(117,113,249,.22) 0%,transparent 60%),radial-gradient(ellipse 70% 60% at 85% 110%,rgba(56,189,248,.14) 0%,transparent 60%),#06070f;}
+        .login-form-bg::before{content:'';position:absolute;inset:0;opacity:.030;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;pointer-events:none;z-index:0;}
+        .login-form-bg .container{position:relative;z-index:1;}
+        .form-input-content{padding:40px 0;animation:fadeSlideUp .55s ease both;}
+        @keyframes fadeSlideUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+        .card.login-form{background:rgba(255,255,255,.042)!important;backdrop-filter:blur(28px) saturate(160%)!important;-webkit-backdrop-filter:blur(28px) saturate(160%)!important;border:1px solid var(--gbs)!important;border-radius:var(--r)!important;box-shadow:0 0 0 1px rgba(117,113,249,.10),0 24px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08)!important;position:relative;overflow:hidden;}
+        .card.login-form::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.20),transparent);}
+        .card.login-form::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--a),var(--a2),var(--a3));border-radius:var(--r) var(--r) 0 0;}
+        .card-body.pt-5{padding:48px 44px 44px!important;}
+        /* Brand */
+        a.text-center{display:block;text-align:center;text-decoration:none;}
+        a.text-center h2{font-family:'Syne',sans-serif!important;font-weight:800!important;font-size:1.7rem!important;letter-spacing:-.03em;background:linear-gradient(135deg,#fff 30%,var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px!important;display:inline-block;}
+        a.text-center p.text-muted{color:var(--tl)!important;font-size:.84rem;margin-top:2px;}
+        a.text-center::after{content:'';display:block;width:32px;height:3px;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px;margin:8px auto 0;}
+        /* Form */
+        label{font-weight:500!important;font-size:.76rem!important;letter-spacing:.05em;text-transform:uppercase;color:var(--tl)!important;}
+        .form-control,input[type="text"],input[type="email"],input[type="password"]{background:rgba(255,255,255,.055)!important;border:1px solid var(--gbd)!important;border-radius:var(--rs)!important;color:var(--th)!important;font-family:'DM Sans',sans-serif!important;padding:13px 18px!important;height:auto!important;transition:border-color var(--t),box-shadow var(--t),background var(--t)!important;}
+        .form-control:focus,input:focus{background:rgba(255,255,255,.085)!important;border-color:var(--a)!important;box-shadow:0 0 0 3px rgba(117,113,249,.22)!important;color:var(--th)!important;outline:none!important;}
+        .form-control::placeholder,input::placeholder{color:var(--tl)!important;}
+        small.form-text{color:var(--tl)!important;font-size:.76rem;}
+        /* Submit button */
+        .btn.login-form__btn.submit{padding:13px 24px!important;background:linear-gradient(135deg,#7571f9 0%,#a78bfa 100%)!important;border:none!important;border-radius:var(--rs)!important;color:#fff!important;font-family:'Syne',sans-serif!important;font-weight:700!important;font-size:.95rem!important;letter-spacing:.04em;cursor:pointer;box-shadow:0 4px 24px rgba(117,113,249,.45)!important;transition:all var(--t)!important;position:relative;overflow:hidden;width:100%;display:block;}
+        .btn.login-form__btn.submit::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .55s ease;}
+        .btn.login-form__btn.submit:hover{transform:translateY(-2px)!important;box-shadow:0 8px 32px rgba(117,113,249,.60)!important;filter:brightness(1.08);}
+        .btn.login-form__btn.submit:hover::before{left:140%;}
+        /* Footer */
+        p.login-form__footer{font-size:.84rem;color:var(--tl)!important;text-align:center;margin-top:12px!important;}
+        p.login-form__footer a,.text-primary{color:var(--a2)!important;font-weight:500;-webkit-text-fill-color:unset!important;}
+        p.login-form__footer a:hover{color:#fff!important;}
+        /* Preloader */
+        #preloader{background:var(--bg)!important;position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;}
+        .path{stroke:var(--a)!important;}
+        ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(117,113,249,.35);border-radius:99px;}
+        @media(max-width:576px){.card-body.pt-5{padding:36px 24px 32px!important;}}
+    </style>
 </head>
-
 <body class="h-100">
-<div id="preloader">
-    <div class="loader">
-        <svg class="circular" viewBox="25 25 50 50">
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
-        </svg>
-    </div>
-</div>
+<div id="preloader"><div class="loader"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10"/></svg></div></div>
 
 <div class="login-form-bg h-100">
     <div class="container h-100">
@@ -34,31 +67,23 @@
                             </a>
 
                             <form class="mt-5 mb-5 login-input" th:action="@{/register}" th:object="${user}" method="post">
-
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Full Name" required th:field="*{name}">
                                 </div>
-
                                 <div class="form-group">
                                     <input type="email" class="form-control" placeholder="TUP Email Address" required th:field="*{email}">
                                 </div>
-
                                 <div class="form-group">
                                     <input type="password" class="form-control" placeholder="Password" required th:field="*{password}">
                                 </div>
-
                                 <div class="form-group mt-4">
-                                    <label class="text-dark font-weight-bold">Class Section:</label>
-                                    <input type="text" class="form-control"
-                                           placeholder="e.g., CP-3A, ET-2B"
-                                           required th:field="*{section}"
-                                           style="border: 2px solid #f3f3f3;">
+                                    <label class="text-dark font-weight-bold"><i class="fas fa-users mr-1"></i> Class Section:</label>
+                                    <input type="text" class="form-control" placeholder="e.g., CP-3A, ET-2B" required th:field="*{section}">
                                     <small class="form-text text-muted mt-2">
                                         <i class="fa fa-info-circle mr-1"></i>
                                         Type the section code provided by your teacher to join your class.
                                     </small>
                                 </div>
-
                                 <button type="submit" class="btn login-form__btn submit w-100 mt-4">Create Account</button>
                             </form>
 

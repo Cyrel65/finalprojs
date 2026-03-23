@@ -1,69 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Archiva - Student Performance Tracker System Themefisher.com</title>
-  <!-- Favicon icon -->
+  <title>Archiva - Student Records</title>
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-  <!-- Custom Stylesheet -->
   <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--a:#7571f9;--a2:#a78bfa;--a3:#38bdf8;--gb:rgba(255,255,255,.042);--gh:rgba(255,255,255,.075);--gbd:rgba(255,255,255,.10);--gbs:rgba(255,255,255,.16);--gs:0 8px 40px rgba(0,0,0,.50);--bl:blur(22px) saturate(160%);--bs:blur(12px);--bg:#06070f;--th:rgba(255,255,255,.92);--tm:rgba(255,255,255,.55);--tl:rgba(255,255,255,.30);--r:16px;--rs:10px;--t:.22s cubic-bezier(.4,0,.2,1);}
+    *,*::before,*::after{box-sizing:border-box;}
+    html,body{font-family:'DM Sans',sans-serif!important;color:var(--tm);background:var(--bg)!important;-webkit-font-smoothing:antialiased;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(117,113,249,.18) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 90% 100%,rgba(56,189,248,.12) 0%,transparent 60%);}
+    body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.030;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+    #main-wrapper{position:relative;z-index:1;}
+    ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(117,113,249,.35);border-radius:99px;}
+    h1,h2,h3,h4,h5,h6{font-family:'Syne',sans-serif!important;color:var(--th)!important;font-weight:700;letter-spacing:-.02em;}
+    a{color:var(--a2);text-decoration:none;transition:color var(--t);}a:hover{color:#fff;text-decoration:none;}
+    small,.text-muted{color:var(--tl)!important;}.text-primary{color:var(--a2)!important;}p,span,td,li{color:var(--tm);}
+    .nav-header{background:rgba(117,113,249,.14)!important;border-right:1px solid var(--gbd)!important;border-bottom:1px solid var(--gbd)!important;}
+    .nk-sidebar{background:rgba(13,15,30,.72)!important;backdrop-filter:var(--bl)!important;-webkit-backdrop-filter:var(--bl)!important;border-right:1px solid var(--gbd)!important;box-shadow:4px 0 40px rgba(0,0,0,.40)!important;}
+    .nk-sidebar .metismenu,.nk-sidebar .metismenu ul{background:transparent!important;}
+    .nk-sidebar .metismenu > li > a,.nk-sidebar .metismenu a{display:flex;align-items:center;gap:10px;padding:10px 22px!important;margin:2px 10px;border-radius:var(--rs)!important;color:var(--tm)!important;font-size:.84rem;font-weight:500;border:1px solid transparent;transition:all var(--t)!important;background:transparent!important;}
+    .nk-sidebar .metismenu > li > a:hover,.nk-sidebar .metismenu a:hover{color:var(--th)!important;background:var(--gh)!important;border-color:var(--gbd)!important;}
+    .nk-sidebar .metismenu > li.active > a,.nk-sidebar .metismenu > li.mm-active > a{color:#fff!important;background:linear-gradient(135deg,rgba(117,113,249,.40),rgba(117,113,249,.18))!important;border-color:rgba(117,113,249,.40)!important;box-shadow:0 4px 18px rgba(117,113,249,.28)!important;}
+    .nk-sidebar .metismenu a i{color:inherit!important;opacity:.8;}
+    .header{background:rgba(13,15,30,.65)!important;backdrop-filter:var(--bs)!important;-webkit-backdrop-filter:var(--bs)!important;border-bottom:1px solid var(--gbd)!important;box-shadow:none!important;}
+    .hamburger .line{background:var(--tm)!important;}.hamburger:hover .line{background:var(--th)!important;}
+    .header-left .input-group .form-control{background:rgba(255,255,255,.055)!important;border:1px solid var(--gbd)!important;color:var(--th)!important;border-radius:var(--rs)!important;}
+    .header-left .input-group .form-control::placeholder{color:var(--tl)!important;}
+    .header-left .input-group-text{background:transparent!important;border:none!important;color:var(--tm)!important;}
+    .user-img{border:2px solid var(--a)!important;border-radius:50%!important;box-shadow:0 0 12px rgba(117,113,249,.40)!important;}
+    .activity.active{background:linear-gradient(230deg,#ffc480,#ff763b)!important;box-shadow:0 0 8px rgba(255,118,59,.6)!important;}
+    .dropdown-menu{background:rgba(17,19,39,.94)!important;backdrop-filter:var(--bl)!important;border:1px solid var(--gbd)!important;border-radius:var(--r)!important;box-shadow:0 16px 48px rgba(0,0,0,.50)!important;padding:8px!important;}
+    .dropdown-item{color:var(--tm)!important;border-radius:var(--rs)!important;padding:9px 16px!important;transition:all var(--t)!important;}
+    .dropdown-item:hover{background:var(--gh)!important;color:var(--th)!important;}
+    .drop-down{background:rgba(13,15,30,.92)!important;border:1px solid var(--gbd)!important;}
+    .dropdown-content-heading{color:var(--th)!important;border-bottom:1px solid var(--gbd);padding:12px 16px!important;font-family:'Syne',sans-serif;font-weight:600;}
+    .dropdown-content-body ul li a{color:var(--tm)!important;}.dropdown-content-body ul li a:hover{color:var(--th)!important;background:var(--gh)!important;}
+    .notification-heading{color:var(--th)!important;font-weight:600;}.notification-timestamp,.notification-text{color:var(--tl)!important;font-size:.78rem;}
+    .badge,.badge-primary{background:linear-gradient(135deg,var(--a),var(--a2))!important;color:#fff!important;border-radius:6px!important;font-family:'Syne',sans-serif;font-weight:700;font-size:.65rem;padding:3px 9px;}
+    .content-body,.container-fluid,.page-titles{background:transparent!important;}
+    .breadcrumb{background:transparent!important;padding:0!important;}.breadcrumb-item a{color:var(--a2)!important;}.breadcrumb-item.active,.breadcrumb-item+.breadcrumb-item::before{color:var(--tl)!important;}
+    /* Card */
+    .card{background:var(--gb)!important;backdrop-filter:var(--bl)!important;-webkit-backdrop-filter:var(--bl)!important;border:1px solid var(--gbd)!important;border-radius:var(--r)!important;box-shadow:var(--gs)!important;position:relative;overflow:hidden;animation:fadeSlideUp .40s ease both;}
+    .card::before{content:'';position:absolute;inset:0;pointer-events:none;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,255,255,.04) 0%,transparent 55%);z-index:0;}
+    .card > *{position:relative;z-index:1;}
+    .card-body{padding:24px!important;}.card-title{font-family:'Syne',sans-serif!important;font-weight:700!important;color:var(--th)!important;}
+    /* Table */
+    .table{color:var(--tm)!important;border-color:var(--gbd)!important;}
+    .table thead th{font-family:'Syne',sans-serif!important;font-weight:700!important;font-size:.70rem!important;letter-spacing:.08em;text-transform:uppercase;color:var(--tl)!important;border-bottom:1px solid var(--gbd)!important;padding:12px 10px!important;background:rgba(255,255,255,.03)!important;white-space:nowrap;}
+    .table tbody td{color:var(--tm)!important;border-bottom:1px solid rgba(255,255,255,.05)!important;padding:10px!important;}
+    .table-striped tbody tr:nth-of-type(odd){background:rgba(255,255,255,.022)!important;}
+    .table-hover tbody tr:hover td{background:rgba(117,113,249,.07)!important;color:var(--th)!important;}
+    .table-bordered td,.table-bordered th{border-color:rgba(255,255,255,.07)!important;}
+    /* DataTables overrides */
+    .dataTables_wrapper .dataTables_filter label,.dataTables_wrapper .dataTables_length label{color:var(--tl)!important;font-family:'DM Sans',sans-serif;}
+    .dataTables_wrapper .dataTables_filter input{background:rgba(255,255,255,.055)!important;border:1px solid var(--gbd)!important;border-radius:var(--rs)!important;color:var(--th)!important;padding:7px 14px!important;outline:none!important;}
+    .dataTables_wrapper .dataTables_filter input:focus{border-color:var(--a)!important;box-shadow:0 0 0 3px rgba(117,113,249,.18)!important;}
+    .dataTables_wrapper .dataTables_length select{background:rgba(255,255,255,.055)!important;border:1px solid var(--gbd)!important;border-radius:var(--rs)!important;color:var(--th)!important;padding:5px 10px!important;}
+    .dataTables_wrapper .dataTables_info,.dataTables_wrapper .dataTables_paginate{color:var(--tl)!important;font-size:.82rem;}
+    .dataTables_wrapper .dataTables_paginate .paginate_button{color:var(--tm)!important;border-radius:var(--rs)!important;border:1px solid var(--gbd)!important;background:var(--gb)!important;padding:5px 12px!important;margin:2px!important;transition:all var(--t)!important;}
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover{background:var(--gh)!important;color:var(--th)!important;border-color:var(--gbs)!important;}
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{background:linear-gradient(135deg,var(--a),var(--a2))!important;color:#fff!important;border-color:var(--a)!important;box-shadow:0 4px 14px rgba(117,113,249,.40);}
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled{color:var(--tl)!important;opacity:.4;}
+    /* Scrollable table wrapper */
+    .table-responsive{border-radius:var(--rs);overflow:hidden;}
+    #preloader{background:var(--bg)!important;position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;}
+    .path{stroke:var(--a)!important;}
+    @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  </style>
 </head>
-
 <body>
+<div id="preloader"><div class="loader"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10"/></svg></div></div>
 
-<!--*******************
-    Preloader start
-********************-->
-<div id="preloader">
-  <div class="loader">
-    <svg class="circular" viewBox="25 25 50 50">
-      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
-    </svg>
-  </div>
-</div>
-<!--*******************
-    Preloader end
-********************-->
-
-
-<!--**********************************
-    Main wrapper start
-***********************************-->
 <div id="main-wrapper">
-
-  <!--**********************************
-      Nav header start
-  ***********************************-->
   <div class="nav-header">
     <div class="brand-logo">
-        <a th:href="@{/}">
-        <b class="logo-abbr"><img src="images/logo.png" alt=""> </b>
+      <a th:href="@{/}">
+        <b class="logo-abbr"><img src="images/logo.png" alt=""></b>
         <span class="logo-compact"><img src="./images/logo-compact.png" alt=""></span>
-        <span class="brand-title">
-                        <img src="images/logo-text.png" alt="">
-                    </span>
+        <span class="brand-title"><img src="images/logo-text.png" alt=""></span>
       </a>
     </div>
   </div>
-  <!--**********************************
-      Nav header end
-  ***********************************-->
 
-  <!--**********************************
-      Header start
-  ***********************************-->
   <div class="header">
     <div class="header-content clearfix">
-
       <div class="nav-control">
-        <div class="hamburger">
-          <span class="toggle-icon"><i class="icon-menu"></i></span>
-        </div>
+        <div class="hamburger"><span class="toggle-icon"><i class="icon-menu"></i></span></div>
       </div>
       <div class="header-left">
         <div class="input-group icons">
@@ -71,138 +100,46 @@
             <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
           </div>
           <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
-          <div class="drop-down   d-md-none">
-            <form action="#">
-              <input type="text" class="form-control" placeholder="Search">
-            </form>
-          </div>
         </div>
       </div>
       <div class="header-right">
         <ul class="clearfix">
           <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
             <i class="mdi mdi-email-outline"></i>
-            <span class="badge gradient-1 badge-pill badge-primary">3</span>
-          </a>
+            <span class="badge gradient-1 badge-pill badge-primary">3</span></a>
             <div class="drop-down animated fadeIn dropdown-menu">
-              <div class="dropdown-content-heading d-flex justify-content-between">
-                <span class="">3 New Messages</span>
-
-              </div>
+              <div class="dropdown-content-heading d-flex justify-content-between"><span>3 New Messages</span></div>
               <div class="dropdown-content-body">
                 <ul>
-                  <li class="notification-unread">
-                    <a href="javascript:void()">
-                      <img class="float-left mr-3 avatar-img" src="images/avatar/1.jpg" alt="">
-                      <div class="notification-content">
-                        <div class="notification-heading">Saiful Islam</div>
-                        <div class="notification-timestamp">08 Hours ago</div>
-                        <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                      </div>
-                    </a>
-                  </li>
-                  <li class="notification-unread">
-                    <a href="javascript:void()">
-                      <img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg" alt="">
-                      <div class="notification-content">
-                        <div class="notification-heading">Adam Smith</div>
-                        <div class="notification-timestamp">08 Hours ago</div>
-                        <div class="notification-text">Can you do me a favour?</div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void()">
-                      <img class="float-left mr-3 avatar-img" src="images/avatar/3.jpg" alt="">
-                      <div class="notification-content">
-                        <div class="notification-heading">Barak Obama</div>
-                        <div class="notification-timestamp">08 Hours ago</div>
-                        <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void()">
-                      <img class="float-left mr-3 avatar-img" src="images/avatar/4.jpg" alt="">
-                      <div class="notification-content">
-                        <div class="notification-heading">Hilari Clinton</div>
-                        <div class="notification-timestamp">08 Hours ago</div>
-                        <div class="notification-text">Hello</div>
-                      </div>
-                    </a>
-                  </li>
+                  <li class="notification-unread"><a href="javascript:void()"><img class="float-left mr-3 avatar-img" src="images/avatar/1.jpg" alt=""><div class="notification-content"><div class="notification-heading">Saiful Islam</div><div class="notification-timestamp">08 Hours ago</div><div class="notification-text">Hi Teddy, Just wanted to let you ...</div></div></a></li>
+                  <li class="notification-unread"><a href="javascript:void()"><img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg" alt=""><div class="notification-content"><div class="notification-heading">Adam Smith</div><div class="notification-timestamp">08 Hours ago</div><div class="notification-text">Can you do me a favour?</div></div></a></li>
                 </ul>
-
               </div>
             </div>
           </li>
           <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
             <i class="mdi mdi-bell-outline"></i>
-            <span class="badge badge-pill gradient-2 badge-primary">3</span>
-          </a>
+            <span class="badge badge-pill gradient-2 badge-primary">2</span></a>
             <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
-              <div class="dropdown-content-heading d-flex justify-content-between">
-                <span class="">2 New Notifications</span>
-
-              </div>
+              <div class="dropdown-content-heading d-flex justify-content-between"><span>2 New Notifications</span></div>
               <div class="dropdown-content-body">
                 <ul>
-                  <li>
-                    <a href="javascript:void()">
-                      <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
-                      <div class="notification-content">
-                        <h6 class="notification-heading">Events near you</h6>
-                        <span class="notification-text">Within next 5 days</span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void()">
-                      <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
-                      <div class="notification-content">
-                        <h6 class="notification-heading">Event Started</h6>
-                        <span class="notification-text">One hour ago</span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void()">
-                      <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
-                      <div class="notification-content">
-                        <h6 class="notification-heading">Event Ended Successfully</h6>
-                        <span class="notification-text">One hour ago</span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void()">
-                      <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
-                      <div class="notification-content">
-                        <h6 class="notification-heading">Events to Join</h6>
-                        <span class="notification-text">After two days</span>
-                      </div>
-                    </a>
-                  </li>
+                  <li><a href="javascript:void()"><span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span><div class="notification-content"><h6 class="notification-heading">Events near you</h6><span class="notification-text">Within next 5 days</span></div></a></li>
+                  <li><a href="javascript:void()"><span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span><div class="notification-content"><h6 class="notification-heading">Event Started</h6><span class="notification-text">One hour ago</span></div></a></li>
                 </ul>
-
               </div>
             </div>
           </li>
           <li class="icons dropdown">
-            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+            <div class="user-img c-pointer position-relative" data-toggle="dropdown">
               <span class="activity active"></span>
               <img src="images/user/1.png" height="40" width="40" alt="">
             </div>
-            <div class="drop-down dropdown-profile   dropdown-menu">
+            <div class="drop-down dropdown-profile dropdown-menu">
               <div class="dropdown-content-body">
                 <ul>
-                  <li>
-                    <a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a>
-                  </li>
-                  <li>
-                    <a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
-                  </li>
-
+                  <li><a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a></li>
+                  <li><a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a></li>
                   <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
                 </ul>
               </div>
@@ -212,22 +149,11 @@
       </div>
     </div>
   </div>
-  <!--**********************************
-      Header end ti-comment-alt
-  ***********************************-->
 
-  <!--**********************************
-      Sidebar start
-  ***********************************-->
   <div class="nk-sidebar">
     <div class="nk-nav-scroll">
       <ul class="metismenu" id="menu">
-
-        <li>
-          <a th:href="@{/}">
-            <span class="nav-text">Dashboard</span>
-          </a>
-        </li>
+        <li><a th:href="@{/}"><i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span></a></li>
         <li class="mega-menu mega-menu-sm">
           <a class="has-arrow" href="javascript:void()" aria-expanded="false">
             <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Settings</span>
@@ -236,69 +162,18 @@
             <li><a th:href="@{/login}">Signout</a></li>
             <li><a th:href="@{/forgotpass}">Forgot Password</a></li>
             <li><a th:href="@{/helpFeed}">Help and Feedback</a></li>
-
           </ul>
         </li>
-
-        <li>
-          <a th:href="@{/inbox}" aria-expanded="false">
-            <i class="icon-envelope menu-icon"></i> <span class="nav-text">Mail</span>
-          </a>
-
-        </li>
-        <li>
-          <a th:href="@{/profile}">
-            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Profile</span>
-          </a>
-
-        </li>
-        <li>
-          <a th:href="@{/table}">
-            <i class="icon-graph menu-icon"></i> <span class="nav-text">Student Rankings</span>
-          </a>
-
-        </li>
-
-        <li>
-          <a  th:href="@{/viewclass}">
-            <i class="icon-grid menu-icon"></i><span class="nav-text">View Classes</span>
-          </a>
-
-        </li>
-        <li>
-          <a th:href="@{/redeem}" aria-expanded="false">
-            <i class="icon-badge menu-icon"></i><span class="nav-text">Redeem</span>
-          </a>
-        </li>
-
-
-
-
-        <!--
-                         <li>
-                             <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                                 <i class="icon-menu menu-icon"></i><span class="nav-text">Table</span>
-                             </a>
-                             <ul aria-expanded="false">
-                                 <li><a href="./table-basic.html" aria-expanded="false">Basic Table</a></li>
-                                 <li><a href="./table-datatable.html" aria-expanded="false">Data Table</a></li>
-                             </ul>
-                         </li>  -->
-
-
-
+        <li><a th:href="@{/inbox}" aria-expanded="false"><i class="icon-envelope menu-icon"></i><span class="nav-text">Mail</span></a></li>
+        <li><a th:href="@{/profile}"><i class="icon-user menu-icon"></i><span class="nav-text">Profile</span></a></li>
+        <li><a th:href="@{/table}"><i class="icon-graph menu-icon"></i><span class="nav-text">Student Rankings</span></a></li>
+        <li><a th:href="@{/viewclass}"><i class="icon-grid menu-icon"></i><span class="nav-text">View Classes</span></a></li>
+        <li><a th:href="@{/redeem}" aria-expanded="false"><i class="icon-badge menu-icon"></i><span class="nav-text">Redeem</span></a></li>
       </ul>
     </div>
   </div>
-  <!--**********************************
-      Sidebar end
-  ***********************************-->
 
-  <!--**********************************
-      Content body start
-  ***********************************-->
   <div class="content-body">
-
     <div class="row page-titles mx-0">
       <div class="col p-md-0">
         <ol class="breadcrumb">
@@ -307,335 +182,46 @@
         </ol>
       </div>
     </div>
-    <!-- row -->
-
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title">Students List</h4>
+              <h4 class="card-title"><i class="icon-people mr-2" style="color:var(--a2);"></i>Students List</h4>
               <div class="table-responsive">
                 <table class="table table-striped table-bordered zero-configuration">
                   <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                      <th>Q1</th>
-                      <th>Q2</th>
-                      <th>Q3</th>
-                      <th>Q4</th>
-                      <th>Q5</th>
-                    <th>Quiz Average</th>
-                      <th>UT1</th>
-                      <th>UT2</th>
-                    <th>Unit Test Average</th>
+                    <th>ID</th><th>Name</th>
+                    <th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Q5</th>
+                    <th>Quiz Avg</th>
+                    <th>UT1</th><th>UT2</th>
+                    <th>Unit Test Avg</th>
                     <th>Term Test %</th>
                     <th>Raw Grades %</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Student 1 </td>
-                    <td>92%</td>
-                    <td>85%</td>
-                    <td>75%</td>
-                    <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Student 2</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Student 3</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>Student 4</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td>Student 5</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>6</td>
-                    <td>Student 6</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>7</td>
-                    <td>Student 7</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>8</td>
-                    <td>Student 8</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>9</td>
-                      <td>Student 8</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>10</td>
-                    <td>Student 10</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>11</td>
-                    <td>Student 11</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>12</td>
-                    <td>Student 12</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>13</td>
-                    <td>Student 13</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>14</td>
-                    <td>Student 14</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>15</td>
-                    <td>Student 15</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>16</td>
-                    <td>Student 16</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>17</td>
-                    <td>Student 17</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>18</td>
-                    <td>Student 18</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>19</td>
-                    <td>Student 19</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
-                  <tr>
-                    <td>20</td>
-                    <td>Student 20</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                      <td>45%</td>
-                      <td>92%</td>
-                      <td>85%</td>
-                      <td>75%</td>
-                  </tr>
+                  <tr><td>1</td><td>Student 1</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>2</td><td>Student 2</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>3</td><td>Student 3</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>4</td><td>Student 4</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>5</td><td>Student 5</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>6</td><td>Student 6</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>7</td><td>Student 7</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>8</td><td>Student 8</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>9</td><td>Student 9</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>10</td><td>Student 10</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>11</td><td>Student 11</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>12</td><td>Student 12</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>13</td><td>Student 13</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>14</td><td>Student 14</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>15</td><td>Student 15</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>16</td><td>Student 16</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>17</td><td>Student 17</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>18</td><td>Student 18</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>19</td><td>Student 19</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
+                  <tr><td>20</td><td>Student 20</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td><td>45%</td><td>92%</td><td>85%</td><td>75%</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -644,29 +230,16 @@
         </div>
       </div>
     </div>
-    <!-- #/ container -->
   </div>
-  <!--**********************************
-      Content body end
-  ***********************************-->
 </div>
-<!--**********************************
-    Main wrapper end
-***********************************-->
 
-<!--**********************************
-    Scripts
-***********************************-->
 <script src="plugins/common/common.min.js"></script>
 <script src="js/custom.min.js"></script>
 <script src="js/settings.js"></script>
 <script src="js/gleek.js"></script>
 <script src="js/styleSwitcher.js"></script>
-
 <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
 <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
 <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
-
 </body>
-
 </html>
