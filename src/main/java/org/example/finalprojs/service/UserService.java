@@ -5,7 +5,12 @@ import org.example.finalprojs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -17,15 +22,14 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final Map<String, PasswordResetToken> tokenStore = new HashMap<>();
+    private static final String UPLOAD_DIR = "uploads/profiles/";
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    // ADDED: This method allows the MainController to fetch Joseph and others by section
     public List<User> findBySection(String section) {
         return userRepository.findBySection(section);
     }
@@ -48,13 +52,30 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfilePicture(User user, String profilePictureUrl) {
-        user.setProfilePictureUrl(profilePictureUrl);
+    public void updateProfilePicture(User user, MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) return;
+
+        Path uploadPath = Paths.get(UPLOAD_DIR);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        String original = file.getOriginalFilename();
+        String ext = (original != null && original.contains("."))
+                ? original.substring(original.lastIndexOf("."))
+                : ".jpg";
+        String filename = "user_" + user.getId() + "_" + UUID.randomUUID() + ext;
+
+        Files.write(uploadPath.resolve(filename), file.getBytes());
+
+        user.setProfilePictureUrl("/uploads/profiles/" + filename);
         userRepository.save(user);
     }
 
     @Transactional
-    public User updateProfile(User user, String name, String email, String currentPassword, String newPassword, String retypePassword) {
+    public User updateProfile(User user, String name, String email,
+                              String currentPassword, String newPassword,
+                              String retypePassword) {
         if (!user.getPassword().equals(currentPassword)) {
             throw new IllegalArgumentException("Current password is incorrect.");
         }

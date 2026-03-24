@@ -30,8 +30,6 @@
         h1,h2,h3,h4,h5,h6{font-family:'Syne',sans-serif!important;color:var(--th)!important;font-weight:700;letter-spacing:-.02em;}
         a{color:var(--a2);text-decoration:none;transition:color var(--t);}a:hover{color:#fff;text-decoration:none;}
         small,.text-muted{color:var(--tl)!important;}.text-primary{color:var(--a2)!important;}strong{color:var(--th);}
-
-        /* Sidebar & header chrome */
         .nav-header{background:rgba(117,113,249,.14)!important;border-right:1px solid var(--gbd)!important;border-bottom:1px solid var(--gbd)!important;}
         .nk-sidebar{background:rgba(13,15,30,.72)!important;backdrop-filter:var(--bl)!important;-webkit-backdrop-filter:var(--bl)!important;border-right:1px solid var(--gbd)!important;box-shadow:4px 0 40px rgba(0,0,0,.40)!important;}
         .nk-sidebar .metismenu,.nk-sidebar .metismenu ul{background:transparent!important;}
@@ -54,39 +52,27 @@
         .footer p,.copyright p{color:var(--tl)!important;}
         #preloader{background:var(--bg)!important;position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;}
         .path{stroke:var(--a)!important;}
-
-        /* ── Glass card ── */
         .glass-card{background:var(--gb);backdrop-filter:var(--bl);-webkit-backdrop-filter:var(--bl);border:1px solid var(--gbd);border-radius:var(--r);box-shadow:var(--gs);position:relative;overflow:hidden;transition:border-color var(--t),box-shadow var(--t),transform var(--t);}
         .glass-card::before{content:'';position:absolute;inset:0;pointer-events:none;border-radius:var(--r);background:linear-gradient(135deg,rgba(255,255,255,.04) 0%,transparent 55%);z-index:0;}
         .glass-card>*{position:relative;z-index:1;}
         .glass-card:hover{border-color:var(--gbs)!important;box-shadow:0 16px 48px rgba(0,0,0,.55),0 0 0 1px rgba(117,113,249,.14)!important;transform:translateY(-2px);}
-
-        /* ── Profile header card ── */
         .profile-header-card{background:linear-gradient(135deg,rgba(117,113,249,.75),rgba(100,90,240,.60))!important;border:1px solid rgba(117,113,249,.45)!important;border-radius:var(--r);box-shadow:0 8px 40px rgba(117,113,249,.30)!important;position:relative;overflow:hidden;}
         .profile-header-card::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.12) 0%,transparent 50%);}
         .profile-header-card>*{position:relative;z-index:1;}
-
-        /* ── Profile avatar ── */
         .profile-avatar-wrap{position:relative;display:inline-block;flex-shrink:0;}
         .profile-avatar{width:68px;height:68px;border-radius:50%;border:3px solid rgba(255,255,255,.50);box-shadow:0 0 0 4px rgba(255,255,255,.15),0 6px 20px rgba(0,0,0,.40);object-fit:cover;transition:transform var(--t);}
         .profile-avatar:hover{transform:scale(1.05);}
         .profile-avatar-edit{position:absolute;bottom:0;right:0;width:22px;height:22px;background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.40);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:.60rem;transition:background var(--t);}
         .profile-avatar-edit:hover{background:rgba(255,255,255,.38);}
-
         .profile-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:#fff!important;margin:0 0 2px;}
         .profile-meta{font-size:.76rem;color:rgba(255,255,255,.68);margin:0;}
         .profile-email-sm{font-size:.74rem;color:rgba(255,255,255,.55);margin:3px 0 0;}
-
         .profile-progress{height:3px;border-radius:99px;background:rgba(255,255,255,.18);margin-top:12px;overflow:hidden;}
         .profile-progress-fill{height:100%;width:68%;border-radius:99px;background:linear-gradient(90deg,rgba(255,255,255,.80),rgba(255,255,255,.38));}
-
-        /* ── Section header ── */
         .sec-header{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:linear-gradient(135deg,rgba(117,113,249,.35),rgba(117,113,249,.20));border-bottom:1px solid rgba(117,113,249,.22);}
         .sec-header-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.84rem;color:#fff;margin:0;}
         .sec-edit-btn{width:26px;height:26px;border-radius:7px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.75);font-size:.70rem;cursor:pointer;transition:background var(--t);}
         .sec-edit-btn:hover{background:rgba(255,255,255,.25);color:#fff;}
-
-        /* ── Pref items ── */
         .pref-item{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.05);transition:background var(--t);}
         .pref-item:last-child{border-bottom:none;}
         .pref-item:hover{background:rgba(255,255,255,.04);}
@@ -96,22 +82,16 @@
         .pref-icon.green{background:rgba(34,197,94,.18);color:#4ade80;}
         .pref-sub{font-size:.70rem;color:var(--tl);text-transform:uppercase;letter-spacing:.04em;}
         .pref-main{font-size:.86rem;color:var(--th);font-weight:600;}
-
-        /* ── Update form card ── */
         .update-card{background:rgba(255,255,255,.032)!important;backdrop-filter:var(--bl)!important;-webkit-backdrop-filter:var(--bl)!important;border:1px solid var(--gbd)!important;border-radius:var(--r)!important;box-shadow:var(--gs)!important;overflow:hidden;}
         .update-card-head{padding:16px 22px;border-bottom:1px solid var(--gbd);display:flex;align-items:center;gap:10px;}
         .update-card-head h5{font-family:'Syne',sans-serif;font-weight:700;color:var(--th)!important;margin:0;font-size:1rem;}
         .update-card-body{padding:22px;}
-
-        /* form inputs */
         .form-group{margin-bottom:14px;}
         .form-group label{font-weight:500!important;font-size:.72rem!important;letter-spacing:.05em;text-transform:uppercase;color:var(--tl)!important;margin-bottom:5px;display:block;}
         .form-control,input[type="text"],input[type="email"],input[type="password"]{background:rgba(255,255,255,.055)!important;border:1px solid var(--gbd)!important;border-radius:var(--rs)!important;color:var(--th)!important;font-family:'DM Sans',sans-serif!important;font-size:.875rem!important;padding:10px 14px!important;height:auto!important;width:100%;transition:border-color var(--t),box-shadow var(--t),background var(--t)!important;}
         .form-control:focus,input:focus{background:rgba(255,255,255,.085)!important;border-color:var(--a)!important;box-shadow:0 0 0 3px rgba(117,113,249,.22)!important;color:var(--th)!important;outline:none!important;}
         .form-control::placeholder,input::placeholder{color:var(--tl)!important;}
         .form-control[readonly],input[readonly]{background:rgba(255,255,255,.025)!important;border-color:rgba(255,255,255,.06)!important;color:var(--tl)!important;cursor:not-allowed;}
-
-        /* buttons */
         .btn{font-family:'DM Sans',sans-serif!important;font-weight:600!important;border-radius:var(--rs)!important;transition:all var(--t)!important;position:relative;overflow:hidden;cursor:pointer;}
         .btn::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:left .5s ease;}
         .btn:hover::after{left:140%;}
@@ -121,23 +101,16 @@
         .btn-secondary:hover{background:rgba(255,255,255,.13)!important;border-color:var(--gbs)!important;color:#fff!important;}
         .btn-ghost-sm{padding:6px 14px!important;font-size:.78rem!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important;color:rgba(255,255,255,.70)!important;}
         .btn-ghost-sm:hover{background:rgba(255,255,255,.14)!important;color:#fff!important;}
-
-        /* alerts */
         .alert{border-radius:var(--rs)!important;backdrop-filter:blur(8px);border:1px solid!important;margin-bottom:16px;padding:12px 16px!important;}
         .alert-success{background:rgba(34,211,160,.10)!important;border-color:rgba(34,211,160,.28)!important;color:#6ee7b7!important;}
         .alert-danger{background:rgba(239,68,68,.10)!important;border-color:rgba(239,68,68,.28)!important;color:#fca5a5!important;}
-
-        /* layout */
         .profile-layout{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;}
         .left-col{display:flex;flex-direction:column;gap:14px;}
         @media(max-width:900px){.profile-layout{grid-template-columns:1fr;} .form-row-2{grid-template-columns:1fr!important;}}
         .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
         .divider{height:1px;background:var(--gbd);margin:18px 0;}
         .pw-section-label{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--tm);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
-
         #profilePicInputContainer{margin-top:12px;}
-        #profilePicInputContainer .form-control{font-size:.82rem!important;padding:8px 12px!important;}
-
         @keyframes fadeSlideUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
         .glass-card,.profile-header-card,.update-card{animation:fadeSlideUp .40s ease both;}
         .update-card{animation-delay:.08s;}
@@ -149,7 +122,6 @@
 
 <div id="main-wrapper">
 
-    <!-- Nav header -->
     <div class="nav-header">
         <div class="brand-logo">
             <a th:href="@{/}">
@@ -160,7 +132,6 @@
         </div>
     </div>
 
-    <!-- Header -->
     <div class="header">
         <div class="header-content clearfix">
             <div class="nav-control"><div class="hamburger"><span class="toggle-icon"><i class="icon-menu"></i></span></div></div>
@@ -185,7 +156,6 @@
         </div>
     </div>
 
-    <!-- Sidebar -->
     <div class="nk-sidebar">
         <div class="nk-nav-scroll">
             <ul class="metismenu" id="menu">
@@ -206,15 +176,12 @@
         </div>
     </div>
 
-    <!-- Content -->
     <div class="content-body">
         <div class="container-fluid" style="padding:24px;">
             <div class="profile-layout">
 
-                <!-- ══ LEFT COLUMN ══ -->
                 <div class="left-col">
 
-                    <!-- ① Profile header card (blue gradient like reference) -->
                     <div class="profile-header-card">
                         <div style="padding:18px 16px 14px;">
                             <div style="display:flex;align-items:center;gap:13px;">
@@ -230,19 +197,25 @@
                                 <div style="flex:1;min-width:0;">
                                     <p class="profile-name" th:text="${user.name}">Student Name</p>
                                     <p class="profile-meta" th:text="${user.section}">Section</p>
-                                    <p class="profile-email-sm" th:text="${user.email}"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="76131b171f1a360203065813120358061e">[email&#160;protected]</a></p>
+                                    <p class="profile-email-sm" th:text="${user.email}">email@example.com</p>
                                 </div>
                             </div>
 
-                            <!-- Change picture inline form -->
+                            <!-- ── CHANGED: file upload form instead of URL input ── -->
                             <div id="profilePicInputContainer" style="display:none;margin-top:12px;">
-                                <form th:action="@{/update/profile-picture}" method="post">
-                                    <input type="text" name="profilePictureUrl" id="profilePicUrl"
+                                <form th:action="@{/update/profile-picture}" method="post" enctype="multipart/form-data">
+                                    <input type="file" name="profilePicture" id="profilePicFile"
                                            class="form-control mb-2"
-                                           placeholder="Paste image URL…"
-                                           required th:value="${user.profilePictureUrl}">
+                                           accept="image/png,image/jpeg,image/gif,image/webp"
+                                           required>
+                                    <small style="color:rgba(255,255,255,.45);font-size:.70rem;display:block;margin-top:4px;">
+                                        Max 10MB · JPG, PNG, GIF, WEBP
+                                    </small>
                                     <div style="display:flex;gap:8px;margin-top:8px;">
-                                        <button type="submit" class="btn btn-primary" style="font-size:.78rem;padding:7px 16px!important;">Update</button>
+                                        <button type="submit" class="btn btn-primary"
+                                                style="font-size:.78rem;padding:7px 16px!important;">
+                                            <i class="icon-cloud-upload" style="margin-right:5px;"></i>Upload
+                                        </button>
                                         <button type="button" class="btn btn-ghost-sm" id="cancelProfileBtn">Cancel</button>
                                     </div>
                                 </form>
@@ -252,13 +225,10 @@
                         </div>
                     </div>
 
-                    <!-- ② Student Info card -->
                     <div class="glass-card" style="overflow:hidden;padding:0;">
                         <div class="sec-header">
                             <p class="sec-header-title"><i class="icon-star" style="margin-right:7px;opacity:.8;"></i>Student Info</p>
-
                         </div>
-
                         <div class="pref-item">
                             <div class="pref-icon blue"><i class="icon-grid"></i></div>
                             <div>
@@ -266,15 +236,13 @@
                                 <div class="pref-main" th:text="${user.section}">—</div>
                             </div>
                         </div>
-
                         <div class="pref-item">
                             <div class="pref-icon orange"><i class="icon-envelope"></i></div>
                             <div>
                                 <div class="pref-sub">Registered Email</div>
-                                <div class="pref-main" th:text="${user.email}"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e0858d81898ca0949590ce858495ce9088">[email&#160;protected]</a></div>
+                                <div class="pref-main" th:text="${user.email}">email@example.com</div>
                             </div>
                         </div>
-
                         <div class="pref-item">
                             <div class="pref-icon green"><i class="icon-user"></i></div>
                             <div>
@@ -285,9 +253,7 @@
                     </div>
 
                 </div>
-                <!-- ══ END LEFT ══ -->
 
-                <!-- ══ RIGHT COLUMN — Update Profile form ══ -->
                 <div class="update-card">
                     <div class="update-card-head">
                         <div style="width:30px;height:30px;border-radius:9px;background:rgba(117,113,249,.22);display:flex;align-items:center;justify-content:center;color:var(--a2);">
@@ -301,7 +267,6 @@
                         <div th:if="${error}"   class="alert alert-danger"  th:text="${error}"></div>
 
                         <form th:action="@{/profile/update}" method="post">
-
                             <div class="form-row-2">
                                 <div class="form-group">
                                     <label for="name">Change Name</label>
@@ -312,7 +277,6 @@
                                     <input type="email" class="form-control" id="email" name="email" th:value="${user.email}" placeholder="Email address">
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="section">Registered Section</label>
                                 <input type="text" class="form-control" id="section" th:value="${user.section}" readonly tabindex="-1">
@@ -321,18 +285,14 @@
                                     Section cannot be modified. Contact your instructor for reassignment.
                                 </small>
                             </div>
-
                             <div class="divider"></div>
-
                             <div class="pw-section-label">
                                 <i class="icon-lock" style="color:var(--a2);"></i>Change Password
                             </div>
-
                             <div class="form-group">
                                 <label for="currentpassword">Current Password</label>
                                 <input type="password" class="form-control" id="currentpassword" name="cpassword" placeholder="Required to save any changes" required>
                             </div>
-
                             <div class="form-row-2">
                                 <div class="form-group">
                                     <label for="newpassword">New Password</label>
@@ -343,17 +303,14 @@
                                     <input type="password" class="form-control" id="retypepassword" name="rpassword" placeholder="Re-type new password">
                                 </div>
                             </div>
-
                             <div style="display:flex;justify-content:flex-end;margin-top:6px;">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="icon-check" style="margin-right:6px;"></i>Save Changes
                                 </button>
                             </div>
-
                         </form>
                     </div>
                 </div>
-                <!-- ══ END RIGHT ══ -->
 
             </div>
         </div>
@@ -362,49 +319,37 @@
     <div class="footer"><div class="copyright"><p>Copyright &copy; 2026 Archiva System</p></div></div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script th:src="@{/plugins/common/common.min.js}"></script>
+<script th:src="@{/plugins/common/common.min.js}"></script>
 <script th:src="@{/js/custom.min.js}"></script>
 <script th:src="@{/js/settings.js}"></script>
 <script th:src="@{/js/gleek.js}"></script>
 <script th:src="@{/js/styleSwitcher.js}"></script>
 <script>
-    // ── Profile picture toggle (same logic as original) ─────────
     const changeBtn      = document.getElementById('changeProfileBtn');
     const inputContainer = document.getElementById('profilePicInputContainer');
     const cancelBtn      = document.getElementById('cancelProfileBtn');
+    const headerAvatar   = document.getElementById('headerAvatar');
+    const fileInput      = document.getElementById('profilePicFile');
 
     changeBtn.addEventListener('click', () => {
-        inputContainer.style.display = inputContainer.style.display === 'none' ? 'block' : 'none';
+        inputContainer.style.display =
+            inputContainer.style.display === 'none' ? 'block' : 'none';
     });
 
     cancelBtn.addEventListener('click', () => {
         inputContainer.style.display = 'none';
     });
 
-    // Live preview — update avatar as user types URL
-    const urlInput     = document.getElementById('profilePicUrl');
-    const headerAvatar = document.getElementById('headerAvatar');
-
-    if (urlInput && headerAvatar) {
-        // Debounced live preview
-        let debounce;
-        urlInput.addEventListener('input', () => {
-            clearTimeout(debounce);
-            debounce = setTimeout(() => {
-                const val = urlInput.value.trim();
-                if (val) {
-                    const testImg = new Image();
-                    testImg.onload  = () => { headerAvatar.src = val; };
-                    testImg.onerror = () => { /* keep current */ };
-                    testImg.src = val;
-                }
-            }, 400);
+    // Live preview before uploading
+    if (fileInput && headerAvatar) {
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => { headerAvatar.src = e.target.result; };
+            reader.readAsDataURL(file);
         });
-
-        // Also pre-fill if there's already a value
-        if (urlInput.value.trim()) {
-            headerAvatar.src = urlInput.value.trim();
-        }
     }
-
-    // Sync header avatar with the top-rig
+</script>
+</body>
+</html>

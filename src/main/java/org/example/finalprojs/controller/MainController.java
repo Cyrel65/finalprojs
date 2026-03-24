@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
@@ -26,13 +27,13 @@ public class MainController {
     private final MessageService messageService;
 
     @Autowired
-    public MainController(UserService userService, GradeService gradeService, MessageService messageService, FeedbackService feedbackService) {
+    public MainController(UserService userService, GradeService gradeService,
+                          MessageService messageService, FeedbackService feedbackService) {
         this.userService = userService;
         this.gradeService = gradeService;
         this.messageService = messageService;
     }
 
-    // Helper: get current user from session
     private Optional<User> getCurrentUser(HttpSession session) {
         String userEmail = (String) session.getAttribute("userEmail");
         if (userEmail == null) return Optional.empty();
@@ -46,15 +47,14 @@ public class MainController {
         model.addAttribute("user", new User());
         return "page-register";
     }
-    @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
 
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute("user") User user,
+                               RedirectAttributes redirectAttributes) {
         if (user.getSection() == null || user.getSection().trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Section code is required to join a class!");
             return "redirect:/register";
         }
-
-
         userService.registerUser(user);
         redirectAttributes.addFlashAttribute("success", "Registration successful! You can now log in.");
         return "redirect:/login";
@@ -72,9 +72,7 @@ public class MainController {
                             @RequestParam String password,
                             Model model,
                             HttpSession session) {
-
         Optional<User> userOptional = userService.authenticate(email, password);
-
         if (userOptional.isPresent()) {
             session.setAttribute("userEmail", userOptional.get().getEmail());
             return "redirect:/";
@@ -104,13 +102,14 @@ public class MainController {
     }
 
     @PostMapping("/update/profile-picture")
-    public String updateProfilePicture(@RequestParam String profilePictureUrl, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String updateProfilePicture(@RequestParam("profilePicture") MultipartFile file,
+                                       HttpSession session,
+                                       RedirectAttributes redirectAttributes) {
         Optional<User> userOptional = getCurrentUser(session);
         if (userOptional.isEmpty()) return "redirect:/login";
 
         try {
-            User user = userOptional.get();
-            userService.updateProfilePicture(user, profilePictureUrl);
+            userService.updateProfilePicture(userOptional.get(), file);
             redirectAttributes.addFlashAttribute("success", "Profile picture updated successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Failed to update profile picture: " + e.getMessage());
@@ -126,20 +125,18 @@ public class MainController {
                                 @RequestParam(value = "rpassword", required = false) String retypePassword,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) {
-
         Optional<User> userOptional = getCurrentUser(session);
         if (userOptional.isEmpty()) return "redirect:/login";
 
         User user = userOptional.get();
-
         try {
-            User updatedUser = userService.updateProfile(user, name, email, currentPassword, newPassword, retypePassword);
+            User updatedUser = userService.updateProfile(user, name, email,
+                    currentPassword, newPassword, retypePassword);
             session.setAttribute("userEmail", updatedUser.getEmail());
             redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-
         return "redirect:/profile";
     }
 
@@ -149,7 +146,6 @@ public class MainController {
     public String viewScores(@RequestParam(required = false) String subjectName,
                              Model model,
                              HttpSession session) {
-
         Optional<User> userOptional = getCurrentUser(session);
         if (userOptional.isEmpty()) return "redirect:/login";
 
@@ -160,7 +156,6 @@ public class MainController {
         model.addAttribute("user", user);
         model.addAttribute("report", report);
         model.addAttribute("unreadCount", messageService.getUnreadCount(user));
-
         return "scores";
     }
 
