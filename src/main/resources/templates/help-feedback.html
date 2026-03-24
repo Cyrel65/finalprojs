@@ -105,16 +105,44 @@
                             <span class="activity active"></span>
                             <img th:src="${user != null and user.profilePictureUrl != null and user.profilePictureUrl != ''} ? ${user.profilePictureUrl} : 'images/user/1.png'" height="40" width="40" alt="Profile Picture">
                         </div>
+                        <!-- ══ FIXED DROPDOWN ══ -->
                         <div class="drop-down dropdown-profile dropdown-menu">
                             <div class="dropdown-content-body">
+
+                                <!-- User info header -->
+                                <div class="dp-user-info">
+                                    <span class="dp-user-name" th:text="${user.name}">Student Name</span>
+                                    <span class="dp-user-email" th:text="${user.email}">email@example.com</span>
+                                </div>
+
                                 <ul>
-                                    <li><a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a></li>
-                                    <li><a th:href="@{/inbox}"><i class="icon-envelope-open"></i> <span>Inbox</span>
-                                        <span th:text="${unreadCount != null ? unreadCount : 0}" class="badge gradient-3 badge-pill badge-primary"></span></a></li>
-                                    <li><a th:href="@{/logout}"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                    <li>
+                                        <a th:href="@{/profile}">
+                                            <i class="icon-user"></i>
+                                            <span>Profile</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/inbox}">
+                                            <i class="icon-envelope-open"></i>
+                                            <span>Inbox</span>
+                                            <span th:if="${unreadCount != null and unreadCount > 0}"
+                                                  th:text="${unreadCount}"
+                                                  class="badge badge-pill badge-primary"></span>
+                                        </a>
+                                    </li>
+                                    <li class="dp-logout-divider" style="list-style:none;height:1px;background:var(--gbd);margin:6px 4px;"></li>
+                                    <li class="dp-logout">
+                                        <a th:href="@{/login}">
+                                            <i class="icon-key"></i>
+                                            <span>Logout</span>
+                                        </a>
+                                    </li>
                                 </ul>
+
                             </div>
                         </div>
+                        <!-- ══ END FIXED DROPDOWN ══ -->
                     </li>
                 </ul>
             </div>

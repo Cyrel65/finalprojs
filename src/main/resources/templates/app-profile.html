@@ -41,11 +41,132 @@
         .hamburger .line{background:var(--tm)!important;}.hamburger:hover .line{background:var(--th)!important;}
         .user-img{border:2px solid var(--a)!important;border-radius:50%!important;box-shadow:0 0 12px rgba(117,113,249,.40)!important;}
         .activity.active{background:linear-gradient(230deg,#ffc480,#ff763b)!important;box-shadow:0 0 8px rgba(255,118,59,.6)!important;}
-        .dropdown-menu{background:rgba(17,19,39,.94)!important;backdrop-filter:var(--bl)!important;-webkit-backdrop-filter:var(--bl)!important;border:1px solid var(--gbd)!important;border-radius:var(--r)!important;box-shadow:0 16px 48px rgba(0,0,0,.50)!important;padding:8px!important;}
-        .dropdown-item{color:var(--tm)!important;border-radius:var(--rs)!important;padding:9px 16px!important;transition:all var(--t)!important;}
-        .dropdown-item:hover{background:var(--gh)!important;color:var(--th)!important;}
-        .drop-down{background:rgba(13,15,30,.92)!important;border:1px solid var(--gbd)!important;}
-        .dropdown-content-body ul li a{color:var(--tm)!important;}.dropdown-content-body ul li a:hover{color:var(--th)!important;background:var(--gh)!important;}
+
+        /* ══════════════════════════════════════════
+           PROFILE DROPDOWN — FULLY FIXED
+        ══════════════════════════════════════════ */
+        .dropdown-profile.dropdown-menu,
+        .drop-down.dropdown-profile.dropdown-menu {
+            min-width: 220px !important;
+            background: rgba(13,15,30,.97) !important;
+            backdrop-filter: var(--bl) !important;
+            -webkit-backdrop-filter: var(--bl) !important;
+            border: 1px solid var(--gbd) !important;
+            border-radius: var(--r) !important;
+            box-shadow: 0 20px 60px rgba(0,0,0,.70), 0 0 0 1px rgba(117,113,249,.12) !important;
+            padding: 8px !important;
+            overflow: hidden !important;
+        }
+
+        /* User info header inside dropdown */
+        .dropdown-profile .dp-user-info {
+            padding: 10px 14px 12px;
+            border-bottom: 1px solid var(--gbd);
+            margin-bottom: 6px;
+        }
+        .dropdown-profile .dp-user-name {
+            font-family: 'Syne', sans-serif !important;
+            font-weight: 700;
+            font-size: .88rem;
+            color: var(--th) !important;
+            display: block;
+            margin: 0 0 2px;
+        }
+        .dropdown-profile .dp-user-email {
+            font-size: .72rem;
+            color: var(--tl);
+            display: block;
+        }
+
+        /* Reset ul/li */
+        .dropdown-profile .dropdown-content-body ul {
+            list-style: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+        }
+        .dropdown-profile .dropdown-content-body ul li {
+            margin: 0 !important;
+        }
+
+        /* Each link row */
+        .dropdown-profile .dropdown-content-body ul li a {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            padding: 9px 14px !important;
+            border-radius: 9px !important;
+            color: var(--tm) !important;
+            font-family: 'DM Sans', sans-serif !important;
+            font-size: .84rem !important;
+            font-weight: 500 !important;
+            background: transparent !important;
+            border: none !important;
+            transition: all var(--t) !important;
+            white-space: nowrap !important;
+            text-decoration: none !important;
+        }
+        .dropdown-profile .dropdown-content-body ul li a:hover {
+            background: var(--gh) !important;
+            color: var(--th) !important;
+        }
+
+        /* Icons */
+        .dropdown-profile .dropdown-content-body ul li a i {
+            width: 18px !important;
+            height: 18px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            font-size: .88rem !important;
+            opacity: .75 !important;
+            color: inherit !important;
+        }
+
+        /* Force text spans to show */
+        .dropdown-profile .dropdown-content-body ul li a span:not(.badge):not(.badge-pill) {
+            display: inline !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            color: inherit !important;
+            font-size: inherit !important;
+            font-weight: inherit !important;
+            overflow: visible !important;
+            clip: unset !important;
+            clip-path: unset !important;
+            position: static !important;
+            width: auto !important;
+            height: auto !important;
+        }
+
+        /* Badge */
+        .dropdown-profile .dropdown-content-body ul li a .badge {
+            margin-left: auto !important;
+            background: linear-gradient(135deg, var(--a), var(--a2)) !important;
+            color: #fff !important;
+            border-radius: 6px !important;
+            font-size: .65rem !important;
+            font-weight: 700 !important;
+            padding: 2px 8px !important;
+            line-height: 1.4 !important;
+        }
+
+        /* Logout separator + red tint */
+        .dropdown-profile .dp-logout-divider {
+            height: 1px;
+            background: var(--gbd);
+            margin: 6px 8px;
+        }
+        .dropdown-profile .dp-logout a {
+            color: rgba(239,68,68,.80) !important;
+        }
+        .dropdown-profile .dp-logout a:hover {
+            background: rgba(239,68,68,.10) !important;
+            color: #f87171 !important;
+        }
+        /* ══════════════════════════════════════════ */
+
         .badge,.badge-primary{background:linear-gradient(135deg,var(--a),var(--a2))!important;color:#fff!important;border-radius:6px!important;font-family:'Syne',sans-serif;font-weight:700;font-size:.65rem;padding:3px 9px;}
         .content-body,.container-fluid,.page-titles{background:transparent!important;}
         .footer,.footer .copyright{background:rgba(13,15,30,.60)!important;border-top:1px solid var(--gbd)!important;}
@@ -143,13 +264,46 @@
                             <span class="activity active"></span>
                             <img th:src="${user.profilePictureUrl != null ? user.profilePictureUrl : 'images/user/1.png'}" height="40" width="40" alt="">
                         </div>
+
+                        <!-- ══ FIXED DROPDOWN ══ -->
                         <div class="drop-down dropdown-profile dropdown-menu">
-                            <div class="dropdown-content-body"><ul>
-                                <li><a th:href="@{/profile}"><i class="icon-user"></i> <span>Profile</span></a></li>
-                                <li><a th:href="@{/inbox}"><i class="icon-envelope-open"></i> Inbox <span th:text="${unreadCount != null ? unreadCount : 0}" class="badge gradient-3 badge-pill badge-primary"></span></a></li>
-                                <li><a th:href="@{/login}"><i class="icon-key"></i> <span>Logout</span></a></li>
-                            </ul></div>
+                            <div class="dropdown-content-body">
+
+                                <!-- User info header -->
+                                <div class="dp-user-info">
+                                    <span class="dp-user-name" th:text="${user.name}">Student Name</span>
+                                    <span class="dp-user-email" th:text="${user.email}">email@example.com</span>
+                                </div>
+
+                                <ul>
+                                    <li>
+                                        <a th:href="@{/profile}">
+                                            <i class="icon-user"></i>
+                                            <span>Profile</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/inbox}">
+                                            <i class="icon-envelope-open"></i>
+                                            <span>Inbox</span>
+                                            <span th:if="${unreadCount != null and unreadCount > 0}"
+                                                  th:text="${unreadCount}"
+                                                  class="badge badge-pill badge-primary"></span>
+                                        </a>
+                                    </li>
+                                    <li class="dp-logout-divider" style="list-style:none;height:1px;background:var(--gbd);margin:6px 4px;"></li>
+                                    <li class="dp-logout">
+                                        <a th:href="@{/login}">
+                                            <i class="icon-key"></i>
+                                            <span>Logout</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
                         </div>
+                        <!-- ══ END FIXED DROPDOWN ══ -->
+
                     </li>
                 </ul>
             </div>
@@ -201,7 +355,6 @@
                                 </div>
                             </div>
 
-                            <!-- ── CHANGED: file upload form instead of URL input ── -->
                             <div id="profilePicInputContainer" style="display:none;margin-top:12px;">
                                 <form th:action="@{/update/profile-picture}" method="post" enctype="multipart/form-data">
                                     <input type="file" name="profilePicture" id="profilePicFile"
