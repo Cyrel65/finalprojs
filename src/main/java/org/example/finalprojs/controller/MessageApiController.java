@@ -216,4 +216,22 @@ public class MessageApiController {
         } catch (Exception ignored) {}
         return "User";
     }
+
+    // ── DELETE /api/messages/delete/{id} ──────────────────────────────────────
+    // Called by Flutter when the user swipes a message to delete it.
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteMessage(@PathVariable Long id) {
+        try {
+            return messageRepository.findById(id)
+                    .map(message -> {
+                        messageRepository.delete(message);
+                        return ResponseEntity.ok(Map.of("message", "Deleted successfully"));
+                    })
+                    .orElse(ResponseEntity.status(404)
+                            .body(Map.of("message", "Message not found with id: " + id)));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(Map.of("message", "Failed to delete: " + e.getMessage()));
+        }
+    }
 }
